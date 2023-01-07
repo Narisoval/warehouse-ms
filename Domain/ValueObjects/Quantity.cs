@@ -2,7 +2,7 @@ using ValueOf;
 
 namespace Domain.ValueObjects;
 
-public class Quantity : ValueOf<int,Quantity>
+public sealed class Quantity : ValueOf<int,Quantity>
 {
     protected override void Validate()
     {

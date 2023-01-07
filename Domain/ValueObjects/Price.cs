@@ -2,7 +2,7 @@ using ValueOf;
 
 namespace Domain.ValueObjects;
 
-public class Price : ValueOf<decimal,Price>
+public sealed class Price : ValueOf<decimal,Price>
 {
     private const decimal MinPrice = 0.5M;
     private const decimal MaxPrice = 1_000_000M;

@@ -3,7 +3,7 @@ using ValueOf;
 
 namespace Domain.ValueObjects;
 
-public class ProductName : ValueOf<string,ProductName>
+public sealed class ProductName : ValueOf<string,ProductName>
 {
     private const int MinimumNameSize = 10;
     private const int MaximumNameSize = 70;
@@ -19,5 +19,4 @@ public class ProductName : ValueOf<string,ProductName>
             throw new IncorrectLengthException(MinimumNameSize, MaximumNameSize, "Product name");
         }
     }
-    
 }

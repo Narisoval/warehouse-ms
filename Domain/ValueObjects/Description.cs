@@ -3,7 +3,7 @@ using ValueOf;
 
 namespace Domain.ValueObjects;
 
-public class Description : ValueOf<string,Description>
+public sealed class Description : ValueOf<string,Description>
 {
     private const int MinimumNameSize = 30;
     private const int MaximumNameSize = 1200;
