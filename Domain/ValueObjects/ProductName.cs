@@ -1,3 +1,4 @@
+using Domain.Exceptions;
 using ValueOf;
 
 namespace Domain.ValueObjects;
@@ -15,9 +16,7 @@ public class ProductName : ValueOf<string,ProductName>
 
         if (Value.Length is <= MinimumNameSize or >= MaximumNameSize)
         {
-            throw new ArgumentOutOfRangeException($"Value", Value,
-        "Name of the product is incorrect length. The length should be" +
-                $"between {MinimumNameSize} and {MinimumNameSize}.");
+            throw new IncorrectLengthException(MinimumNameSize, MaximumNameSize, "Product name");
         }
     }
     

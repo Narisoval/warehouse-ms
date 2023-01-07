@@ -1,3 +1,4 @@
+using Domain.Exceptions;
 using Domain.ValueObjects;
 
 namespace Domain.UnitTests.Entities.Product;
@@ -10,7 +11,7 @@ public class ValueObjectTests
         MemberType = typeof(Generators))]
     public void Should_ThrowException_When_NameIsIncorrectLength(string name)
     {
-        Assert.Throws<ArgumentOutOfRangeException>(() => ProductName.From(name));
+        Assert.Throws<IncorrectLengthException>(() => ProductName.From(name));
     }
     
     [Fact]
@@ -32,9 +33,15 @@ public class ValueObjectTests
     [MemberData(nameof(Generators.GenerateDescriptions),MemberType = typeof(Generators))]
     public void Should_ThrowException_When_DescriptionIsIncorrectLength(string description)
     {
-        Assert.Throws<ArgumentOutOfRangeException>(() => Description.From(description));
+        Assert.Throws<IncorrectLengthException>(() => Description.From(description));
     }
 
+    [Fact]
+    public void Should_ThrowException_When_DescriptionIsNull()
+    {
+        Assert.Throws<ArgumentNullException>(() => Description.From(null!));
+    }
+    
     [Theory]
     [InlineData(-1)]
     [InlineData(0.001)]
