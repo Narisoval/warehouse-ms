@@ -1,21 +1,21 @@
-﻿using Domain.ValueObjects;
+﻿using Domain.Primitives;
+using Domain.ValueObjects;
 
 namespace Domain.Entities;
 
-public class Product
+public class Product : Entity
 {
-    public Guid ProductId { get; set; }
     public ProductName ProductName { get; set; }
     public Quantity Quantity { get; set; }
     public Price Price { get; set; }
-    public string? Images { get; set; }
+    public string ImageUri { get; set; }
     public Description Description { get; set; }
-
-    public int CategoryId { get; set; }
-    public Category Category { get; set; }
     
     public Guid ProviderId  { get; set; }
-    public Provider Provider { get; set; }
+    public Provider? Provider { get; set; }
+
+    public Guid BrandId { get; set; }
+    public Brand? Brand { get; set; }
 
     public void DecreaseQuantityBy(int amount)
     {
@@ -25,5 +25,23 @@ public class Product
     public void IncreaseQuantityBy(int amount)
     {
         this.Quantity = Quantity.From(this.Quantity.Value + amount);
+    }
+
+    public static Entity Create(Quantity quantity, string imageUri, Description description, Guid brandId, Guid providerId)
+    {
+        return new Product(Guid.NewGuid(),quantity,imageUri,description,brandId,providerId);
+    }
+
+    private Product(Guid id, Quantity quantity, 
+        string imageUri, Description description, 
+        Guid brandId, Guid providerId) : base(id)
+    {
+        Id = id;
+        this.Quantity = quantity;
+        ImageUri = imageUri;
+        this.Description = description;
+        BrandId = brandId;
+        ProviderId = providerId;
+
     }
 }
