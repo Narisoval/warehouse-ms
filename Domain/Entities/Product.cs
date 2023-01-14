@@ -19,12 +19,12 @@ public class Product : Entity
 
     public void DecreaseQuantityBy(int amount)
     {
-        this.Quantity = Quantity.From(this.Quantity.Value - amount);
+        this.Quantity = Quantity.Create(this.Quantity.Value - amount);
     }
 
     public void IncreaseQuantityBy(int amount)
     {
-        this.Quantity = Quantity.From(this.Quantity.Value + amount);
+        this.Quantity = Quantity.Create(this.Quantity.Value + amount);
     }
 
     public static Entity Create(Quantity quantity, string imageUri, Description description, Guid brandId, Guid providerId)
