@@ -27,14 +27,9 @@ public class Product : Entity
         this.Quantity = Quantity.Create(this.Quantity.Value + amount);
     }
 
-    public static Entity Create(Quantity quantity, string imageUri, Description description, Guid brandId, Guid providerId)
-    {
-        return new Product(Guid.NewGuid(),quantity,imageUri,description,brandId,providerId);
-    }
-
-    private Product(Guid id, Quantity quantity, 
+    public Product(Guid id, Quantity quantity, 
         string imageUri, Description description, 
-        Guid brandId, Guid providerId) : base(id)
+        Guid brandId, Guid providerId, ProductName productName, Price price) : base(id)
     {
         Id = id;
         this.Quantity = quantity;
@@ -42,6 +37,7 @@ public class Product : Entity
         this.Description = description;
         BrandId = brandId;
         ProviderId = providerId;
-
+        ProductName = productName;
+        Price = price;
     }
 }

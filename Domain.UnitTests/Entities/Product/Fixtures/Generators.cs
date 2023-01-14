@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Domain.UnitTests.Entities.Product;
+namespace Domain.UnitTests.Entities.Product.Fixtures;
 
 public static class Generators
 {
