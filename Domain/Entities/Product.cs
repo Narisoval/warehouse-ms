@@ -27,11 +27,13 @@ public class Product : Entity
         this.Quantity = Quantity.Create(this.Quantity.Value + amount);
     }
 
-    public Product(Guid id, Quantity quantity, 
+    public Product(
+        Guid id, 
+        Quantity quantity, 
         string imageUri, Description description, 
-        Guid brandId, Guid providerId, ProductName productName, Price price) : base(id)
+        Guid brandId, Guid providerId, 
+        ProductName productName, Price price) : base(id)
     {
-        Id = id;
         this.Quantity = quantity;
         ImageUri = imageUri;
         this.Description = description;
@@ -40,4 +42,5 @@ public class Product : Entity
         ProductName = productName;
         Price = price;
     }
+
 }

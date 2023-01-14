@@ -1,4 +1,5 @@
 using Domain.Exceptions;
+using Domain.UnitTests.Entities.Product.Fixtures;
 using Domain.ValueObjects;
 
 namespace Domain.UnitTests.Entities.Product;
@@ -11,20 +12,20 @@ public class ValueObjectTests
         MemberType = typeof(Generators))]
     public void Should_ThrowException_When_NameIsIncorrectLength(string name)
     {
-        Assert.Throws<IncorrectLengthException>(() => ProductName.From(name));
+        Assert.Throws<IncorrectLengthException>(() => ProductName.Create(name));
     }
     
     [Fact]
     public void Should_ThrowException_When_NameIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => ProductName.From(null!));
+        Assert.Throws<ArgumentNullException>(() => ProductName.Create(null!));
     }
 
     //Quantity
     [Fact]
     public void Should_ThrowException_When_QuantityIsLessThanZero()
     {
-        Assert.Throws<ArgumentOutOfRangeException>(() => Quantity.From(-1));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Quantity.Create(-1));
     }
     
     //Description
@@ -33,13 +34,13 @@ public class ValueObjectTests
     [MemberData(nameof(Generators.GenerateDescriptions),MemberType = typeof(Generators))]
     public void Should_ThrowException_When_DescriptionIsIncorrectLength(string description)
     {
-        Assert.Throws<IncorrectLengthException>(() => Description.From(description));
+        Assert.Throws<IncorrectLengthException>(() => Description.Create(description));
     }
 
     [Fact]
     public void Should_ThrowException_When_DescriptionIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => Description.From(null!));
+        Assert.Throws<ArgumentNullException>(() => Description.Create(null!));
     }
     
     [Theory]
@@ -48,6 +49,6 @@ public class ValueObjectTests
     [InlineData(1_000_000_000_000)]
     private void Should_ThrowException_When_PriceIsIncorrect(decimal price)
     {
-        Assert.Throws<ArgumentOutOfRangeException>(() => Price.From(price));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Price.Create(price));
     }
 }
