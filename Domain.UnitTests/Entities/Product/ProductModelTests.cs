@@ -1,5 +1,4 @@
 using Domain.UnitTests.Entities.Product.Fixtures;
-using Domain.ValueObjects;
 using FluentAssertions;
 
 namespace Domain.UnitTests.Entities.Product;
@@ -11,8 +10,7 @@ public class ProductModelTests
     public void Should_SumNumbers_When_IncreaseQuantityBy(int initialQuantity, int increaseBy, int expectedSum)
     {
         //Arrange
-        var sut = ProductsFixture.GetTestProducts().First();
-        sut.Quantity = Quantity.Create(initialQuantity);
+        var sut = ProductsFixture.GetProductWithFixedQuantity(initialQuantity);
         //Act
         sut.IncreaseQuantityBy(increaseBy);
         //Assert
@@ -25,8 +23,7 @@ public class ProductModelTests
     public void Should_SubtractNumbers_When_DecreaseQuantityBy(int initialQuantity, int decreaseBy, int expectedResult)
     {
         //Arrange
-        var sut = ProductsFixture.GetTestProducts().First();
-        sut.Quantity = Quantity.Create(initialQuantity);
+        var sut = ProductsFixture.GetProductWithFixedQuantity(initialQuantity);
         //Act
         sut.DecreaseQuantityBy(decreaseBy);
         //Assert

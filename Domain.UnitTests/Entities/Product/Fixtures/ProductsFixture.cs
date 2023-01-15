@@ -4,30 +4,17 @@ namespace Domain.UnitTests.Entities.Product.Fixtures;
 using Domain.Entities;
 public static class ProductsFixture
 {
-    public static IEnumerable<Product> GetTestProducts()
+    
+    public static Product GetProductWithFixedQuantity(int quantity)
     {
-        yield return new Product(
-            Guid.NewGuid(),
-            Quantity.Create(3),
-            "htrhrth",
-            Description.Create(new string('a',35)),
-            Guid.NewGuid(),
-            Guid.NewGuid(), 
-            ProductName.Create("Hard drive ABC"),
-            Price.Create(3000.22M));
-
-        
-        yield return new Product(
-            Guid.NewGuid(),
-            Quantity.Create(3),
-            "agdsg",
-            Description.Create(new string('b',55)),
-            Guid.NewGuid(),
-            Guid.NewGuid(), 
-            ProductName.Create("Soft drive ABC"),
-            Price.Create(3000.22M));
-
-
+        return new Product(Guid.NewGuid(),
+                            new ProductName("Name of the product"),
+                            Quantity.Create(quantity), 
+                            Price.Create(300M), 
+                    "https://yes.com/unitTests",
+                           Description.Create(new string('*',60)),  
+                            new Provider(Guid.NewGuid()),
+                            new Brand(Guid.NewGuid()));
     }
 
 }
