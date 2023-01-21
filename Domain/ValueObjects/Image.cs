@@ -1,3 +1,4 @@
+using Domain.Exceptions;
 using Domain.Primitives;
 
 namespace Domain.ValueObjects;
@@ -17,7 +18,7 @@ public class Image : ValueObject
     {
         if (!IsValidImageUrl(imageUrl))
         {
-            throw new ArgumentException("Invalid image URL format.", nameof(imageUrl));
+            throw new InvalidImageUrlFormatException(imageUrl);
         }
 
         return new Image(imageUrl);
