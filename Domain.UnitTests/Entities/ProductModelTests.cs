@@ -1,12 +1,13 @@
-using Domain.UnitTests.Entities.Product.Fixtures;
+using Domain.UnitTests.Fixtures;
+using Domain.UnitTests.Fixtures.Generators;
 using FluentAssertions;
 
-namespace Domain.UnitTests.Entities.Product;
+namespace Domain.UnitTests.Entities;
 public class ProductModelTests
 {
     [Theory]
-    [MemberData(nameof(Generators.GenerateNumbersForSum),
-        MemberType = typeof(Generators))]
+    [MemberData(nameof(NumbersForArithmeticOperationsGenerator.GenerateNumbersForSum),
+        MemberType = typeof(NumbersForArithmeticOperationsGenerator))]
     public void Should_SumNumbers_When_IncreaseQuantityBy(int initialQuantity, int increaseBy, int expectedSum)
     {
         //Arrange
@@ -18,8 +19,8 @@ public class ProductModelTests
     }
     
     [Theory]
-    [MemberData(nameof(Generators.GenerateNumbersForSubtraction),
-        MemberType = typeof(Generators))]
+    [MemberData(nameof(NumbersForArithmeticOperationsGenerator.GenerateNumbersForSubtraction),
+        MemberType = typeof(NumbersForArithmeticOperationsGenerator))]
     public void Should_SubtractNumbers_When_DecreaseQuantityBy(int initialQuantity, int decreaseBy, int expectedResult)
     {
         //Arrange
