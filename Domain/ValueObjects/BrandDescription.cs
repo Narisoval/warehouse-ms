@@ -19,7 +19,7 @@ public class BrandDescription : ValueObject
         Value = description;
     }
 
-    private static BrandDescription Create(string description)
+    public static BrandDescription Create(string description)
     {
         if (description.Length < 20 || description.Length > 800)
         {
