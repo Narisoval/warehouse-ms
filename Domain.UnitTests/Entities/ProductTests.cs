@@ -5,6 +5,12 @@ using FluentAssertions;
 namespace Domain.UnitTests.Entities;
 public class ProductModelTests
 {
+    [Fact]
+    public void Should_CreateProduct_When_ConstructorWithAllParametersIsCalled()
+    {
+        
+    }
+    
     [Theory]
     [MemberData(nameof(NumbersForArithmeticOperationsGenerator.GenerateNumbersForSum),
         MemberType = typeof(NumbersForArithmeticOperationsGenerator))]

@@ -1,29 +1,16 @@
-using Domain.Primitives;
+using ValueOf;
 
 namespace Domain.ValueObjects;
 
-public sealed class Quantity : ValueObject
+public sealed class Quantity : ValueOf<int,Quantity>
 {
-    public int Value { get; }
-
-    private Quantity(int quantity)
+    protected override void Validate()
     {
-        Value = quantity;
-    }
-    
-    public static Quantity Create(int quantity)
-    {
-        if (quantity < 0)
+        if (Value < 0)
         {
             throw new ArgumentOutOfRangeException
-                ($"Value","Quantity of a product cannot be less than 0");
+                (nameof(Value),"Quantity of a product cannot be less than 0");
         }
-
-        return new Quantity(quantity);
     }
 
-    public override IEnumerable<object> GetAtomicValues()
-    {
-        yield return Value;
-    }
 }

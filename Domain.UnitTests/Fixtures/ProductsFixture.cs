@@ -10,11 +10,11 @@ public static class ProductsFixture
     {
         _brands = BrandsFixture.GetBrands().ToList();
         return new Product(Guid.NewGuid(),
-                            new ProductName("Name of the product"),
-                            Quantity.Create(quantity), 
-                            Price.Create(300M), 
+                            ProductName.From("Name of the product"),
+                            Quantity.From(quantity), 
+                            Price.From(300M), 
                     "https://yes.com/unitTests",
-                           Description.Create(new string('*',60)),  
+                           ProductDescription.From(new string('*',60)),  
                             new Provider(Guid.NewGuid()),
                             _brands[0]);
     }

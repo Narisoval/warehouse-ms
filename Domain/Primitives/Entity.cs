@@ -5,7 +5,7 @@ public abstract class Entity : IEquatable<Entity>
     {
         Id = id;
     }
-    public Guid Id { get; protected init; }
+    public Guid Id { get; }
 
     public static bool operator ==(Entity? first, Entity? second)
     {

@@ -3,10 +3,9 @@ using ValueOf;
 
 namespace Domain.ValueObjects;
 
-public sealed class BrandDescription : ValueOf<string,BrandDescription>
+public sealed class ProductDescription : ValueOf<string,ProductDescription>
 {
-    private static readonly Range<int> LengthRange = Range<int>.Create(20, 800);
- 
+    private static readonly Range<int> LengthRange = Range<int>.Create(30, 1200);
     protected override void Validate()
     {
         StringLengthValidator.ValidateStringLength(Value,LengthRange);
@@ -16,5 +15,4 @@ public sealed class BrandDescription : ValueOf<string,BrandDescription>
     {
         return Range<int>.Create(LengthRange.Min, LengthRange.Max);
     }
-    
 }

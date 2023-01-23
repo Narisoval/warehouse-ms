@@ -1,32 +1,25 @@
-using Domain.Primitives;
+using Domain.Validation;
+using ValueOf;
 
 namespace Domain.ValueObjects;
 
-public sealed class Price : ValueObject
+public sealed class Price : ValueOf<decimal, Price>
 {
-    public decimal Value { get; }
-    
-    private const decimal MinPrice = 0.5M;
-    private const decimal MaxPrice = 1_000_000M;
+    private static readonly Range<decimal> PriceRange = Range<decimal>.Create(0.5M, 1_000_000M);
 
-    private Price(decimal value)
+    protected override void Validate()
     {
-        Value = value;
-    }
-
-    public static Price Create(decimal price)
-    {
-        if (price is < MinPrice or > MaxPrice)
+        if (Value < PriceRange.Min || Value > PriceRange.Max)
         {
             throw new ArgumentOutOfRangeException
-            ($"Value",
-                price,$"Price of a product cannot be less than {MinPrice} or more than {MaxPrice}");
+            (nameof(Value),
+                Value,$"Price of a product cannot be less than {PriceRange.Min} or more than {PriceRange.Max}");
         }
-        return new Price(price);
     }
 
-    public override IEnumerable<object> GetAtomicValues()
+    public static Range<decimal> GetPriceRange()
     {
-        yield return Value;
+        return Range<decimal>.Create(PriceRange.Min, PriceRange.Max);
     }
+
 }

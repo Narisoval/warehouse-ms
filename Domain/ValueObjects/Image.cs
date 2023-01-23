@@ -1,41 +1,30 @@
-using Domain.Exceptions;
-using Domain.Primitives;
+using System.Text.RegularExpressions;
+using ValueOf;
 
 namespace Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
-public class Image : ValueObject
+public class Image : ValueOf<string,Image>
 {
-    private readonly Uri _imageUrl;
-    private Image(string imageUrl)
+    protected override void Validate()
     {
-        _imageUrl = new Uri(imageUrl);
-    }
-
-    public static Image Create(string imageUrl)
-    {
-        if (!IsValidImageUrl(imageUrl))
+        if (Value is null)
         {
-            throw new InvalidImageUrlFormatException(imageUrl);
+            throw new ArgumentNullException(nameof(Value),"Image can't be null");
+        }
+        
+        if (!IsValidImageUrl(Value))
+        {
+            throw new FormatException("Email is incorrect format");
         }
 
-        return new Image(imageUrl);
     }
 
-    public string Value => _imageUrl.ToString();
-
-    public override IEnumerable<object> GetAtomicValues()
+    private static bool IsValidImageUrl(string? imageUrl)
     {
-        yield return Value;
-    }
-
-    private static bool IsValidImageUrl(string imageUrl)
-    {
-        // Regular expression to check if the URL is in a valid format
+        // This pattern is a really basic and allows some strange URLs like https:///.jpg 
         var pattern = @"(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)";
         var match = Regex.Match(imageUrl, pattern);
         return match.Success;
     }
+    
 }

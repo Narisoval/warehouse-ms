@@ -1,4 +1,3 @@
-using System.Net.Mime;
 using Domain.Primitives;
 using Domain.ValueObjects;
 

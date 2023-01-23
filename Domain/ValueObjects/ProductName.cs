@@ -1,36 +1,19 @@
-using Domain.Exceptions;
-using Domain.Primitives;
+using ValueOf;
+using Domain.Validation;
 
 namespace Domain.ValueObjects;
 
-public sealed class ProductName : ValueObject 
+public sealed class ProductName : ValueOf<string,ProductName>
 {
-    public string Value { get; }
-    private const int MinimumNameSize = 10;
-    private const int MaximumNameSize = 70;
+    private static readonly Range<int> LengthRange = Range<int>.Create(10, 70);
 
-    public ProductName(string value)
+    protected override void Validate()
     {
-        Value = value;
+        StringLengthValidator.ValidateStringLength(Value,LengthRange);
     }
 
-    public static ProductName Create(string productName)
+    public static Range<int> GetRange()
     {
-        if (productName is null)
-        {
-            throw new ArgumentNullException($"Value","Name of the product cannot be null");
-        }
-
-        if (productName.Length is <= MinimumNameSize or >= MaximumNameSize)
-        {
-            throw new IncorrectLengthException(MinimumNameSize, MaximumNameSize, "Product name");
-        }
-
-        return new ProductName(productName);
-    }
-
-    public override IEnumerable<object> GetAtomicValues()
-    {
-        yield return Value;
+        return Range<int>.Create(LengthRange.Min, LengthRange.Max);
     }
 }

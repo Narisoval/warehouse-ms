@@ -1,30 +1,21 @@
-using System.Dynamic;
-using Domain.Exceptions;
-using Domain.Primitives;
+using ValueOf;
+
 
 namespace Domain.ValueObjects;
 
-public sealed class Email : ValueObject
+public sealed class Email : ValueOf<string,Email>
 {
-    public string Value { get; }
-
-    public Email(string email)
+    protected override void Validate()
     {
-        Value = email;
-    }
-
-    public static Email Create(string email)
-    {
-        if (email == null)
+        if (Value == null)
         {
-            throw new ArgumentNullException("Value", "Email can't be null");
+            throw new ArgumentNullException(nameof(Value));
         }
 
-        if (!IsCorrectFormat(email))
+        if (!IsCorrectFormat(Value))
         {
-            throw new InvalidEmailException($"{email} is not a valid email");
+            throw new FormatException($"{Value} is not a valid email");
         }
-        return new Email(email);
     }
 
     private static bool IsCorrectFormat(string email)
@@ -38,14 +29,9 @@ public sealed class Email : ValueObject
 
         string[] domainPartSplitByDot = splitByAtSign[1].Split(".");
         
-        if (domainPartSplitByDot.Any(s => s.Length == 0))
+        if (domainPartSplitByDot.Length < 2 || domainPartSplitByDot.Any(s => s.Length == 0))
             return false;
         
         return true;
-    }
-    
-    public override IEnumerable<object> GetAtomicValues()
-    {
-        yield return Value;
     }
 }
