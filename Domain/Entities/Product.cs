@@ -7,36 +7,43 @@ public class Product : Entity
 {
     public ProductName ProductName { get; private set; }
     public Quantity Quantity { get; private set; }
-    public Price Price { get; private set; }
-    public string ImageUri { get; private set; }
-    public Description Description { get; private set; }
-    
+    public Price FullPrice { get; private set; }
+    //TODO make a list of them and a new entity ProductImage
+    public Image Image { get; private set; }
+    public ProductDescription ProductDescription { get; private set; }
+    public bool IsActive { get; private set; }
+    public Sale Sale { get; private set; }
     public Guid ProviderId  { get; private set; }
-    public Provider? Provider { get; private set; }
+    public Provider Provider { get; private set; }
 
     public Guid BrandId { get; private set; }
-    public Brand? Brand { get; private set; }
+    public Brand Brand { get; private set; }
+
+    public Product(Guid id, ProductName productName, Quantity quantity, Price fullPrice, Image image, 
+        ProductDescription productDescription, bool isActive, Sale sale, 
+        Provider provider, Brand brand) : base(id)
+    {
+        ProductName = productName;
+        Quantity = quantity;
+        FullPrice = fullPrice;
+        Image = image;
+        ProductDescription = productDescription;
+        IsActive = isActive;
+        Sale = sale;
+        Provider = provider;
+        ProviderId = Provider.Id;
+        Brand = brand;
+        BrandId = Brand.Id;
+    }
 
     public void DecreaseQuantityBy(int amount)
     {
-        this.Quantity = Quantity.Create(this.Quantity.Value - amount);
+        this.Quantity = Quantity.From(this.Quantity.Value - amount);
     }
 
     public void IncreaseQuantityBy(int amount)
     {
-        this.Quantity = Quantity.Create(this.Quantity.Value + amount);
+        this.Quantity = Quantity.From(this.Quantity.Value + amount);
     }
 
-    public Product(Guid id, ProductName productName, Quantity quantity, Price price, string imageUri, Description description, Provider provider, Brand brand) : base(id)
-    {
-        ProductName = productName;
-        Quantity = quantity;
-        Price = price;
-        ImageUri = imageUri;
-        Description = description;
-        Provider = provider;
-        ProviderId = provider.Id;
-        Brand = brand;
-        BrandId = brand.Id;
-    }
 }
