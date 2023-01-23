@@ -6,6 +6,7 @@ namespace Domain.UnitTests.Entities;
 
 public class BrandTests
 {
+    //TODO test constructors
     [Fact]
     public void Should_SetDescriptionToNull_When_RemoveBrandDescription()
     {

@@ -1,4 +1,4 @@
-using Domain.Validation;
+using Domain.Primitives;
 using Domain.ValueObjects;
 using FluentAssertions;
 
@@ -6,7 +6,7 @@ namespace Domain.UnitTests.ValueObjects;
 
 public class PriceTests
 {
-    private static readonly Range<decimal> PriceRange = Price.GetPriceRange();
+    private static readonly Range<decimal> PriceRange = new Price().Range;
     
     [Fact]
     private void Should_ThrowException_When_PriceIsMoreThanMaximum()

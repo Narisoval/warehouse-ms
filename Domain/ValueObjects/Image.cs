@@ -19,7 +19,7 @@ public class Image : ValueOf<string,Image>
 
     }
 
-    private static bool IsValidImageUrl(string? imageUrl)
+    private static bool IsValidImageUrl(string imageUrl)
     {
         // This pattern is a really basic and allows some strange URLs like https:///.jpg 
         var pattern = @"(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)";

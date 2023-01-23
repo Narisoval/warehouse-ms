@@ -1,18 +1,8 @@
-using Domain.Validation;
-using ValueOf;
+using Domain.Primitives;
 
 namespace Domain.ValueObjects;
 
-public sealed class ProductDescription : ValueOf<string,ProductDescription>
+public sealed class ProductDescription : StringValueObjectWithLengthRestrictions<ProductDescription>
 {
-    private static readonly Range<int> LengthRange = Range<int>.Create(30, 1200);
-    protected override void Validate()
-    {
-        StringLengthValidator.ValidateStringLength(Value,LengthRange);
-    }
-
-    public static Range<int> GetRange()
-    {
-        return Range<int>.Create(LengthRange.Min, LengthRange.Max);
-    }
+    internal override Range<int> LengthRange => Range<int>.Create(30, 1200);
 }

@@ -8,7 +8,7 @@ public class ProductModelTests
     [Fact]
     public void Should_CreateProduct_When_ConstructorWithAllParametersIsCalled()
     {
-        
+       //TODO write this
     }
     
     [Theory]

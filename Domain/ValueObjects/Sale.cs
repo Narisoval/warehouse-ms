@@ -1,16 +1,9 @@
-using Domain.Validation;
+using Domain.Primitives;
 using ValueOf;
+
 namespace Domain.ValueObjects;
 
-public class Sale : ValueOf<decimal,Sale>
+public class Sale : NumericValueObjectInRange<decimal,Sale>
 {
-    private static readonly Range<decimal> SaleRange = Range<decimal>.Create(0M, 100M);
-
-    protected override void Validate()
-    {
-        if (Value < SaleRange.Min || Value > SaleRange.Max)
-        {
-            
-        }
-    }
+    internal override Range<decimal> Range => Range<decimal>.Create(0M, 100M);
 }

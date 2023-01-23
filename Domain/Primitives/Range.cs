@@ -1,5 +1,6 @@
-namespace Domain.Validation;
-public class Range<T> where T : struct, IComparable
+namespace Domain.Primitives;
+
+internal class Range<T> where T : struct, IComparable
 {
     public T Min { get; }
     public T Max { get; }

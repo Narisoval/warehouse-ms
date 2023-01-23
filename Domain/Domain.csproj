@@ -5,7 +5,11 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
+    
+    <ItemGroup>
+        <InternalsVisibleTo Include="Domain.UnitTests" />
+    </ItemGroup> 
+    
     <ItemGroup>
       <PackageReference Include="ValueOf" Version="2.0.31" />
     </ItemGroup>

@@ -1,4 +1,4 @@
-using Domain.Validation;
+using Domain.Primitives;
 using Domain.ValueObjects;
 using FluentAssertions;
 
@@ -6,8 +6,8 @@ namespace Domain.UnitTests.ValueObjects;
 
 public class BrandDescriptionTests
 {
-    private static readonly Range<int> LengthRange = BrandDescription.GetRange();
-    
+    private readonly Range<int> _lengthRange = new BrandDescription().LengthRange;
+
     [Fact]
     public void Should_ThrowArgumentNullException_When_DescriptionIsNull()
     {
@@ -22,7 +22,7 @@ public class BrandDescriptionTests
     public void Should_ThrowArgumentOutOfRangeException_When_DescriptionLengthIsLessThanMinimum()
     {
         //Arrange
-        string description = new string('a', LengthRange.Min-1);
+        string description = new string('a', _lengthRange.Min-1);
         
         //Act & Assert
         Assert.Throws<ArgumentOutOfRangeException>(() => BrandDescription.From(description));
@@ -32,7 +32,7 @@ public class BrandDescriptionTests
     public void Should_ThrowArgumentOutOfRangeException_When_DescriptionLengthIsGreaterThanMaximum()
     {
         //Arrange
-        string description = new string('a', LengthRange.Max+1);
+        string description = new string('a', _lengthRange.Max+1);
         
         //Act & Assert
         Assert.Throws<ArgumentOutOfRangeException>(() => BrandDescription.From(description));
@@ -44,7 +44,7 @@ public class BrandDescriptionTests
     {
         // Arrange
         Random rnd = new Random();
-        string description = new string('a',rnd.Next(LengthRange.Min,LengthRange.Max));
+        string description = new string('a',rnd.Next(_lengthRange.Min,_lengthRange.Max));
 
         // Act
         var sut = BrandDescription.From(description);

@@ -1,4 +1,4 @@
-using Domain.Validation;
+using Domain.Primitives;
 using Domain.ValueObjects;
 using FluentAssertions;
 
@@ -6,7 +6,7 @@ namespace Domain.UnitTests.ValueObjects;
 
 public sealed class ProductDescriptionTests
 {
-    private static readonly Range<int> LengthRange = ProductDescription.GetRange();
+    private readonly Range<int> _lengthRange = new ProductDescription().LengthRange;
 
     [Fact]
     public void Should_ThrowException_When_ProductDescriptionIsNull()
@@ -22,7 +22,7 @@ public sealed class ProductDescriptionTests
     public void Should_ThrowException_When_ProductDescriptionLengthIsLessThanMinimum()
     {
         //Arrange
-        string description = new string('a', LengthRange.Min - 1);
+        string description = new string('a', _lengthRange.Min - 1);
         
         //Act & Assert
         Assert.Throws<ArgumentOutOfRangeException>(() => ProductDescription.From(description));
@@ -32,7 +32,7 @@ public sealed class ProductDescriptionTests
     public void Should_ThrowException_When_ProductDescriptionLengthIsMoreThanMaximum()
     {
         //Arrange
-        string description = new string('a', LengthRange.Max + 1);
+        string description = new string('a', _lengthRange.Max + 1);
         
         //Act & Assert 
         Assert.Throws<ArgumentOutOfRangeException>(() => ProductDescription.From(description));
@@ -43,7 +43,7 @@ public sealed class ProductDescriptionTests
     {
         //Arrange
         Random rnd = new Random();
-        string description = new string('a',rnd.Next(LengthRange.Min,LengthRange.Max));
+        string description = new string('a',rnd.Next(_lengthRange.Min,_lengthRange.Max));
         
         //Act 
         var sut = ProductDescription.From(description);
