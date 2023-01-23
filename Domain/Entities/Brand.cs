@@ -15,13 +15,19 @@ public class Brand : Entity
         Description = description;
     }
     
-    public Brand(Guid id, string brandName, Image? brandImage) : base(id)
+    public Brand(Guid id, string brandName, Image brandImage) : base(id)
     {
         BrandName = brandName;
         BrandImage = brandImage;
     }
     
-    public Brand(Guid id, string brandName ) : base(id)
+    public Brand(Guid id, string brandName, BrandDescription description) : base(id)
+    {
+        BrandName = brandName;
+        Description = description;
+    }
+    
+    public Brand(Guid id, string brandName) : base(id)
     {
         BrandName = brandName;
     }
