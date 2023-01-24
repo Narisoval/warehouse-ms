@@ -1,34 +1,34 @@
 using Domain.Entities;
+using FluentAssertions;
 
 namespace Domain.UnitTests.Entities;
 
 public class CategoryTests
 {
-    [Theory]
-    [InlineData("Shoes")]
-    [InlineData("Clothes")]
-    [InlineData("Electronics")]
-    public void Should_CreateCategory_When_NameIsProvided(string name)
+    [Fact]
+    public void Should_ChangeName_When_Called()
     {
         //Arrange
-        var id = Guid.NewGuid();
+        var initialName = "Shoses";
+        var sut = Category.Create(Guid.NewGuid(), initialName);
+        var nameToChangeTo = "Shoes";
         
         //Act
-        var category = Category.Create(id, name);
+        sut.ChangeName(nameToChangeTo);
         
         //Assert
-        Assert.Equal(id, category.Id);
-        Assert.Equal(name, category.Name);
+        sut.Name.Should().BeEquivalentTo(nameToChangeTo);
+        sut.Name.Should().NotBe(initialName);
     }
 
     [Fact]
-    public void Should_ThrowArgumentNullException_When_NameIsNotProvided()
+    public void Should_ThrowException_When_ChangeNameIsCalledWithNull()
     {
         //Arrange
-        var id = Guid.NewGuid();
-        string? name = null;
+        var sut = Category.Create(Guid.NewGuid(), "Electronics");
+        string? nameToChangeTo = null;
         
         //Act & Assert
-        Assert.Throws<ArgumentNullException>(() => Category.Create(id, name));
+        Assert.Throws<ArgumentNullException>(() => sut.ChangeName(nameToChangeTo));
     }
 }

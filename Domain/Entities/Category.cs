@@ -16,7 +16,7 @@ public class Category : Entity
         return new Category(id, name);
     }
 
-    public void ChangeName(string name)
+    public void ChangeName(string? name)
     {
         Name = name ?? throw new ArgumentNullException(nameof(name));
     }
