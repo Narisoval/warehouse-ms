@@ -12,6 +12,7 @@ public class ProductNameTests
     {
         //Arrange
         string? productName = null;
+        
         //Act & Assert
         Assert.Throws<ArgumentNullException>(() => ProductName.From(productName));
     }

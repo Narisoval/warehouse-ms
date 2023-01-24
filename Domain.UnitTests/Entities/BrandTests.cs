@@ -12,7 +12,7 @@ public class BrandTests
     {
         //Arrange
         var id = Guid.NewGuid();
-        var brandName = "BrandName";
+        var brandName = BrandName.From("Adidas");
         var brandImage = Image.From("https://image.jpg");
         var brandDescription = BrandDescription.From("This is a brand description");
     
@@ -75,7 +75,7 @@ public class BrandTests
     {
         //Arrange
         var sut = BrandsFixture.GetTestBrand();
-        var newBrandName = "BBA";
+        var newBrandName = BrandName.From("BBA");
         
         //Act
         sut.ChangeName(newBrandName); 
@@ -89,7 +89,7 @@ public class BrandTests
     {
         //Arrange
         var sut = BrandsFixture.GetTestBrand();
-        string? newBrandName = null;
+        BrandName? newBrandName = null;
         
         //Act & Assert
         Assert.Throws<ArgumentNullException>(() => sut.ChangeName(newBrandName));

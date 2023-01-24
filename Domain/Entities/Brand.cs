@@ -5,23 +5,23 @@ namespace Domain.Entities;
 
 public class Brand : Entity
 {
-    public string Name { get; private set; }
+    public BrandName Name { get; private set; }
     public Image Image { get; private set; }
     public BrandDescription Description { get; private set; }
 
-    private Brand(Guid id, string? brandName, Image? brandImage, BrandDescription? description) : base(id)
+    private Brand(Guid id, BrandName? brandName, Image? brandImage, BrandDescription? description) : base(id)
     {
         Name = brandName ?? throw new ArgumentNullException(nameof(brandName));
         Image = brandImage ?? throw new ArgumentNullException(nameof(brandImage));
         Description = description ?? throw new ArgumentNullException(nameof(description));
     }
 
-    public static Brand Create(Guid id, string brandName, Image? brandImage, BrandDescription? description)
+    public static Brand Create(Guid id, BrandName brandName, Image? brandImage, BrandDescription? description)
     {
         return new Brand(id, brandName, brandImage, description);
     }
 
-    public void ChangeName(string? brandName)
+    public void ChangeName(BrandName? brandName)
     {
         Name = brandName ?? throw new ArgumentNullException(nameof(brandName));
     }
