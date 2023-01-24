@@ -28,17 +28,24 @@ public class PriceTests
         Assert.Throws<ArgumentOutOfRangeException>(() => Price.From(price));
     }
     
-    [Fact]
-    private void Should_CreatePrice_WhenPriceIsInValidRange()
+    [Theory]
+    [MemberData(nameof(GetPriceData))]
+    private void Should_CreatePrice_WhenPriceIsInValidRange(decimal price)
     {
-        //Arrange
-        Random rnd = new Random();
-        decimal price = PriceRange.Max - PriceRange.Min;
-        
         //Act 
         var sut = Price.From(price);
         
         //Assert
         sut.Value.Should().Be(price);
     }
+
+    private static IEnumerable<object[]> GetPriceData()
+    {
+        yield return ConvertToObjectsArray( PriceRange.Max - PriceRange.Min);
+        yield return ConvertToObjectsArray(PriceRange.Min * 2);
+        yield return ConvertToObjectsArray( PriceRange.Max - 0.1M);
+        yield return ConvertToObjectsArray(30);
+    }
+
+    private static object[] ConvertToObjectsArray(object obj) => new[] { obj };
 }

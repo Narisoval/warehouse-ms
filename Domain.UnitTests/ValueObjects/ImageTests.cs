@@ -23,7 +23,7 @@ public class ImageTests
     }
     
     [Fact]
-    public void Should_FromImage_When_ImageUrlIsValid()
+    public void Should_CreateImage_When_ImageUrlIsValid()
     {
         //Arrange
         string imageUrl = "https://image.jpg ";

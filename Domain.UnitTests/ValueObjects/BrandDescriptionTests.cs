@@ -1,6 +1,7 @@
 using Domain.Primitives;
 using Domain.ValueObjects;
 using FluentAssertions;
+using Random = System.Random;
 
 namespace Domain.UnitTests.ValueObjects;
 
@@ -40,16 +41,17 @@ public class BrandDescriptionTests
     }
 
     [Fact]
-    public void Should_FromBrandDescription_When_DescriptionIsValid()
+    public void Should_FromBrandDescription_When_DescriptionLengthIsValid()
     {
         // Arrange
-        Random rnd = new Random();
-        string description = new string('a',rnd.Next(_lengthRange.Min,_lengthRange.Max));
+        var rnd = new Random();
+        var descriptionLength = rnd.Next(_lengthRange.Min, _lengthRange.Max);
+        string description = new string('a',descriptionLength);
 
         // Act
         var sut = BrandDescription.From(description);
 
         //Assert
-        sut.Value.Should().Be(description);
+        sut.Value.Should().BeEquivalentTo(description);
     }
 }

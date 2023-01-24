@@ -1,5 +1,6 @@
 using Domain.Primitives;
 using Domain.ValueObjects;
+using FluentAssertions;
 
 namespace Domain.UnitTests.ValueObjects;
 
@@ -33,5 +34,20 @@ public class ProductNameTests
         var productName = new string('a', _lengthRange.Max + 1);
         //Act & Assert
         Assert.Throws<ArgumentOutOfRangeException>(() => ProductName.From(productName));
+    }
+
+    [Fact]
+    public void Should_CreateProductName_When_LengthIsInCorrectRange()
+    {
+        //Arrange
+        var rnd = new Random();
+        var nameLength = rnd.Next(_lengthRange.Min, _lengthRange.Max);
+        var productName = new string('a',nameLength);
+        
+        //Act 
+        var sut = ProductDescription.From(productName);
+            
+        //Assert
+        sut.Value.Should().Be(productName);
     }
 }

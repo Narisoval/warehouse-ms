@@ -22,7 +22,7 @@ public sealed class ProductDescriptionTests
     public void Should_ThrowException_When_ProductDescriptionLengthIsLessThanMinimum()
     {
         //Arrange
-        string description = new string('a', _lengthRange.Min - 1);
+        var description = new string('a', _lengthRange.Min - 1);
         
         //Act & Assert
         Assert.Throws<ArgumentOutOfRangeException>(() => ProductDescription.From(description));
@@ -32,7 +32,7 @@ public sealed class ProductDescriptionTests
     public void Should_ThrowException_When_ProductDescriptionLengthIsMoreThanMaximum()
     {
         //Arrange
-        string description = new string('a', _lengthRange.Max + 1);
+        var description = new string('a', _lengthRange.Max + 1);
         
         //Act & Assert 
         Assert.Throws<ArgumentOutOfRangeException>(() => ProductDescription.From(description));
@@ -42,8 +42,9 @@ public sealed class ProductDescriptionTests
     public void Should_CreateProductDescription_When_ProductDescriptionLengthIsValid()
     {
         //Arrange
-        Random rnd = new Random();
-        string description = new string('a',rnd.Next(_lengthRange.Min,_lengthRange.Max));
+        var rnd = new Random();
+        var descriptionLength = rnd.Next(_lengthRange.Min, _lengthRange.Max);
+        var description = new string('a',descriptionLength);
         
         //Act 
         var sut = ProductDescription.From(description);
@@ -51,5 +52,4 @@ public sealed class ProductDescriptionTests
         //Assert
         sut.Value.Should().Be(description);
     }
-
 }
