@@ -1,8 +1,12 @@
+using System.ComponentModel;
+
 namespace Domain.Primitives;
 public abstract class Entity : IEquatable<Entity>
 {
     protected Entity(Guid id)
     {
+        if(id == Guid.Empty)
+            throw new InvalidEnumArgumentException("Id should be a valid Guid");
         Id = id;
     }
     public Guid Id { get; }
