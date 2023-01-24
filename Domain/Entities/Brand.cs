@@ -32,22 +32,22 @@ public class Brand : Entity
         BrandName = brandName;
     }
 
-    public void ChangeBrandImage(Image image)
+    public void ChangeImage(Image image)
     {
         BrandImage = image;
     }
     
-    public void RemoveBrandImage()
+    public void RemoveImage()
     {
         BrandImage = null;
     }
     
-    public void ChangeBrandDescription(BrandDescription description)
+    public void ChangeDescription(BrandDescription description)
     {
         Description = description;
     }
     
-    public void RemoveBrandDescription()
+    public void RemoveDescription()
     {
         Description = null;
     }

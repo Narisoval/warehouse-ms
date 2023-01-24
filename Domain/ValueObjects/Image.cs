@@ -3,7 +3,7 @@ using ValueOf;
 
 namespace Domain.ValueObjects;
 
-public class Image : ValueOf<string,Image>
+public sealed class Image : ValueOf<string,Image>
 {
     protected override void Validate()
     {

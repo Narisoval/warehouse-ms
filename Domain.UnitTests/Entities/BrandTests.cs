@@ -69,7 +69,7 @@ public class BrandTests
         //Arrange
         var sut = BrandsFixture.GetBrands().ElementAt(0);
         //Act
-        sut.RemoveBrandDescription();
+        sut.RemoveDescription();
         //Assert
         sut.Description.Should().Be(null);
     }
@@ -80,7 +80,7 @@ public class BrandTests
         //Arrange
         var sut = BrandsFixture.GetBrands().ElementAt(0);
         //Act
-        sut.RemoveBrandImage();
+        sut.RemoveImage();
         //Assert
         sut.BrandImage.Should().Be(null);
     }
@@ -92,7 +92,7 @@ public class BrandTests
         var sut = BrandsFixture.GetBrands().ElementAt(0);
         var newDescription = BrandDescription.From("A great brand which offers great products");
         //Act
-        sut.ChangeBrandDescription(newDescription);
+        sut.ChangeDescription(newDescription);
         //Assert
         sut.Description.Should().Be(newDescription);
     }
@@ -104,7 +104,7 @@ public class BrandTests
         var sut = BrandsFixture.GetBrands().ElementAt(0);
         var newImage = Image.From("https://cat.png");
         //Act
-        sut.ChangeBrandImage(newImage);
+        sut.ChangeImage(newImage);
         //Assert
         sut.BrandImage.Should().Be(newImage);
     }
