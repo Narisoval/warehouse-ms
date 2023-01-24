@@ -13,11 +13,11 @@ public static class ProductsFixture
             ProductName.From("A great product"),
             Quantity.From(quantity),
             Price.From(600),
-            Image.From("https://cat.png"),
+new List<ProductImage>(){new ProductImage(Guid.NewGuid(), Image.From("https://cat.png"))},
             ProductDescription.From(new string('a',50)),
             true,
             Sale.From(0),
-            new Provider(Guid.NewGuid()),
+            new Provider(Guid.NewGuid(), "Nike inc.","+380689438934",Email.From("example@ex.com")),
             _brands[0]);
     }
 }
