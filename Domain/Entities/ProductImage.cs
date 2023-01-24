@@ -11,5 +11,4 @@ public class ProductImage : Entity
     {
         Image = image;
     }
-    
 }
