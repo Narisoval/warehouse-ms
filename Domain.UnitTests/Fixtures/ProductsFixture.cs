@@ -9,11 +9,11 @@ public static class ProductsFixture
     public static Product GetProductWithFixedQuantity(int quantity)
     {
         _brands = BrandsFixture.GetBrands().ToList();
-        return new Product(new Guid(),
+        return Product.Create(Guid.NewGuid(),
             ProductName.From("A great product"),
             Quantity.From(quantity),
             Price.From(600),
-new List<ProductImage>(){new ProductImage(Guid.NewGuid(), Image.From("https://cat.png"))},
+            new List<ProductImage>() { ProductImage.Create(Guid.NewGuid(), Image.From("https://cat.png")) },
             ProductDescription.From(new string('a',50)),
             true,
             Sale.From(0),

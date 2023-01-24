@@ -14,7 +14,7 @@ public class CategoryTests
         var id = Guid.NewGuid();
         
         //Act
-        var category = new Category(id, name);
+        var category = Category.Create(id, name);
         
         //Assert
         Assert.Equal(id, category.Id);
@@ -29,6 +29,6 @@ public class CategoryTests
         string name = null;
         
         //Act & Assert
-        Assert.Throws<ArgumentNullException>(() => new Category(id, name));
+        Assert.Throws<ArgumentNullException>(() => Category.Create(id, name));
     }
 }

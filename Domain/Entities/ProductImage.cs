@@ -6,9 +6,14 @@ namespace Domain.Entities;
 public class ProductImage : Entity
 {
     public Image Image { get; private set; }
-    
-    public ProductImage(Guid id, Image image) : base(id)
+
+    private ProductImage(Guid id, Image image) : base(id)
     {
-        Image = image;
+        Image = image ?? throw new ArgumentNullException(nameof(image));
+    }
+
+    public static ProductImage Create(Guid id, Image image)
+    {
+        return new ProductImage(id, image);
     }
 }
