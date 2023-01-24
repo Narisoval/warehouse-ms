@@ -6,30 +6,19 @@ namespace Domain.Entities;
 public class Brand : Entity
 {
     public string BrandName { get; private set; }
-    public Image? BrandImage { get; private set; }
-    public BrandDescription? Description { get; private set; }
-    public Brand(Guid id, string brandName, Image? brandImage, BrandDescription? description) : base(id)
+    public Image BrandImage { get; private set; }
+    public BrandDescription Description { get; private set; }
+
+    private Brand(Guid id, string? brandName, Image? brandImage, BrandDescription? description) : base(id)
     {
-        BrandName = brandName;
-        BrandImage = brandImage;
-        Description = description;
+        BrandName = brandName ?? throw new ArgumentNullException(nameof(brandName));
+        BrandImage = brandImage ?? throw new ArgumentNullException(nameof(brandImage));
+        Description = description ?? throw new ArgumentNullException(nameof(description));
     }
-    
-    public Brand(Guid id, string brandName, Image brandImage) : base(id)
+
+    public static Brand Create(Guid id, string brandName, Image? brandImage, BrandDescription? description)
     {
-        BrandName = brandName;
-        BrandImage = brandImage;
-    }
-    
-    public Brand(Guid id, string brandName, BrandDescription description) : base(id)
-    {
-        BrandName = brandName;
-        Description = description;
-    }
-    
-    public Brand(Guid id, string brandName) : base(id)
-    {
-        BrandName = brandName;
+        return new Brand(id, brandName, brandImage, description);
     }
 
     public void ChangeImage(Image image)
@@ -37,18 +26,8 @@ public class Brand : Entity
         BrandImage = image;
     }
     
-    public void RemoveImage()
-    {
-        BrandImage = null;
-    }
-    
     public void ChangeDescription(BrandDescription description)
     {
         Description = description;
-    }
-    
-    public void RemoveDescription()
-    {
-        Description = null;
     }
 }

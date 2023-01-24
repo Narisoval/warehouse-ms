@@ -18,7 +18,7 @@ public class BrandTests
         var brandDescription = BrandDescription.From("This is a brand description");
     
         //Act
-        var brand = new Brand(id, brandName, brandImage, brandDescription);
+        var brand = Brand.Create(id, brandName, brandImage, brandDescription);
     
         //Assert
         Assert.Equal(id, brand.Id);
@@ -26,64 +26,6 @@ public class BrandTests
         Assert.Equal(brandImage, brand.BrandImage);
         Assert.Equal(brandDescription, brand.Description);
     } 
-    
-    [Fact]
-    public void Should_CreateBrand_When_BrandDescriptionIsNotProvided()
-    {
-        // Arrange
-        var id = Guid.NewGuid();
-        var brandName = "Nike";
-        var brandImage = Image.From("https://example.com/nike.jpg");
-
-        // Act
-        var brand = new Brand(id, brandName, brandImage);
-
-        // Assert
-        Assert.Equal(id, brand.Id);
-        Assert.Equal(brandName, brand.BrandName);
-        Assert.Equal(brandImage, brand.BrandImage);
-        Assert.Null(brand.Description);
-    } 
-    
- 
-    [Fact]
-    public void Should_Create_Brand_When_OnlyBrandNameIsProvided()
-    {
-        //Arrange
-        var id = Guid.NewGuid();
-        var brandName = "BrandName";
-    
-        //Act
-        var brand = new Brand(id, brandName);
-    
-        //Assert
-        Assert.Equal(id, brand.Id);
-        Assert.Equal(brandName, brand.BrandName);
-        Assert.Null(brand.BrandImage);
-        Assert.Null(brand.Description);
-    } 
-    
-    [Fact]
-    public void Should_SetDescriptionToNull_When_RemoveBrandDescription()
-    {
-        //Arrange
-        var sut = BrandsFixture.GetBrands().ElementAt(0);
-        //Act
-        sut.RemoveDescription();
-        //Assert
-        sut.Description.Should().Be(null);
-    }
-    
-    [Fact]
-    public void Should_SetImageToNull_When_RemoveBrandImage()
-    {
-        //Arrange
-        var sut = BrandsFixture.GetBrands().ElementAt(0);
-        //Act
-        sut.RemoveImage();
-        //Assert
-        sut.BrandImage.Should().Be(null);
-    }
     
     [Fact]
     public void Should_ChangeBrandDescription_When_Called()

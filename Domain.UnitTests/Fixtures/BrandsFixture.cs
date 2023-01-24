@@ -7,6 +7,9 @@ public static class BrandsFixture
 {
     public static IEnumerable<Brand> GetBrands()
     {
-        yield return new Brand(Guid.NewGuid(), "Adidas",Image.From("http://Logo.png"));
+        yield return Brand.Create(
+            Guid.NewGuid(), "Adidas",
+            Image.From("http://Logo.png"), 
+            BrandDescription.From("Fjsdkfjsdlkfjsldkjflksdjflksdjflksdjflksdjglkdfjglkdf"));
     }
 }
