@@ -41,7 +41,7 @@ public class Product : Entity
         Provider = provider ?? throw new ArgumentNullException(nameof(provider));
         ProviderId = Provider.Id;
         Brand = brand ?? throw new ArgumentNullException(nameof(brand));
-        BrandId = Brand.Id;;
+        BrandId = Brand.Id;
     }
     
     public static Product Create(Guid id, 

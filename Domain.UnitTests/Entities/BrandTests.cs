@@ -7,7 +7,6 @@ namespace Domain.UnitTests.Entities;
 
 public class BrandTests
 {
-    // CONSTRUCTORS
     [Fact]
     public void Should_Create_Brand_When_All_Properties_Are_Provided()
     {
@@ -22,8 +21,8 @@ public class BrandTests
     
         //Assert
         Assert.Equal(id, brand.Id);
-        Assert.Equal(brandName, brand.BrandName);
-        Assert.Equal(brandImage, brand.BrandImage);
+        Assert.Equal(brandName, brand.Name);
+        Assert.Equal(brandImage, brand.Image);
         Assert.Equal(brandDescription, brand.Description);
     } 
     
@@ -40,7 +39,17 @@ public class BrandTests
     }
     
     [Fact]
-    public void Should_ChangeBrandImage_When_Called()
+    public void Should_ThrowException_When_ChangeDescriptionArgumentIsNull()
+    {
+        //Arrange
+        var sut = BrandsFixture.GetTestBrand();
+        BrandDescription? newDescription = null; 
+        //Act && Assert
+        Assert.Throws<ArgumentNullException>(() => sut.ChangeDescription(newDescription));
+    }
+    
+    [Fact]
+    public void Should_ChangeImage_When_Called()
     {
         //Arrange
         var sut = BrandsFixture.GetTestBrand();
@@ -48,6 +57,41 @@ public class BrandTests
         //Act
         sut.ChangeImage(newImage);
         //Assert
-        sut.BrandImage.Should().Be(newImage);
+        sut.Image.Should().Be(newImage);
+    }
+
+    [Fact]
+    public void Should_ThrowException_When_ChangeImageArgumentIsNull()
+    {
+        //Arrange
+        var sut = BrandsFixture.GetTestBrand();
+        Image? newImage = null;
+        //Act && Assert
+        Assert.Throws<ArgumentNullException>(() => sut.ChangeImage(newImage));
+    }
+
+    [Fact]
+    public void Should_ChangeName_When_Called()
+    {
+        //Arrange
+        var sut = BrandsFixture.GetTestBrand();
+        var newBrandName = "BBA";
+        
+        //Act
+        sut.ChangeName(newBrandName); 
+        
+        //Assert
+        sut.Name.Should().Be(newBrandName);
+    }
+    
+    [Fact]
+    public void Should_ThrowException_When_ChangeNameArgumentIsNull()
+    {
+        //Arrange
+        var sut = BrandsFixture.GetTestBrand();
+        string? newBrandName = null;
+        
+        //Act & Assert
+        Assert.Throws<ArgumentNullException>(() => sut.ChangeName(newBrandName));
     }
 }

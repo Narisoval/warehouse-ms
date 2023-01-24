@@ -5,14 +5,14 @@ namespace Domain.Entities;
 
 public class Brand : Entity
 {
-    public string BrandName { get; private set; }
-    public Image BrandImage { get; private set; }
+    public string Name { get; private set; }
+    public Image Image { get; private set; }
     public BrandDescription Description { get; private set; }
 
     private Brand(Guid id, string? brandName, Image? brandImage, BrandDescription? description) : base(id)
     {
-        BrandName = brandName ?? throw new ArgumentNullException(nameof(brandName));
-        BrandImage = brandImage ?? throw new ArgumentNullException(nameof(brandImage));
+        Name = brandName ?? throw new ArgumentNullException(nameof(brandName));
+        Image = brandImage ?? throw new ArgumentNullException(nameof(brandImage));
         Description = description ?? throw new ArgumentNullException(nameof(description));
     }
 
@@ -21,14 +21,19 @@ public class Brand : Entity
         return new Brand(id, brandName, brandImage, description);
     }
 
-    public void ChangeImage(Image image)
+    public void ChangeName(string? brandName)
     {
-        BrandImage = image;
+        Name = brandName ?? throw new ArgumentNullException(nameof(brandName));
     }
     
-    public void ChangeDescription(BrandDescription description)
+    public void ChangeImage(Image? image)
     {
-        Description = description;
+        Image = image ?? throw new ArgumentNullException(nameof(image));
+    }
+    
+    public void ChangeDescription(BrandDescription? description)
+    {
+        Description = description ?? throw new ArgumentNullException(nameof(description));
     }
     
 }
