@@ -12,6 +12,6 @@ public static class ProviderFixture
         var phoneNumber = "555-555-5555";
         var email = Email.From("test@example.com");
 
-        return new Provider(id, companyName, phoneNumber, email);
+        return Provider.Create(id, companyName, phoneNumber, email);
     }
 }

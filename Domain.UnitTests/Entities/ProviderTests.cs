@@ -16,7 +16,7 @@ public class ProviderTests
         var email = Email.From("test@example.com");
 
         // Act
-        var provider = new Provider(id, companyName, phoneNumber, email);
+        var provider = Provider.Create(id, companyName, phoneNumber, email);
 
         // Assert
         Assert.Equal(id, provider.Id);

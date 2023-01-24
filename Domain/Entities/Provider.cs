@@ -8,20 +8,26 @@ public class Provider : Entity
     public string CompanyName { get; private set; }
     public string PhoneNumber { get; private set; }
     public Email Email { get; private set; }
-    public Provider(Guid id, string companyName, string phoneNumber, Email email) : base(id)
+
+    private Provider(Guid id, string? companyName, string? phoneNumber, Email? email) : base(id)
     {
-        CompanyName = companyName;
-        PhoneNumber = phoneNumber;
-        Email = email;
+        CompanyName = companyName ?? throw new ArgumentNullException(nameof(companyName)) ;
+        PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
+        Email = email ?? throw new ArgumentNullException(nameof(email));
     }
 
-    public void ChangePhoneNumber(string phoneNumber)
+    public static Provider Create(Guid id, string companyName, string phoneNumber, Email email)
     {
-        PhoneNumber = phoneNumber;
+        return new Provider(id, companyName, phoneNumber, email);
     }
 
-    public void ChangeEmail(Email email)
+    public void ChangePhoneNumber(string? phoneNumber)
     {
-        Email = email;
+        PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
+    }
+
+    public void ChangeEmail(Email? email)
+    {
+        Email = email ?? throw new ArgumentNullException(nameof(email));
     }
 }
