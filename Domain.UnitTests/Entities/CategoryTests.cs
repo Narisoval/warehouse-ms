@@ -26,7 +26,7 @@ public class CategoryTests
     {
         //Arrange
         var id = Guid.NewGuid();
-        string name = null;
+        string? name = null;
         
         //Act & Assert
         Assert.Throws<ArgumentNullException>(() => Category.Create(id, name));

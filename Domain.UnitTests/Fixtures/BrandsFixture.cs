@@ -5,9 +5,9 @@ namespace Domain.UnitTests.Fixtures;
 
 public static class BrandsFixture
 {
-    public static IEnumerable<Brand> GetBrands()
+    public static Brand GetTestBrand()
     {
-        yield return Brand.Create(
+        return Brand.Create(
             Guid.NewGuid(), "Adidas",
             Image.From("http://Logo.png"), 
             BrandDescription.From("Fjsdkfjsdlkfjsldkjflksdjflksdjflksdjflksdjglkdfjglkdf"));

@@ -1,4 +1,4 @@
-namespace Domain.UnitTests.Fixtures.Generators;
+namespace Domain.UnitTests.Generators;
 
 public static class NumbersForArithmeticOperationsGenerator
 {
@@ -10,7 +10,7 @@ public static class NumbersForArithmeticOperationsGenerator
         {
             int firstNum = rnd.Next(50000);
             int secondNum = rnd.Next(50000);
-            yield return new object[] { firstNum, secondNum, firstNum + secondNum };
+            yield return new object[] { firstNum, secondNum};
         }     
     }
     
@@ -21,7 +21,7 @@ public static class NumbersForArithmeticOperationsGenerator
         {
             int firstNum = rnd.Next(50000);
             int secondNum = rnd.Next(firstNum);
-            yield return new object[] { firstNum, secondNum, firstNum - secondNum };
+            yield return new object[] { firstNum, secondNum};
         }
     }
 }

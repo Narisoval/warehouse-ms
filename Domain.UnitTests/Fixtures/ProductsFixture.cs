@@ -5,19 +5,81 @@ namespace Domain.UnitTests.Fixtures;
 
 public static class ProductsFixture
 {
-    private static List<Brand>? _brands;
-    public static Product GetProductWithFixedQuantity(int quantity)
+    public static Product GetTestProduct()
     {
-        _brands = BrandsFixture.GetBrands().ToList();
-        return Product.Create(Guid.NewGuid(),
-            ProductName.From("A great product"),
-            Quantity.From(quantity),
-            Price.From(600),
-            new List<ProductImage>() { ProductImage.Create(Guid.NewGuid(), Image.From("https://cat.png")) },
-            ProductDescription.From(new string('a',50)),
-            true,
-            Sale.From(0),
-            new Provider(Guid.NewGuid(), "Nike inc.","+380689438934",Email.From("example@ex.com")),
-            _brands[0]);
+        var id = Guid.NewGuid();
+        var productName = ProductName.From("Hard drive Kingston 2TB");
+        var quantity = Quantity.From(300);
+        var price = Price.From(300);
+        var productImages = new List<ProductImage>
+            { ProductImage.Create(Guid.NewGuid(), Image.From("https://cat.png")) };
+        var productDescription = ProductDescription.From(new string('a', 60));
+        var isActive = true;
+        var sale = Sale.From(0);
+        var provider = Provider.Create(Guid.NewGuid(), "Nike inc.", "+380689438934", Email.From("example@ex.com"));
+        var brand = BrandsFixture.GetTestBrand();
+        
+        return Product.Create(id,
+            productName,
+            quantity,
+            price,
+            productImages,
+            productDescription,
+            isActive,
+            sale,
+            provider,
+            brand);
+    }
+    
+    public static Product GetTestProduct(int intQuantity)
+    {
+        var id = Guid.NewGuid();
+        var productName = ProductName.From("Hard drive Kingston 2TB");
+        var quantity = Quantity.From(intQuantity);
+        var price = Price.From(300);
+        var productImages = new List<ProductImage>
+            { ProductImage.Create(Guid.NewGuid(), Image.From("https://cat.png")) };
+        var productDescription = ProductDescription.From(new string('a', 60));
+        var isActive = true;
+        var sale = Sale.From(0);
+        var provider = Provider.Create(Guid.NewGuid(), "Nike inc.", "+380689438934", Email.From("example@ex.com"));
+        var brand = BrandsFixture.GetTestBrand();
+        
+        return Product.Create(id,
+            productName,
+            quantity,
+            price,
+            productImages,
+            productDescription,
+            isActive,
+            sale,
+            provider,
+            brand);
+    }
+
+    public static Product GetTestProduct(bool isActiveParam)
+    {
+        var id = Guid.NewGuid();
+        var productName = ProductName.From("Hard drive Kingston 2TB");
+        var quantity = Quantity.From(300);
+        var price = Price.From(300);
+        var productImages = new List<ProductImage>
+            { ProductImage.Create(Guid.NewGuid(), Image.From("https://cat.png")) };
+        var productDescription = ProductDescription.From(new string('a', 60));
+        var isActive = isActiveParam;
+        var sale = Sale.From(0);
+        var provider = Provider.Create(Guid.NewGuid(), "Nike inc.", "+380689438934", Email.From("example@ex.com"));
+        var brand = BrandsFixture.GetTestBrand();
+         
+        return Product.Create(id,
+            productName,
+            quantity,
+            price,
+            productImages,
+            productDescription,
+            isActive,
+            sale,
+            provider,
+            brand);       
     }
 }

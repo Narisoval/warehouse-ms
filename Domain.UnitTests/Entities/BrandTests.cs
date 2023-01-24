@@ -31,7 +31,7 @@ public class BrandTests
     public void Should_ChangeBrandDescription_When_Called()
     {
         //Arrange
-        var sut = BrandsFixture.GetBrands().ElementAt(0);
+        var sut = BrandsFixture.GetTestBrand();
         var newDescription = BrandDescription.From("A great brand which offers great products");
         //Act
         sut.ChangeDescription(newDescription);
@@ -43,7 +43,7 @@ public class BrandTests
     public void Should_ChangeBrandImage_When_Called()
     {
         //Arrange
-        var sut = BrandsFixture.GetBrands().ElementAt(0);
+        var sut = BrandsFixture.GetTestBrand();
         var newImage = Image.From("https://cat.png");
         //Act
         sut.ChangeImage(newImage);
