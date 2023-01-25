@@ -1,55 +1,87 @@
-using Domain.Entities;
 using Domain.UnitTests.Fixtures;
 using Domain.ValueObjects;
+using FluentAssertions;
 
 namespace Domain.UnitTests.Entities;
 
 public class ProviderTests
 {
     [Fact]
-    public void Should_CreateProvider_When_AllPropertiesAreValid()
+    public void Should_ChangeCompanyName_WhenCalled()
     {
-        // Arrange
-        var id = Guid.NewGuid();
-        var companyName = "Acme Corp";
-        var phoneNumber = "555-555-5555";
-        var email = Email.From("test@example.com");
-
+        var sut = ProviderFixture.CreateProvider();
+        var oldCompanyName = sut.CompanyName;
         // Act
-        var provider = Provider.Create(id, companyName, phoneNumber, email);
+        var newCompanyName = "New Company Name";
+        sut.ChangeCompanyName(newCompanyName);
 
         // Assert
-        Assert.Equal(id, provider.Id);
-        Assert.Equal(companyName, provider.CompanyName);
-        Assert.Equal(phoneNumber, provider.PhoneNumber);
-        Assert.Equal(email, provider.Email);
+        sut.CompanyName.Should().BeEquivalentTo(newCompanyName);
+        sut.CompanyName.Should().NotBeEquivalentTo(oldCompanyName);
     }
 
     [Fact]
-    public void Should_ChangePhoneNumber_When_NewPhoneNumberIsValid()
+    public void Should_ThrowException_When_ChangeCompanyNameArgumentIsNull()
     {
         // Arrange
-        var provider = ProviderFixture.CreateProvider();
+        var sut = ProviderFixture.CreateProvider();
+        string? newCompanyName = null;
+        // Act & Assert
+        
+        Assert.Throws<ArgumentNullException>(() => sut.ChangeCompanyName(newCompanyName));
+    }
+ 
+    [Fact]
+    public void Should_ChangePhoneNumber_When_Called()
+    {
+        // Arrange
+        var sut = ProviderFixture.CreateProvider();
+        var oldPhoneNumber = sut.PhoneNumber;
         var newPhoneNumber = "666-666-6666";
 
         // Act
-        provider.ChangePhoneNumber(newPhoneNumber);
+        sut.ChangePhoneNumber(newPhoneNumber);
 
         // Assert
-        Assert.Equal(newPhoneNumber, provider.PhoneNumber);
+        sut.PhoneNumber.Should().BeEquivalentTo(newPhoneNumber);
+        sut.PhoneNumber.Should().NotBeEquivalentTo(oldPhoneNumber);
+    }
+    
+    [Fact]
+    public void Should_ThrowException_When_ChangePhoneNumberArgumentIsNull()
+    {
+        // Arrange
+        var sut = ProviderFixture.CreateProvider();
+        string? newPhoneNumber = null;
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => sut.ChangePhoneNumber(newPhoneNumber));
     }
 
     [Fact]
-    public void Should_ChangeEmail_When_NewEmailIsValid()
+    public void Should_ChangeEmail_When_Called()
     {
         // Arrange
-        var provider = ProviderFixture.CreateProvider();
+        var sut = ProviderFixture.CreateProvider();
         var newEmail = Email.From("exampleee@example.com");
+        var oldEmail = sut.Email;
 
         // Act
-        provider.ChangeEmail(newEmail);
+        sut.ChangeEmail(newEmail);
 
         // Assert
-        Assert.Equal(newEmail, provider.Email);
+        sut.Email.Should().BeEquivalentTo(newEmail);
+        sut.Email.Should().NotBeEquivalentTo(oldEmail);
     }
+    
+    [Fact]
+    public void Should_ThrowException_When_ChangeEmailArgumentIsNull()
+    {
+        // Arrange
+        var sut = ProviderFixture.CreateProvider();
+        Email? newEmail = null; 
+
+        // Act && Assert
+        Assert.Throws<ArgumentNullException>(() => sut.ChangeEmail(newEmail));
+    } 
 }

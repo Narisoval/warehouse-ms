@@ -21,6 +21,11 @@ public class Provider : Entity
         return new Provider(id, companyName, phoneNumber, email);
     }
 
+    public void ChangeCompanyName(string? companyName)
+    {
+        CompanyName = companyName ?? throw new ArgumentNullException(nameof(companyName));
+    }
+
     public void ChangePhoneNumber(string? phoneNumber)
     {
         PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
