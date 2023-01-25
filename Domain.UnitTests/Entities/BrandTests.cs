@@ -7,12 +7,13 @@ namespace Domain.UnitTests.Entities;
 
 public class BrandTests
 {
+    // CONSTRUCTORS
     [Fact]
     public void Should_Create_Brand_When_All_Properties_Are_Provided()
     {
         //Arrange
         var id = Guid.NewGuid();
-        var brandName = BrandName.From("Adidas");
+        var brandName = BrandName.From("BrandName");
         var brandImage = Image.From("https://image.jpg");
         var brandDescription = BrandDescription.From("This is a brand description");
     
@@ -21,77 +22,37 @@ public class BrandTests
     
         //Assert
         Assert.Equal(id, brand.Id);
-        Assert.Equal(brandName, brand.Name);
-        Assert.Equal(brandImage, brand.Image);
+        Assert.Equal(brandName, brand.BrandName);
+        Assert.Equal(brandImage, brand.BrandImage);
         Assert.Equal(brandDescription, brand.Description);
-    } 
-    
-    [Fact]
-    public void Should_ChangeBrandDescription_When_Called()
-    {
-        //Arrange
-        var sut = BrandsFixture.GetTestBrand();
-        var newDescription = BrandDescription.From("A great brand which offers great products");
-        //Act
-        sut.ChangeDescription(newDescription);
-        //Assert
-        sut.Description.Should().Be(newDescription);
-    }
-    
-    [Fact]
-    public void Should_ThrowException_When_ChangeDescriptionArgumentIsNull()
-    {
-        //Arrange
-        var sut = BrandsFixture.GetTestBrand();
-        BrandDescription? newDescription = null; 
-        //Act && Assert
-        Assert.Throws<ArgumentNullException>(() => sut.ChangeDescription(newDescription));
-    }
-    
-    [Fact]
-    public void Should_ChangeImage_When_Called()
-    {
-        //Arrange
-        var sut = BrandsFixture.GetTestBrand();
-        var newImage = Image.From("https://cat.png");
-        //Act
-        sut.ChangeImage(newImage);
-        //Assert
-        sut.Image.Should().Be(newImage);
     }
 
     [Fact]
-    public void Should_ThrowException_When_ChangeImageArgumentIsNull()
+    public void Should_ThrowException_When_SomeOfTheConstructorArgumentsAreNull()
     {
-        //Arrange
-        var sut = BrandsFixture.GetTestBrand();
-        Image? newImage = null;
-        //Act && Assert
-        Assert.Throws<ArgumentNullException>(() => sut.ChangeImage(newImage));
+        // Arrange
+        var id = Guid.NewGuid();
+        var brandName = BrandName.From("BrandName");
+        var image = Image.From("https://image.jpg");
+        var description = BrandDescription.From("This is a brand description");
+        var validArguments = new List<object?>() { brandName, image, description };
+
+        // Act and Assert
+        for (int i = 0; i < validArguments.Count; i++)
+        {
+            var currValidArgument = validArguments[i];
+            validArguments[i] = null;
+            Assert.Throws<ArgumentNullException>(() => CreateBrand(id,validArguments));
+            validArguments[i] = currValidArgument;
+        }
     }
 
-    [Fact]
-    public void Should_ChangeName_When_Called()
+
+    private Brand CreateBrand(Guid id, List<object?> arguments)
     {
-        //Arrange
-        var sut = BrandsFixture.GetTestBrand();
-        var newBrandName = BrandName.From("BBA");
-        
-        //Act
-        sut.ChangeName(newBrandName); 
-        
-        //Assert
-        sut.Name.Should().Be(newBrandName);
+        return Brand.Create(id,(BrandName)arguments[0]!,(Image)arguments[1]!,
+            (BrandDescription)arguments[2]!);
     }
     
-    [Fact]
-    public void Should_ThrowException_When_ChangeNameArgumentIsNull()
-    {
-        //Arrange
-        var sut = BrandsFixture.GetTestBrand();
-        BrandName? newBrandName = null;
-        
-        //Act & Assert
-        Assert.Throws<ArgumentNullException>(() => sut.ChangeName(newBrandName));
-    }
+    
 }
