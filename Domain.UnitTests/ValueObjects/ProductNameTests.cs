@@ -45,7 +45,7 @@ public class ProductNameTests
         var productName = new string('a',nameLength);
         
         //Act 
-        var sut = ProductDescription.From(productName);
+        var sut = ProductName.From(productName);
             
         //Assert
         sut.Value.Should().Be(productName);
