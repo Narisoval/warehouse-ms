@@ -67,7 +67,6 @@ public class ProductModelTests
         //Act && Assert
         Price? newPrice = null;
         Assert.Throws<ArgumentNullException>(() => sut.ChangeFullPrice(newPrice));
-
     }
 
     [Fact]
@@ -75,8 +74,7 @@ public class ProductModelTests
     {
         //Arrange
         var sut = ProductsFixture.GetTestProduct();
-        var newImages = new List<ProductImage>
-            { ProductImage.Create(Guid.NewGuid(), Image.From("http://a.b/cat.png")) };
+        var newImages = ProductImagesFixture.GetProductImages();
 
         //Act 
         sut.ChangeImages(newImages);
@@ -90,17 +88,95 @@ public class ProductModelTests
     {
         //Arrange
         var sut = ProductsFixture.GetTestProduct();
-        List<ProductImage>? newProductImages = null; 
+        List<ProductImage>? newProductImages = null;
         //Act && Assert
         Assert.Throws<ArgumentNullException>(() => sut.ChangeImages(newProductImages));
     }
 
     [Fact]
+    public void Should_ThrowException_WhenChangeImageArgumentIsWrongId()
+    {
+        //Arrange
+        var sut = ProductsFixture.GetTestProduct();
+        var newImageId = Guid.NewGuid();
+        var newImage = Image.From("https://abc.png");
+        
+        //Act && Assert
+        Assert.Throws<ArgumentException>(() => sut.ChangeImage(newImageId,newImage));  
+    }
+
+    [Fact]
+    public void Should_ThrowException_When_ChangeImageIdIsNull()
+    {
+        //Arrange
+        var sut = ProductsFixture.GetTestProduct();
+        var imageToChangeTo = Image.From("https://a.png");
+        //Act & Assert
+        Assert.Throws<ArgumentNullException>(() => sut.ChangeImage(null,imageToChangeTo));
+    }
+    
+    [Fact]
+    public void Should_ThrowException_When_ChangeImageImageIsNull()
+    {
+        //Arrange
+        var sut = ProductsFixture.GetTestProduct();
+        var imageToChangeTo = Image.From("https://a.png");
+        //Act & Assert
+        Assert.Throws<ArgumentNullException>(() => sut.ChangeImage(Guid.NewGuid(),null));
+    }
+
+    [Fact]
+    public void Should_ChangeRightImage_When_ChangeImageWhenCalled()
+    {
+        //Arrange
+        var productImages = ProductImagesFixture.GetProductImages();
+        var sut = ProductsFixture.GetTestProduct(productImages);
+        var newImage = Image.From("https://abc.png");
+        
+        //Act
+        foreach (var currProductImage in sut.Images)
+        {
+            var initialImage = currProductImage.Image;
+            sut.ChangeImage(currProductImage.Id, newImage);
+            
+            //Assert
+            currProductImage.Image.Should().BeEquivalentTo(newImage);
+            
+            currProductImage.Image = initialImage;
+        }
+    }
+
+    [Fact]
+    public void Should_NotChangeOtherImages_WhenChangeImageIsCalled()
+    {
+        //Arrange
+        var productImages = ProductImagesFixture.GetProductImages();
+        var sut = ProductsFixture.GetTestProduct(productImages);
+        var newImage = Image.From("https://abc.png");
+        
+        foreach (var currProductImage in sut.Images)
+        {
+            var initialImage = currProductImage.Image;
+            
+            //Act
+            sut.ChangeImage(currProductImage.Id,newImage);
+            
+            var otherImages = sut.Images.Where(image => image.Id != currProductImage.Id);
+            foreach(var otherImage in otherImages)
+            {
+                //Assert
+                otherImage.Image.Should().NotBeEquivalentTo(newImage);
+            }
+            currProductImage.Image = initialImage;
+        }
+    }
+    
+    [Fact]
     public void Should_ChangeDescription_WhenCalled()
     {
         //Arrange
         var sut = ProductsFixture.GetTestProduct();
-        var newDescription = 
+        var newDescription =
             ProductDescription.From(
                 "new better and more detailed description of a great productfds");
 
@@ -126,28 +202,27 @@ public class ProductModelTests
     {
         //Arrange
         var sut = ProductsFixture.GetTestProduct(false);
-        
+
         //Act
         sut.EnableProduct();
-            
+
         //Assert
         sut.IsActive.Should().BeTrue();
-
     }
-    
+
     [Fact]
     public void Should_SetIsActiveFalse_When_DisableProductIsCalled()
     {
         //Arrange
         var sut = ProductsFixture.GetTestProduct(true);
-        
+
         //Act
         sut.DisableProduct();
-            
+
         //Assert
         sut.IsActive.Should().BeFalse();
     }
-    
+
     [Fact]
     public void Should_ChangeSale_WhenCalled()
     {
@@ -169,13 +244,12 @@ public class ProductModelTests
     {
         //Arrange
         var sut = ProductsFixture.GetTestProduct();
-        Sale? newSale = null; 
+        Sale? newSale = null;
 
         //Act && Assert
         Assert.Throws<ArgumentNullException>(() => sut.ChangeSale(newSale));
-
     }
-    
+
     [Fact]
     public void Should_ChangeName_WhenCalled()
     {
@@ -186,12 +260,12 @@ public class ProductModelTests
 
         //Act 
         sut.ChangeName(newName);
-        
+
         //Assert
         sut.ProductName.Should().Be(newName);
         sut.ProductName.Should().NotBe(originalName);
     }
-    
+
     [Fact]
     public void Should_ThrowException_When_ChangeNameArgumentIsNull()
     {
@@ -202,26 +276,26 @@ public class ProductModelTests
         ProductName? newName = null;
         Assert.Throws<ArgumentNullException>(() => sut.ChangeName(newName));
     }
-    
+
     [Fact]
     public void Should_ChangeBrandAndId_WhenCalled()
     {
         //Arrange
         var sut = ProductsFixture.GetTestProduct();
-        var originalBrandId = sut.BrandId; 
-        
+        var originalBrandId = sut.BrandId;
+
         var newBrand = BrandsFixture.GetTestBrand();
         var newBrandId = newBrand.Id;
 
         //Act 
         sut.ChangeBrand(newBrand);
-        
+
         //Assert
         sut.Brand.Should().Be(newBrand);
         sut.BrandId.Should().Be(newBrandId);
         sut.BrandId.Should().NotBe(originalBrandId);
     }
-
+    
     [Fact]
     public void Should_ThrowException_When_ChangeBrandArgumentIsNull()
     {
@@ -230,7 +304,7 @@ public class ProductModelTests
 
         //Act 
         Brand? brand = null;
-        
+
         //Assert
         Assert.Throws<ArgumentNullException>(() => sut.ChangeBrand(brand));
     }
@@ -240,14 +314,14 @@ public class ProductModelTests
     {
         //Arrange
         var sut = ProductsFixture.GetTestProduct();
-        var originalProviderId = sut.ProviderId; 
-        
+        var originalProviderId = sut.ProviderId;
+
         var newProvider = ProvidersFixture.GetTestProvider();
         var newProviderId = newProvider.Id;
 
         //Act 
         sut.ChangeProvider(newProvider);
-        
+
         //Assert
         sut.Provider.Should().Be(newProvider);
         sut.ProviderId.Should().Be(newProviderId);

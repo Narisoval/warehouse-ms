@@ -5,7 +5,7 @@ namespace Domain.Entities;
 
 public class ProductImage : Entity
 {
-    public Image Image { get; private set; }
+    public Image Image { get; internal set; }
 
     private ProductImage(Guid id, Image image) : base(id)
     {

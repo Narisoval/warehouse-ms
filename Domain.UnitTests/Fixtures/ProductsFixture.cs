@@ -5,81 +5,69 @@ namespace Domain.UnitTests.Fixtures;
 
 public static class ProductsFixture
 {
+    private static readonly Guid TestId = Guid.NewGuid();
+    private static readonly ProductName TestName = ProductName.From("Kingston 3200 TB hard drive");
+    private static readonly Quantity TestQuantity = Quantity.From(300);
+    private static readonly Price TestPrice = Price.From(500.99M);
+    private static readonly IList<ProductImage> TestProductImages = ProductImagesFixture.GetProductImages();
+    private static readonly ProductDescription TestProductDescription = ProductDescription.From(new string('1', 50));
+    private static readonly bool TestIsActive = true;
+    private static readonly Sale TestSale = Sale.From(0);
+    private static readonly Provider TestProvider = ProviderFixture.CreateProvider();
+    private static readonly Brand TestBrand = BrandsFixture.GetTestBrand();
     public static Product GetTestProduct()
     {
-        var id = Guid.NewGuid();
-        var productName = ProductName.From("Hard drive Kingston 2TB");
-        var quantity = Quantity.From(300);
-        var price = Price.From(300);
-        var productImages = new List<ProductImage>
-            { ProductImage.Create(Guid.NewGuid(), Image.From("https://cat.png")) };
-        var productDescription = ProductDescription.From(new string('a', 60));
-        var isActive = true;
-        var sale = Sale.From(0);
-        var provider = Provider.Create(Guid.NewGuid(), "Nike inc.", "+380689438934", Email.From("example@ex.com"));
-        var brand = BrandsFixture.GetTestBrand();
-        
-        return Product.Create(id,
-            productName,
-            quantity,
-            price,
-            productImages,
-            productDescription,
-            isActive,
-            sale,
-            provider,
-            brand);
+        return Product.Create(TestId,
+            TestName,
+            TestQuantity,
+            TestPrice,
+            TestProductImages,
+            TestProductDescription,
+            TestIsActive,
+            TestSale,
+            TestProvider,
+            TestBrand);
     }
     
     public static Product GetTestProduct(int intQuantity)
     {
-        var id = Guid.NewGuid();
-        var productName = ProductName.From("Hard drive Kingston 2TB");
-        var quantity = Quantity.From(intQuantity);
-        var price = Price.From(300);
-        var productImages = new List<ProductImage>
-            { ProductImage.Create(Guid.NewGuid(), Image.From("https://cat.png")) };
-        var productDescription = ProductDescription.From(new string('a', 60));
-        var isActive = true;
-        var sale = Sale.From(0);
-        var provider = Provider.Create(Guid.NewGuid(), "Nike inc.", "+380689438934", Email.From("example@ex.com"));
-        var brand = BrandsFixture.GetTestBrand();
-        
-        return Product.Create(id,
-            productName,
-            quantity,
-            price,
-            productImages,
-            productDescription,
-            isActive,
-            sale,
-            provider,
-            brand);
+        return Product.Create(TestId,
+            TestName,
+            Quantity.From(intQuantity),
+            TestPrice,
+            TestProductImages,
+            TestProductDescription,
+            TestIsActive,
+            TestSale,
+            TestProvider,
+            TestBrand);
     }
-
+    
     public static Product GetTestProduct(bool isActiveParam)
     {
-        var id = Guid.NewGuid();
-        var productName = ProductName.From("Hard drive Kingston 2TB");
-        var quantity = Quantity.From(300);
-        var price = Price.From(300);
-        var productImages = new List<ProductImage>
-            { ProductImage.Create(Guid.NewGuid(), Image.From("https://cat.png")) };
-        var productDescription = ProductDescription.From(new string('a', 60));
-        var isActive = isActiveParam;
-        var sale = Sale.From(0);
-        var provider = Provider.Create(Guid.NewGuid(), "Nike inc.", "+380689438934", Email.From("example@ex.com"));
-        var brand = BrandsFixture.GetTestBrand();
-         
-        return Product.Create(id,
-            productName,
-            quantity,
-            price,
+        return Product.Create(TestId,
+            TestName,
+            TestQuantity,
+            TestPrice,
+            TestProductImages,
+            TestProductDescription,
+            isActiveParam,
+            TestSale,
+            TestProvider,
+            TestBrand);
+    }
+    
+    public static Product GetTestProduct(IList<ProductImage> productImages)
+    {
+        return Product.Create(TestId,
+            TestName,
+            TestQuantity,
+            TestPrice,
             productImages,
-            productDescription,
-            isActive,
-            sale,
-            provider,
-            brand);       
+            TestProductDescription,
+            TestIsActive,
+            TestSale,
+            TestProvider,
+            TestBrand);
     }
 }

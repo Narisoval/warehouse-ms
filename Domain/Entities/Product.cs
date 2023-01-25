@@ -41,7 +41,7 @@ public class Product : Entity
         Provider = provider ?? throw new ArgumentNullException(nameof(provider));
         ProviderId = Provider.Id;
         Brand = brand ?? throw new ArgumentNullException(nameof(brand));
-        BrandId = Brand.Id;
+        BrandId = Brand.Id;;
     }
     
     public static Product Create(Guid id, 
@@ -65,7 +65,7 @@ public class Product : Entity
 
     public void DecreaseQuantityBy(int amount)
     {
-        Quantity = Quantity.From(this.Quantity.Value - amount);
+        Quantity = Quantity.From(Quantity.Value - amount);
     }
 
     public void IncreaseQuantityBy(int amount)
@@ -84,6 +84,31 @@ public class Product : Entity
     {
         Images = images ?? throw new ArgumentNullException(nameof(images));
     }
+
+    public void ChangeImage(Guid? imageId, Image? imageToChangeTo)
+    {
+        if (imageToChangeTo == null)
+            throw new ArgumentNullException(nameof(imageToChangeTo));
+        
+        if (imageId == null)
+            throw new ArgumentNullException(nameof(imageId));
+
+        ProductImage productImageToChange = GetProductImageById(imageId.Value);
+        productImageToChange.Image = imageToChangeTo;
+    }
+
+    private ProductImage GetProductImageById(Guid id)
+    {
+        try
+        {
+            return Images.First(img => img.Id == id);
+        }
+        catch (InvalidOperationException)
+        {
+            throw new ArgumentException("Image Id is not found in images of this product");
+        }
+    }
+    
 
     public void ChangeDescription(ProductDescription? productDescription)
     {
@@ -116,5 +141,4 @@ public class Product : Entity
         Provider = provider ?? throw new ArgumentNullException(nameof(provider));
         ProviderId = provider.Id;
     }
- 
 }
