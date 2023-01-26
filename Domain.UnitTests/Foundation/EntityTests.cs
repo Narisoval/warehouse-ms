@@ -71,7 +71,7 @@ public class EntityTests
         Assert.Throws<ArgumentNullException>(() => new TestEntity(id));
     }
 
-    class TestEntity : Entity
+    private class TestEntity : Entity
     {
         public TestEntity(Guid? id) : base(id)
         {
