@@ -5,7 +5,7 @@ namespace Domain.UnitTests.Fixtures;
 
 public static class ProductImagesFixture
 {
-    public static IList<ProductImage> GetProductImages()
+    public static IList<ProductImage> GetTestProductImages()
     {
         List<ProductImage> productImages = new List<ProductImage>()
         {

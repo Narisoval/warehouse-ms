@@ -19,6 +19,9 @@ public class Product : Entity
     public Brand Brand { get; private set; }
     public Guid BrandId { get; private set; }
 
+    public Category Category { get; private set; }
+    public Guid CategoryId { get; private set; }
+    
     private Product(
         Guid id, 
         ProductName productName, 
@@ -29,7 +32,8 @@ public class Product : Entity
         bool isActive, 
         Sale sale, 
         Provider provider, 
-        Brand brand) : base(id)
+        Brand brand, 
+        Category category) : base(id)
     {
         ProductName = productName ?? throw new ArgumentNullException(nameof(productName));
         Quantity = quantity ?? throw new ArgumentNullException(nameof(quantity));
@@ -42,8 +46,10 @@ public class Product : Entity
         ProviderId = Provider.Id;
         Brand = brand ?? throw new ArgumentNullException(nameof(brand));
         BrandId = Brand.Id;;
+        Category = category ?? throw new ArgumentException(nameof(category));
+        CategoryId = category.Id;
     }
-    
+
     public static Product Create(Guid id, 
         ProductName productName, 
         Quantity quantity, 
@@ -53,9 +59,10 @@ public class Product : Entity
         bool isActive, 
         Sale sale, 
         Provider provider, 
-        Brand brand)
+        Brand brand,
+        Category category)
     {   
-        return new Product(id, productName, quantity, fullPrice, productImages, productDescription, isActive, sale, provider, brand);
+        return new Product(id, productName, quantity, fullPrice, productImages, productDescription, isActive, sale, provider, brand, category);
     }
     
     public void ChangeName(ProductName? productName)
@@ -140,5 +147,12 @@ public class Product : Entity
     {
         Provider = provider ?? throw new ArgumentNullException(nameof(provider));
         ProviderId = provider.Id;
+    }
+
+    public void ChangeCategory(Category? category)
+    {
+        Category = category ?? throw new ArgumentNullException(nameof(category));
+        CategoryId = category.Id;
+
     }
 }

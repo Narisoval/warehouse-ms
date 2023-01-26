@@ -74,7 +74,7 @@ public class ProductModelTests
     {
         //Arrange
         var sut = ProductsFixture.GetTestProduct();
-        var newImages = ProductImagesFixture.GetProductImages();
+        var newImages = ProductImagesFixture.GetTestProductImages();
 
         //Act 
         sut.ChangeImages(newImages);
@@ -129,7 +129,7 @@ public class ProductModelTests
     public void Should_ChangeRightImage_When_ChangeImageWhenCalled()
     {
         //Arrange
-        var productImages = ProductImagesFixture.GetProductImages();
+        var productImages = ProductImagesFixture.GetTestProductImages();
         var sut = ProductsFixture.GetTestProduct(productImages);
         var newImage = Image.From("https://abc.png");
         
@@ -150,7 +150,7 @@ public class ProductModelTests
     public void Should_NotChangeOtherImages_WhenChangeImageIsCalled()
     {
         //Arrange
-        var productImages = ProductImagesFixture.GetProductImages();
+        var productImages = ProductImagesFixture.GetTestProductImages();
         var sut = ProductsFixture.GetTestProduct(productImages);
         var newImage = Image.From("https://abc.png");
         
@@ -339,5 +339,33 @@ public class ProductModelTests
 
         //Assert
         Assert.Throws<ArgumentNullException>(() => sut.ChangeProvider(newProvider));
+    }
+
+    [Fact]
+    public void Should_ThrowException_When_ChangeCategoryArgumentIsNull()
+    {
+        //Arrange
+        var sut = ProductsFixture.GetTestProduct();
+        Category? categoryToChangeTo = null;
+        
+        //Act & Assert
+        Assert.Throws<ArgumentNullException>( () => sut.ChangeCategory(categoryToChangeTo));
+    }
+    
+    [Fact]
+    public void Should_ChangeCategory_When_Called()
+    {
+        //Arrange
+        var testCategoryId = Guid.NewGuid();
+        var testCategoryName = CategoryName.From("Electronics");
+        var testCategory = Category.Create(testCategoryId, testCategoryName);
+        var sut = ProductsFixture.GetTestProduct();
+        
+        //Act
+        sut.ChangeCategory(testCategory); 
+        
+        //Assert
+        sut.Category.Id.Should().Be(testCategoryId);
+        sut.Category.Name.Should().Be(testCategoryName);
     }
 }
