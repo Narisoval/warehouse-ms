@@ -1,4 +1,5 @@
 using Domain.Entities;
+using Domain.ValueObjects;
 using FluentAssertions;
 
 namespace Domain.UnitTests.Entities;
@@ -6,29 +7,28 @@ namespace Domain.UnitTests.Entities;
 public class CategoryTests
 {
     [Fact]
-    public void Should_ChangeName_When_Called()
+    public void Should_ThrowException_When_ArgumentsAreNull()
     {
         //Arrange
-        var initialName = "Shoses";
-        var sut = Category.Create(Guid.NewGuid(), initialName);
-        var nameToChangeTo = "Shoes";
+        CategoryName? categoryName = null;
+        var id = Guid.NewGuid();
         
-        //Act
-        sut.ChangeName(nameToChangeTo);
+        //Act & Asset
+        Assert.Throws<ArgumentNullException>(() => Category.Create(id, categoryName));
+    }
+    [Fact]
+    public void Should_CreateCategory_When_ArgumentsAreValid()
+    {
+        //Arrange
+        CategoryName? categoryName = CategoryName.From("type");
+        var id = Guid.NewGuid();
+        
+        //Act 
+        var sut = Category.Create(id, categoryName);
         
         //Assert
-        sut.Name.Should().BeEquivalentTo(nameToChangeTo);
-        sut.Name.Should().NotBe(initialName);
-    }
+        sut.Name.Should().BeEquivalentTo(categoryName);
 
-    [Fact]
-    public void Should_ThrowException_When_ChangeNameIsCalledWithNull()
-    {
-        //Arrange
-        var sut = Category.Create(Guid.NewGuid(), "Electronics");
-        string? nameToChangeTo = null;
-        
-        //Act & Assert
-        Assert.Throws<ArgumentNullException>(() => sut.ChangeName(nameToChangeTo));
     }
+    
 }
