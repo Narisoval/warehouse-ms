@@ -18,18 +18,8 @@ internal class Range<T> where T : struct, IComparable
         }
     }
 
-    public static Range<T> Create(T? min, T? max)
+    public static Range<T> Create(T min, T max)
     {
-        if (!min.HasValue)
-        {
-            throw new ArgumentNullException(nameof(min),"Max must not be null.");
-        }
-        
-        if (!max.HasValue)
-        {
-            throw new ArgumentNullException(nameof(max),"Max and max must not be null.");
-        }
-        
-        return new Range<T>(min.Value, max.Value);
+        return new Range<T>(min, max);
     }
 }
