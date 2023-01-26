@@ -1,4 +1,4 @@
-using Domain.UnitTests.Fixtures;
+using Domain.Entities;
 using Domain.ValueObjects;
 using FluentAssertions;
 
@@ -6,82 +6,42 @@ namespace Domain.UnitTests.Entities;
 
 public class ProviderTests
 {
-    [Fact]
-    public void Should_ChangeCompanyName_WhenCalled()
-    {
-        var sut = ProviderFixture.CreateProvider();
-        var oldCompanyName = sut.CompanyName;
-        // Act
-        var newCompanyName = "New Company Name";
-        sut.ChangeCompanyName(newCompanyName);
+    private static readonly Guid Id = Guid.NewGuid();
+    private static readonly Email Email = Email.From("example@email.com");
+    private static readonly string CompanyName = "Hammermen dev.";
+    private static readonly string PhoneNumber = "+3806894583948";
 
-        // Assert
-        sut.CompanyName.Should().BeEquivalentTo(newCompanyName);
-        sut.CompanyName.Should().NotBeEquivalentTo(oldCompanyName);
+    [Fact]
+    public void Should_ThrowException_When_CompanyNameIsNull()
+    {
+        string? companyName = null;
+        Assert.Throws<ArgumentNullException>(() => Provider.Create(Id, companyName, PhoneNumber, Email));
     }
 
     [Fact]
-    public void Should_ThrowException_When_ChangeCompanyNameArgumentIsNull()
+    public void Should_ThrowException_When_PhoneNumberIsNull()
     {
-        // Arrange
-        var sut = ProviderFixture.CreateProvider();
-        string? newCompanyName = null;
-        // Act & Assert
+        string? phoneNumber = null;
+        Assert.Throws<ArgumentNullException>(() => Provider.Create(Id, CompanyName, phoneNumber, Email));
+    }
+
+    [Fact]
+    public void Should_ThrowException_When_EmailIsNull()
+    {
+        Email? email = null;
+        Assert.Throws<ArgumentNullException>(() => Provider.Create(Id, CompanyName, PhoneNumber, email));
+    }
+
+    [Fact]
+    public void Should_CreateProvider_When_AllArgumentsAreValid()
+    {
+        //Act
+        var sut = Provider.Create(Id, CompanyName, PhoneNumber, Email);
         
-        Assert.Throws<ArgumentNullException>(() => sut.ChangeCompanyName(newCompanyName));
+        //Assert
+        sut.Id.Should().Be(Id);
+        sut.CompanyName.Should().BeEquivalentTo(CompanyName);
+        sut.PhoneNumber.Should().Be(PhoneNumber);
+        sut.Email.Should().BeEquivalentTo(Email);
     }
- 
-    [Fact]
-    public void Should_ChangePhoneNumber_When_Called()
-    {
-        // Arrange
-        var sut = ProviderFixture.CreateProvider();
-        var oldPhoneNumber = sut.PhoneNumber;
-        var newPhoneNumber = "666-666-6666";
-
-        // Act
-        sut.ChangePhoneNumber(newPhoneNumber);
-
-        // Assert
-        sut.PhoneNumber.Should().BeEquivalentTo(newPhoneNumber);
-        sut.PhoneNumber.Should().NotBeEquivalentTo(oldPhoneNumber);
-    }
-    
-    [Fact]
-    public void Should_ThrowException_When_ChangePhoneNumberArgumentIsNull()
-    {
-        // Arrange
-        var sut = ProviderFixture.CreateProvider();
-        string? newPhoneNumber = null;
-
-        // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => sut.ChangePhoneNumber(newPhoneNumber));
-    }
-
-    [Fact]
-    public void Should_ChangeEmail_When_Called()
-    {
-        // Arrange
-        var sut = ProviderFixture.CreateProvider();
-        var newEmail = Email.From("exampleee@example.com");
-        var oldEmail = sut.Email;
-
-        // Act
-        sut.ChangeEmail(newEmail);
-
-        // Assert
-        sut.Email.Should().BeEquivalentTo(newEmail);
-        sut.Email.Should().NotBeEquivalentTo(oldEmail);
-    }
-    
-    [Fact]
-    public void Should_ThrowException_When_ChangeEmailArgumentIsNull()
-    {
-        // Arrange
-        var sut = ProviderFixture.CreateProvider();
-        Email? newEmail = null; 
-
-        // Act && Assert
-        Assert.Throws<ArgumentNullException>(() => sut.ChangeEmail(newEmail));
-    } 
 }
