@@ -7,7 +7,7 @@ internal class Range<T> where T : struct, IComparable
 
     private Range(T min, T max)
     {
-        if (min.CompareTo(max) < 0)
+        if (min.CompareTo(max) <= 0)
         {
             Min = min;
             Max = max;
@@ -15,7 +15,6 @@ internal class Range<T> where T : struct, IComparable
         else
         {
             throw new ArgumentOutOfRangeException(nameof(min), "Min cannot be greater than max");
-
         }
     }
 

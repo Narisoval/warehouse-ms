@@ -120,7 +120,7 @@ public class ProductModelTests
     {
         //Arrange
         var sut = ProductsFixture.GetTestProduct();
-        var imageToChangeTo = Image.From("https://a.png");
+        
         //Act & Assert
         Assert.Throws<ArgumentNullException>(() => sut.ChangeImage(Guid.NewGuid(),null));
     }
