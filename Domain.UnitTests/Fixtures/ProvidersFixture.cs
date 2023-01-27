@@ -8,7 +8,7 @@ public static class ProvidersFixture
    public static Provider GetTestProvider()
    {
       var id = Guid.NewGuid();
-      var companyName = "BBC";
+      var companyName = CompanyName.From("BBC");
       var phoneNumber = "+3806666665";
       var email = Email.From("bbc@bbc.co.uk");
       
