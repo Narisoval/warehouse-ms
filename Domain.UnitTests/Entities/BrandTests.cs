@@ -22,8 +22,8 @@ public class BrandTests
     
         //Assert
         Assert.Equal(id, brand.Id);
-        Assert.Equal(brandName, brand.BrandName);
-        Assert.Equal(brandImage, brand.BrandImage);
+        Assert.Equal(brandName, brand.Name);
+        Assert.Equal(brandImage, brand.Image);
         Assert.Equal(brandDescription, brand.Description);
     }
 

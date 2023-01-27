@@ -5,11 +5,11 @@ namespace Domain.Entities;
 
 public class Product : Entity
 {
-    public ProductName ProductName { get; private set; }
+    public ProductName Name { get; private set; }
     public Quantity Quantity { get; private set; }
     public Price FullPrice { get; private set; }
     public IList<ProductImage> Images { get; private set; }
-    public ProductDescription ProductDescription { get; private set; }
+    public ProductDescription Description { get; private set; }
     public bool IsActive { get; private set; }
     public Sale Sale { get; private set; }
     
@@ -35,11 +35,11 @@ public class Product : Entity
         Brand brand, 
         Category category) : base(id)
     {
-        ProductName = productName ?? throw new ArgumentNullException(nameof(productName));
+        Name = productName ?? throw new ArgumentNullException(nameof(productName));
         Quantity = quantity ?? throw new ArgumentNullException(nameof(quantity));
         FullPrice = fullPrice ?? throw new ArgumentNullException(nameof(fullPrice));
         Images = productImages ?? throw new ArgumentException(nameof(productImages));
-        ProductDescription = productDescription ?? throw new ArgumentException(nameof(productDescription));
+        Description = productDescription ?? throw new ArgumentException(nameof(productDescription));
         IsActive = isActive;
         Sale = sale ?? throw new ArgumentNullException(nameof(sale));
         Provider = provider ?? throw new ArgumentNullException(nameof(provider));
@@ -67,7 +67,7 @@ public class Product : Entity
     
     public void ChangeName(ProductName? productName)
     {
-        ProductName = productName ?? throw new ArgumentNullException(nameof(productName));
+        Name = productName ?? throw new ArgumentNullException(nameof(productName));
     }
 
     public void DecreaseQuantityBy(int amount)
@@ -119,7 +119,7 @@ public class Product : Entity
 
     public void ChangeDescription(ProductDescription? productDescription)
     {
-        ProductDescription = productDescription ?? throw new ArgumentNullException(nameof(productDescription));
+        Description = productDescription ?? throw new ArgumentNullException(nameof(productDescription));
     }
 
     public void EnableProduct()

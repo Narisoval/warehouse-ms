@@ -184,7 +184,7 @@ public class ProductModelTests
         sut.ChangeDescription(newDescription);
 
         //Assert
-        sut.ProductDescription.Should().BeEquivalentTo(newDescription);
+        sut.Description.Should().BeEquivalentTo(newDescription);
     }
 
     [Fact]
@@ -255,15 +255,15 @@ public class ProductModelTests
     {
         //Arrange
         var sut = ProductsFixture.GetTestProduct();
-        var originalName = sut.ProductName;
+        var originalName = sut.Name;
         var newName = ProductName.From("New really detailed name");
 
         //Act 
         sut.ChangeName(newName);
 
         //Assert
-        sut.ProductName.Should().Be(newName);
-        sut.ProductName.Should().NotBe(originalName);
+        sut.Name.Should().Be(newName);
+        sut.Name.Should().NotBe(originalName);
     }
 
     [Fact]
