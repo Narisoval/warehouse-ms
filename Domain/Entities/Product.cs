@@ -50,6 +50,9 @@ public class Product : Entity
         CategoryId = category.Id;
     }
 
+    //For EF 
+    private Product() { }
+
     public static Product Create(Guid id, 
         ProductName productName, 
         Quantity quantity, 

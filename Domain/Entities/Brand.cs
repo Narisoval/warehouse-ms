@@ -9,6 +9,10 @@ public class Brand : Entity
     public Image Image { get; set; }
     public BrandDescription Description { get; set; }
 
+    private Brand()
+    {
+        
+    }
     private Brand(Guid id, BrandName? brandName, Image? brandImage, BrandDescription? description) : base(id)
     {
         Name = brandName ?? throw new ArgumentNullException(nameof(brandName));

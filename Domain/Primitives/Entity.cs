@@ -3,6 +3,8 @@ using System.ComponentModel;
 namespace Domain.Primitives;
 public abstract class Entity : IEquatable<Entity>
 {
+    public Guid Id { get; }
+    
     protected Entity(Guid? id)
     {
         if(id == Guid.Empty)
@@ -10,7 +12,11 @@ public abstract class Entity : IEquatable<Entity>
         
         Id = id ?? throw new ArgumentNullException(nameof(id));
     }
-    public Guid Id { get; }
+    
+    //For EF
+    protected Entity()
+    {
+    }
 
     public bool Equals(Entity? other)
     {
