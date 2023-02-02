@@ -9,6 +9,8 @@ public class Brand : Entity
     public Image Image { get; set; }
     public BrandDescription Description { get; set; }
 
+    public List<Product> Products { get; set; }
+
     private Brand()
     {
         
