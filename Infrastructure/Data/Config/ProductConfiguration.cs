@@ -37,5 +37,10 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasConversion(
                 sale => sale.Value,
                 value => Sale.From(value));
+        builder
+            .HasMany(p => p.Images)
+            .WithOne(p => p.Product)
+            .HasForeignKey(p => p.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

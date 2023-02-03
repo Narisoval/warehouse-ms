@@ -11,9 +11,11 @@ public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
     {
         builder.ToTable("ProductImages");
         
-        //builder.WithOwner().HasForeignKey("ProductId");
-        
         builder.HasKey("Id","ProductId");
+        
+        builder.HasOne(pi => pi.Product)
+            .WithMany(p => p.Images)
+            .OnDelete(DeleteBehavior.Cascade); 
         
         builder.Property(productImage => productImage.Image)
             .HasConversion(
