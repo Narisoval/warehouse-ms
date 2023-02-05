@@ -7,7 +7,7 @@ public class Category : Entity
 {
     public CategoryName Name { get; set; }
 
-    public IReadOnlyCollection<Product> Products { get; set; }
+    public IReadOnlyCollection<Product>? Products { get; set; }
 
     private Category(Guid id, CategoryName? name) : base(id)
     {

@@ -7,7 +7,7 @@ public class ProductImage : Entity
 {
     public Image Image { get; internal set; }
 
-    public Product Product { get; set; }
+    public Product? Product { get; set; }
     public Guid ProductId { get; set; }
 
     private ProductImage(Guid id, Image image) : base(id)

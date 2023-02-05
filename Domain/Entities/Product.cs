@@ -156,6 +156,5 @@ public class Product : Entity
     {
         Category = category ?? throw new ArgumentNullException(nameof(category));
         CategoryId = category.Id;
-
     }
 }
