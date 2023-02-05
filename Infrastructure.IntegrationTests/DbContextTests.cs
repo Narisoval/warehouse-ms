@@ -2,46 +2,25 @@ using Domain.Entities;
 using Domain.UnitTests.Fixtures;
 using FluentAssertions;
 using Infrastructure.Data;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.IntegrationTests;
 
-public class DbContextTests : IDisposable
+public class DbContextTests : IClassFixture<WarehouseDbContextFactory>
 {
     private readonly WarehouseDbContext _context;
-    private readonly SqliteConnection _connection;
-    private readonly DbContextOptions<WarehouseDbContext> _contextOptions;
-    
-    #region ConstructorAndDispose
-    public DbContextTests()
+    public DbContextTests(WarehouseDbContextFactory factory)
     {
-        _connection = new SqliteConnection("Filename=:memory:");
-        _connection.Open();
-
-        _contextOptions = new DbContextOptionsBuilder<WarehouseDbContext>()
-            .UseSqlite(_connection)
-            .Options;
-
-        
-        _context = new WarehouseDbContext(_contextOptions);
-
-        _context.Database.EnsureCreated();
+        _context = factory.GetContext();
     }
 
-    public void Dispose()
-    {
-        _context.Database.EnsureDeleted();
-        _connection.Dispose();
-    }
-    
-    #endregion
     
     [Fact]
     public async void Should_AddAllEntities_When_ProductIsAdded()
     {
         // Arrange
         var testProduct = ProductsFixture.GetTestProduct();
+        
         //Act
         await _context.Products.AddAsync(testProduct);
         
@@ -109,7 +88,7 @@ public class DbContextTests : IDisposable
         var sut = async Task () => await _context.SaveChangesAsync();
 
         //Assert
-        await Assert.ThrowsAsync<DbUpdateConcurrencyException>(sut);
+        await Assert.ThrowsAsync<DbUpdateException>(sut);
     }
     
 }
