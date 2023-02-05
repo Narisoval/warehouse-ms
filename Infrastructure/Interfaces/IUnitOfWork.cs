@@ -8,5 +8,5 @@ public interface IUnitOfWork : IDisposable
     ICategoryRepository Categories { get; }
     IProviderRepository Providers { get; }
 
-    int Complete();
+    Task<int> Complete();
 }

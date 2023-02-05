@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.IntegrationTests;
 
-public class WarehouseDbContextFactory : IAsyncLifetime
+public class WarehouseDbContextGenerator : IAsyncLifetime
 {
     private readonly TestcontainerDatabase _postgresqlContainer = new TestcontainersBuilder<PostgreSqlTestcontainer>()
         .WithDatabase(new PostgreSqlTestcontainerConfiguration

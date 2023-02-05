@@ -21,9 +21,9 @@ public class UnitOfWork : IUnitOfWork
     public ICategoryRepository Categories { get; }
     public IProviderRepository Providers { get; }
     
-    public int Complete()
+    public Task<int> Complete()
     {
-        return _context.SaveChanges();
+        return _context.SaveChangesAsync();
     }
 
     public void Dispose()

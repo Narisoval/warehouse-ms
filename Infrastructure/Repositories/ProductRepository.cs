@@ -13,18 +13,14 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
         ;
     }
 
-    // The role of this method is to ensure that when product is added to the database
-    // nothing more than a product and its images is added or changed. 
+    // The role of this method is to ensure that product
+    // with non existing brand, provider or category can't be added. 
     public new async Task Add(Product entity)
     {
-        await CheckIfBrandExists(entity.BrandId);
-        await CheckIfProviderExists(entity.CategoryId);
-        await CheckIfCategoryExists(entity.CategoryId);
-
-        entity.ChangeBrand(null);
-        entity.ChangeProvider(null);
-        entity.ChangeCategory(null);
-
+        await CheckBrandExists(entity.BrandId);
+        await CheckProviderExists(entity.ProviderId);
+        await CheckCategoryExists(entity.CategoryId);
+        
         await base.Add(entity);
     }
 
@@ -67,7 +63,7 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
             .ToListAsync();
     }
 
-    private async Task CheckIfBrandExists(Guid id)
+    private async Task CheckBrandExists(Guid id)
     {
         bool brandExists = await Context.Brands.AnyAsync(brand => brand.Id == id);
         if (!brandExists)
@@ -76,7 +72,7 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
         }
     }
     
-    private async Task CheckIfProviderExists(Guid id)
+    private async Task CheckProviderExists(Guid id)
     {
         bool providerExists = await Context.Providers.AnyAsync(provider => provider.Id == id);
         if (!providerExists)
@@ -85,10 +81,10 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
         }
     }
 
-    private async Task CheckIfCategoryExists(Guid id)
+    private async Task CheckCategoryExists(Guid id)
     {
-        bool providerExists = await Context.Providers.AnyAsync(provider => provider.Id == id);
-        if (!providerExists)
+        bool categoryExists = await Context.Categories.AnyAsync(provider => provider.Id == id);
+        if (!categoryExists)
         {
             throw new InvalidOperationException("Product's category does not exist.");
         }
