@@ -5,17 +5,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class BrandRepository : Repository<Brand>,IBrandRepository
+public class BrandRepository : Repository<Brand,WarehouseDbContext>,IBrandRepository
 {
-    private WarehouseDbContext WarehouseContext => Context as WarehouseDbContext;
-    
-    public BrandRepository(DbContext context) : base(context)
+    public BrandRepository(WarehouseDbContext context) : base(context)
     {
     }
 
     public async Task<Brand?> GetBrandWithProducts(Guid id)
     {
-        return await WarehouseContext.Brands
+        return await Context.Brands
             .Include(brand => brand.Products)
             .Where(brand => brand.Id == id)
             .FirstOrDefaultAsync();
@@ -23,7 +21,7 @@ public class BrandRepository : Repository<Brand>,IBrandRepository
 
     public async Task<IEnumerable<Brand>> GetAllBrandsWithProducts()
     {
-        return await WarehouseContext.Brands.AsNoTracking()
+        return await Context.Brands.AsNoTracking()
             .Include(brand => brand.Products)
             .ToListAsync();
     }

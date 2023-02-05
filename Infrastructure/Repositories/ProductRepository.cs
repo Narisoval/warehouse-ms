@@ -5,11 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class ProductRepository : Repository<Product>, IProductRepository
+public class ProductRepository : Repository<Product,WarehouseDbContext>, IProductRepository
 {
-    private WarehouseDbContext WarehouseContext => Context as WarehouseDbContext;
     
-    public ProductRepository(DbContext context) : base(context)
+    public ProductRepository(WarehouseDbContext context) : base(context)
     {
     }
 
@@ -30,7 +29,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 
     public new async Task<Product?> Get(Guid id)
     {
-        return await WarehouseContext.Products.AsNoTracking()
+        return await Context.Products.AsNoTracking()
             .Include(product => product.Brand)
             .Include(product =>product.Images)
             .Include(product => product.Category)
@@ -40,7 +39,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
     
     public new async Task<IEnumerable<Product>> GetAll()
     {
-        return await WarehouseContext.Products.AsNoTracking()
+        return await Context.Products.AsNoTracking()
             .Include(product => product.Brand)
             .Include(product => product.Images)
             .Include(product => product.Category)
@@ -49,7 +48,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 
     public async Task<Product?> GetProductWithProvider(Guid id)
     {
-        return await WarehouseContext.Products.AsNoTracking()
+        return await Context.Products.AsNoTracking()
             .Include(product => product.Brand)
             .Include(product => product.Images)
             .Include(product => product.Category)
@@ -59,7 +58,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 
     public async Task<IEnumerable<Product>> GetAllProductsWithProvider()
     {
-        return await WarehouseContext.Products.AsNoTracking()
+        return await Context.Products.AsNoTracking()
             .Include(product => product.Brand)
             .Include(product => product.Images)
             .Include(product => product.Category)
@@ -69,7 +68,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 
     private async Task CheckIfBrandExists(Guid id)
     {
-        bool brandExists = await WarehouseContext.Brands.AnyAsync(brand => brand.Id == id);
+        bool brandExists = await Context.Brands.AnyAsync(brand => brand.Id == id);
         if (!brandExists)
         {
             throw new InvalidOperationException("Product's brand does not exist.");
@@ -78,7 +77,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
     
     private async Task CheckIfProviderExists(Guid id)
     {
-        bool providerExists = await WarehouseContext.Providers.AnyAsync(provider => provider.Id == id);
+        bool providerExists = await Context.Providers.AnyAsync(provider => provider.Id == id);
         if (!providerExists)
         {
             throw new InvalidOperationException("Product's provider does not exist.");
@@ -87,7 +86,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 
     private async Task CheckIfCategoryExists(Guid id)
     {
-        bool providerExists = await WarehouseContext.Providers.AnyAsync(provider => provider.Id == id);
+        bool providerExists = await Context.Providers.AnyAsync(provider => provider.Id == id);
         if (!providerExists)
         {
             throw new InvalidOperationException("Product's category does not exist.");

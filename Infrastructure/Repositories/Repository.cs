@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
+public abstract class Repository<TEntity,TContext> : IRepository<TEntity> where TEntity : Entity where TContext : DbContext
 {
-    protected readonly DbContext Context;
+    protected readonly TContext Context;
     protected readonly DbSet<TEntity> Entities;
 
-    public Repository(DbContext context)
+    public Repository(TContext context)
     {
         Context = context;
         Entities = context.Set<TEntity>();
