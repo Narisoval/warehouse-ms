@@ -9,7 +9,7 @@ public class Provider : Entity
     public string PhoneNumber { get; set; }
     public Email Email { get; set; }
 
-    public List<Product> Products { get; set; }
+    public IReadOnlyCollection<Product> Products { get; set; }
     private Provider(Guid id, CompanyName? companyName, string? phoneNumber, Email? email) : base(id)
     {
         CompanyName = companyName ?? throw new ArgumentNullException(nameof(companyName)) ;
