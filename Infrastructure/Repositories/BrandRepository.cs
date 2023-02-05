@@ -14,6 +14,7 @@ public class BrandRepository : Repository<Brand,WarehouseDbContext>,IBrandReposi
     public async Task<Brand?> GetBrandWithProducts(Guid id)
     {
         return await Context.Brands
+            .AsNoTracking()
             .Include(brand => brand.Products)
             .Where(brand => brand.Id == id)
             .FirstOrDefaultAsync();
