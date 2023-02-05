@@ -5,10 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class CategoryRepository : Repository<Category,WarehouseDbContext>, ICategoryRepository
+public sealed class CategoryRepository : Repository<Category,WarehouseDbContext>, ICategoryRepository
 {
     public CategoryRepository(WarehouseDbContext context) : base(context)
     {
+        ;
     }
 
     public async Task<Category?> GetCategoryWithProducts(Guid id)

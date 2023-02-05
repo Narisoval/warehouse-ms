@@ -5,11 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class ProductRepository : Repository<Product,WarehouseDbContext>, IProductRepository
+public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, IProductRepository
 {
     
     public ProductRepository(WarehouseDbContext context) : base(context)
     {
+        ;
     }
 
     // The role of this method is to ensure that when product is added to the database

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class BrandRepository : Repository<Brand,WarehouseDbContext>,IBrandRepository
+public sealed class BrandRepository : Repository<Brand,WarehouseDbContext>,IBrandRepository
 {
     public BrandRepository(WarehouseDbContext context) : base(context)
     {
