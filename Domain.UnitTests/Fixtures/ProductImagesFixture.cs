@@ -5,15 +5,15 @@ namespace Domain.UnitTests.Fixtures;
 
 public static class ProductImagesFixture
 {
-    public static IList<ProductImage> GetTestProductImages()
+    public static ProductImages GetTestProductImages()
     {
-        List<ProductImage> productImages = new List<ProductImage>()
+        List<ProductImage> productImagesList = new List<ProductImage>()
         {
-            ProductImage.Create(Guid.NewGuid(), Image.From("https://imagesss/chair1.png")),
-            ProductImage.Create(Guid.NewGuid(), Image.From("https://imagess/chair2.png")),
-            ProductImage.Create(Guid.NewGuid(), Image.From("https://imagess/chair3.png"))
+            ProductImage.Create(Guid.NewGuid(), Image.From("https://imagesss/chair1.png"),true),
+            ProductImage.Create(Guid.NewGuid(), Image.From("https://imagess/chair2.png"),false),
+            ProductImage.Create(Guid.NewGuid(), Image.From("https://imagess/chair3.png"),false)
         };
         
-        return productImages;
+        return ProductImages.From(productImagesList);
     }
 }
