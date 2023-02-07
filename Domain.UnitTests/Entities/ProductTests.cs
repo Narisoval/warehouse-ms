@@ -6,7 +6,7 @@ using FluentAssertions;
 
 namespace Domain.UnitTests.Entities;
 
-public class ProductModelTests
+public class ProductTests
 {
     [Theory]
     [MemberData(nameof(NumbersForArithmeticOperationsGenerator.GenerateNumbersForSum),
@@ -70,27 +70,28 @@ public class ProductModelTests
     }
 
     [Fact]
-    public void Should_ChangeImages_WhenCalled()
+    public void Should_ChangeAllImages_WhenCalled()
     {
         //Arrange
         var sut = ProductsFixture.GetTestProduct();
         var newImages = ProductImagesFixture.GetTestProductImages();
 
         //Act 
-        sut.ChangeImages(newImages);
+        sut.ChangeAllImages(newImages.Value);
 
         //Assert
-        sut.Images.Should().BeEquivalentTo(newImages);
+        sut.Images.Should().BeEquivalentTo(newImages.Value);
     }
 
     [Fact]
-    public void Should_ThrowException_When_ChangeImagesArgumentIsNull()
+    public void Should_ThrowException_When_ChangeAllImagesArgumentIsNull()
     {
         //Arrange
         var sut = ProductsFixture.GetTestProduct();
-        List<ProductImage>? newProductImages = null;
+        IList<ProductImage>? newProductImages = null;
+        
         //Act && Assert
-        Assert.Throws<ArgumentNullException>(() => sut.ChangeImages(newProductImages));
+        Assert.Throws<ArgumentNullException>(() => sut.ChangeAllImages(newProductImages));
     }
 
     [Fact]
@@ -169,6 +170,50 @@ public class ProductModelTests
             }
             currProductImage.Image = initialImage;
         }
+    }
+
+    [Fact]
+    public void Should_GetMainImage_WhenCalled()
+    {
+        //Arrange
+        var sut = ProductsFixture.GetTestProduct();
+        var mainImageFromImages = sut.Images.First(img => img.IsMain);
+        
+        //Act
+        var mainImageFromMethod = sut.GetMainImage();
+        
+        //Assert
+        mainImageFromMethod.IsMain.Should().BeTrue();
+        mainImageFromImages.Should().Be(mainImageFromMethod);
+
+    }
+    
+    [Fact]
+    public void Should_ChangeMainImage_When_Called()
+    {
+        //Arrange
+        var sut = ProductsFixture.GetTestProduct();
+        var oldMainImage = sut.GetMainImage().Image;
+        var newMainImage = Image.From("https://new.png");
+        
+        //Act
+        sut.ChangeMainImage(newMainImage); 
+        var currentMainImage = sut.GetMainImage().Image;
+        
+        //Assert
+        currentMainImage.Should().Be(newMainImage);
+        currentMainImage.Should().NotBe(oldMainImage);
+    }
+    
+    [Fact]
+    public void Should_ThrowException_When_ChangeMainImageArgumentIsNull()
+    {
+        //Arrange
+        var sut = ProductsFixture.GetTestProduct();
+        Image? newMainImage = null; 
+        
+        //Act & Assert
+        Assert.Throws<ArgumentNullException>(() => sut.ChangeMainImage(newMainImage)); 
     }
     
     [Fact]

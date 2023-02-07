@@ -14,7 +14,7 @@ public static class ProductsFixture
     public static Product GetTestProduct()
     {
         Guid testId = Guid.NewGuid();
-        IList<ProductImage> testProductImages = ProductImagesFixture.GetTestProductImages();
+        ProductImages testProductImages = ProductImagesFixture.GetTestProductImages();
         Brand testBrand = BrandsFixture.GetTestBrand();
         Category testCategory = CategoriesFixture.GetTestCategory();
         Provider testProvider = ProvidersFixture.GetTestProvider();
@@ -35,7 +35,7 @@ public static class ProductsFixture
     public static Product GetTestProduct(int intQuantity)
     {
         Guid testId = Guid.NewGuid();
-        IList<ProductImage> testProductImages = ProductImagesFixture.GetTestProductImages();
+        ProductImages testProductImages = ProductImagesFixture.GetTestProductImages();
         Brand testBrand = BrandsFixture.GetTestBrand();
         Category testCategory = CategoriesFixture.GetTestCategory();
         Provider testProvider = ProvidersFixture.GetTestProvider();
@@ -56,7 +56,7 @@ public static class ProductsFixture
     public static Product GetTestProduct(bool isActiveParam)
     {
         Guid testId = Guid.NewGuid();
-        IList<ProductImage> testProductImages = ProductImagesFixture.GetTestProductImages();
+        ProductImages testProductImages = ProductImagesFixture.GetTestProductImages();
         Brand testBrand = BrandsFixture.GetTestBrand();
         Category testCategory = CategoriesFixture.GetTestCategory();
         Provider testProvider = ProvidersFixture.GetTestProvider();
@@ -74,7 +74,7 @@ public static class ProductsFixture
             testCategory);
     }
     
-    public static Product GetTestProduct(IList<ProductImage> productImages)
+    public static Product GetTestProduct(ProductImages productImages)
     {
         Guid testId = Guid.NewGuid();
         Brand testBrand = BrandsFixture.GetTestBrand();
@@ -96,7 +96,7 @@ public static class ProductsFixture
 
     public static Product GetTestProduct(Guid id)
     {
-         IList<ProductImage> testProductImages = ProductImagesFixture.GetTestProductImages();
+         ProductImages testProductImages = ProductImagesFixture.GetTestProductImages();
          Brand testBrand = BrandsFixture.GetTestBrand();
          Category testCategory = CategoriesFixture.GetTestCategory();
          Provider testProvider = ProvidersFixture.GetTestProvider();
