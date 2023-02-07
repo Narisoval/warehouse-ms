@@ -37,6 +37,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasConversion(
                 sale => sale.Value,
                 value => Sale.From(value));
+        
         builder
             .HasMany(p => p.Images)
             .WithOne(p => p.Product)
