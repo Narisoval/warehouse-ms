@@ -41,8 +41,8 @@ public class Product : Entity
         Name = productName ?? throw new ArgumentNullException(nameof(productName));
         Quantity = quantity ?? throw new ArgumentNullException(nameof(quantity));
         FullPrice = fullPrice ?? throw new ArgumentNullException(nameof(fullPrice));
-        _productImages = productImages ?? throw new ArgumentException(nameof(productImages));
-        Description = productDescription ?? throw new ArgumentException(nameof(productDescription));
+        _productImages = productImages ?? throw new ArgumentNullException(nameof(productImages));
+        Description = productDescription ?? throw new ArgumentNullException(nameof(productDescription));
         IsActive = isActive;
         Sale = sale ?? throw new ArgumentNullException(nameof(sale));
         Provider = provider ?? throw new ArgumentNullException(nameof(provider));
