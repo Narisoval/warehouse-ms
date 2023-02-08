@@ -15,6 +15,7 @@ public class Brand : Entity
     {
         
     }
+    
     private Brand(Guid id, BrandName? brandName, Image? brandImage, BrandDescription? description) : base(id)
     {
         Name = brandName ?? throw new ArgumentNullException(nameof(brandName));
