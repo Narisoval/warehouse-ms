@@ -14,7 +14,7 @@ public sealed class Image : ValueOf<string,Image>
         
         if (!IsValidImageUrl(Value))
         {
-            throw new FormatException("Email is incorrect format");
+            throw new FormatException($"{Value} is not a valid image url");
         }
 
     }
@@ -22,7 +22,7 @@ public sealed class Image : ValueOf<string,Image>
     private static bool IsValidImageUrl(string imageUrl)
     {
         // This pattern is a really basic and allows some strange URLs like https:///.jpg 
-        var pattern = @"(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)";
+        var pattern = @"(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|png|svg|ico|bmp|webp)";
         var match = Regex.Match(imageUrl, pattern);
         return match.Success;
     }
