@@ -26,15 +26,16 @@ public class ProductProviderTests
     }
 
     [Fact]
-    public void Should_ThrowException_When_ChangeProviderArgumentIsNull()
+    public void Should_SetProviderNull_When_ChangeProviderArgumentIsNull()
     {
         //Arrange
         var sut = ProductsFixture.GetTestProduct();
-
-        //Act 
         Provider? newProvider = null;
+        
+        //Act 
+        sut.ChangeProvider(newProvider);
 
         //Assert
-        Assert.Throws<ArgumentNullException>(() => sut.ChangeProvider(newProvider));
+        Assert.Null(sut.Provider);
     }
 }
