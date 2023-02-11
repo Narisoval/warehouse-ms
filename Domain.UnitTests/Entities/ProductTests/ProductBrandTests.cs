@@ -26,15 +26,16 @@ public class ProductBrandTests
     }
     
     [Fact]
-    public void Should_ThrowException_When_ChangeBrandArgumentIsNull()
+    public void Should_SetBrandNull_When_ChangeBrandArgumentIsNull()
     {
         //Arrange
         var sut = ProductsFixture.GetTestProduct();
-
-        //Act 
         Brand? brand = null;
-
+        
+        //Act 
+        sut.ChangeBrand(brand);
+        
         //Assert
-        Assert.Throws<ArgumentNullException>(() => sut.ChangeBrand(brand));
+        sut.Brand.Should().BeNull();
     }
 }

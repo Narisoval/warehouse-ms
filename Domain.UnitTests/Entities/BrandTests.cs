@@ -1,13 +1,10 @@
 using Domain.Entities;
-using Domain.UnitTests.Fixtures;
 using Domain.ValueObjects;
-using FluentAssertions;
 
 namespace Domain.UnitTests.Entities;
 
 public class BrandTests
 {
-    // CONSTRUCTORS
     [Fact]
     public void Should_Create_Brand_When_All_Properties_Are_Provided()
     {

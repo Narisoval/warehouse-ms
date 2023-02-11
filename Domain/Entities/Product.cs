@@ -16,13 +16,13 @@ public class Product : Entity
     public bool IsActive { get; private set; }
     public Sale Sale { get; private set; }
 
-    public Provider Provider { get; private set; }
+    public Provider? Provider { get; private set; }
     public Guid ProviderId { get; private set; }
 
-    public Brand Brand { get; private set; }
+    public Brand? Brand { get; private set; }
     public Guid BrandId { get; private set; }
 
-    public Category Category { get; private set; }
+    public Category? Category { get; private set; }
     public Guid CategoryId { get; private set; }
 
     private Product(
@@ -34,9 +34,9 @@ public class Product : Entity
         ProductDescription productDescription,
         bool isActive,
         Sale sale,
-        Provider provider,
-        Brand brand,
-        Category category) : base(id)
+        Provider? provider,
+        Brand? brand,
+        Category? category) : base(id)
     {
         Name = productName ?? throw new ArgumentNullException(nameof(productName));
         Quantity = quantity ?? throw new ArgumentNullException(nameof(quantity));
@@ -45,12 +45,10 @@ public class Product : Entity
         Description = productDescription ?? throw new ArgumentNullException(nameof(productDescription));
         IsActive = isActive;
         Sale = sale ?? throw new ArgumentNullException(nameof(sale));
-        Provider = provider ?? throw new ArgumentNullException(nameof(provider));
-        ProviderId = Provider.Id;
-        Brand = brand ?? throw new ArgumentNullException(nameof(brand));
-        BrandId = Brand.Id;
-        Category = category ?? throw new ArgumentNullException(nameof(category));
-        CategoryId = category.Id;
+       
+        ChangeProvider(provider);
+        ChangeBrand(brand);
+        ChangeCategory(category);
     }
 
     //For EF 
@@ -66,9 +64,9 @@ public class Product : Entity
         ProductDescription productDescription,
         bool isActive,
         Sale sale,
-        Provider provider,
-        Brand brand,
-        Category category)
+        Provider? provider,
+        Brand? brand,
+        Category? category)
     {
         return new Product(id, productName, quantity, fullPrice, productImages, productDescription, isActive, sale,
             provider, brand, category);
@@ -148,19 +146,36 @@ public class Product : Entity
 
     public void ChangeBrand(Brand? brand)
     {
-        Brand = brand ?? throw new ArgumentNullException(nameof(brand));
-        BrandId = brand.Id;
+        if (brand != null)
+        {
+            Brand = brand;
+            BrandId = brand.Id;
+            return;
+        }
+        
+        Brand = null;
     }
 
     public void ChangeProvider(Provider? provider)
     {
-        Provider = provider ?? throw new ArgumentNullException(nameof(provider));
-        ProviderId = provider.Id;
+        if (provider != null)
+        {
+            Provider = provider; 
+            ProviderId = provider.Id;
+            return;
+        }
+        Provider = null;
     }
 
     public void ChangeCategory(Category? category)
     {
-        Category = category ?? throw new ArgumentNullException(nameof(category));
-        CategoryId = category.Id;
+        if (category != null)
+        {
+            Category = category;
+            CategoryId = category.Id;
+            return;
+        }
+
+        Category = null;
     }
 }

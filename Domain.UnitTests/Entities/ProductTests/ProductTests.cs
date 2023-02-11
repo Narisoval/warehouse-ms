@@ -8,17 +8,6 @@ namespace Domain.UnitTests.Entities.ProductTests;
 public class ProductCategoryTests
 {
     [Fact]
-    public void Should_ThrowException_When_ChangeCategoryArgumentIsNull()
-    {
-        //Arrange
-        var sut = ProductsFixture.GetTestProduct();
-        Category? categoryToChangeTo = null;
-        
-        //Act & Assert
-        Assert.Throws<ArgumentNullException>( () => sut.ChangeCategory(categoryToChangeTo));
-    }
-    
-    [Fact]
     public void Should_ChangeCategory_When_Called()
     {
         //Arrange
@@ -31,7 +20,22 @@ public class ProductCategoryTests
         sut.ChangeCategory(testCategory); 
         
         //Assert
-        sut.Category.Id.Should().Be(testCategoryId);
-        sut.Category.Name.Should().Be(testCategoryName);
+        sut.Category?.Id.Should().Be(testCategoryId);
+        sut.Category?.Name.Should().Be(testCategoryName);
     }
+    
+    [Fact]
+    public void Should_SetCategoryNull_When_ChangeCategoryArgumentIsNull()
+    {
+        //Arrange
+        var sut = ProductsFixture.GetTestProduct();
+        Category? categoryToChangeTo = null;
+        
+        //Act 
+        sut.ChangeCategory(categoryToChangeTo);
+        
+        //Assert
+        sut.Category.Should().BeNull();
+    }
+    
 }
