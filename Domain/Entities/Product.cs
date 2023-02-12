@@ -10,7 +10,11 @@ public class Product : Entity
     public Price FullPrice { get; private set; }
 
     private ProductImages _productImages;
-    public IList<ProductImage> Images => _productImages.Value;
+    public IList<ProductImage>? Images
+    {
+        get => _productImages?.Value;
+        private set => _productImages = ProductImages.From(value!);
+    }
 
     public ProductDescription Description { get; private set; }
     public bool IsActive { get; private set; }
