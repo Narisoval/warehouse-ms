@@ -1,4 +1,4 @@
-﻿namespace Warehouse.API.DTO;
+namespace Warehouse.API.DTO;
 
 public record ProductDto
 {
@@ -16,11 +16,11 @@ public record ProductDto
 
     public decimal Sale { get; init; } = default;
 
-
     public bool IsActive { get; init; } = default;
 
+
     public CategoryDto? Category { get; init; }
-    
+
     public ProviderDto? Provider { get; init; }
 
     public BrandDto? Brand { get; init; }
