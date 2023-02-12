@@ -16,8 +16,13 @@ public static class ProductImageMappingConfig
         };
     }
     
-    public static IList<ProductImageDto> ToDtos(this IList<ProductImage> productImages)
+    public static IList<ProductImageDto>? ToDtos(this IList<ProductImage>? productImages)
     {
+        if (productImages == null)
+        {
+            return null;
+        }
+        
         List<ProductImageDto> productImageDtos = new();
         
         foreach (var productImage in productImages)
@@ -37,8 +42,13 @@ public static class ProductImageMappingConfig
         );
     }
     
-    public static IList<ProductImage> ToEntities(this IList<ProductImageDto> productImagesDtos)
+    public static IList<ProductImage>? ToEntities(this IList<ProductImageDto>? productImagesDtos)
     {
+        if (productImagesDtos == null)
+        {
+            return null;
+        }
+        
         List<ProductImage> productImages = new();
         
         foreach (var productImage in productImagesDtos)
