@@ -13,13 +13,16 @@ public class ProductImages : ValueOf<IList<ProductImage>,ProductImages>
         if (Value == null)
             throw new ArgumentNullException(nameof(Value), "Product images can't be null");
         
-        int amountOfMainImages = Value.Count(image => image.IsMain);
+        //This check is necessary for retrieving products for DB to work correctly.
+        //Because when getting Products from db with ProductImages included,
+        //EF initializes an empty list of ProductImage that is going through this validation logic.
+        //So IF THIS CHECK WILL HAVE TO BE REMOVED IN THE FUTURE,
+        //IT SHOULD BE MOVED TO SOME OTHER PLACE, like setter of Images property in Product.       
         
-        if (amountOfMainImages == 0)
-            throw new NoMainImagesDomainException();
+        if (Value.Count == 0)
+            return;
         
-        if(amountOfMainImages > MaxAmountOfMainImages)
-            throw new TooManyMainImagesDomainException(MaxAmountOfMainImages);
+        ValidateAmountOfMainImages();
     }
     
     public ProductImage GetProductImageById(Guid id)
@@ -32,5 +35,16 @@ public class ProductImages : ValueOf<IList<ProductImage>,ProductImages>
         }
         
         return productImage;
+    }
+
+    private void ValidateAmountOfMainImages()
+    {
+        int amountOfMainImages = Value.Count(image => image.IsMain);
+        
+        if (amountOfMainImages == 0)
+            throw new NoMainImagesDomainException();
+        
+        if(amountOfMainImages > MaxAmountOfMainImages)
+            throw new TooManyMainImagesDomainException(MaxAmountOfMainImages);
     }
 }
