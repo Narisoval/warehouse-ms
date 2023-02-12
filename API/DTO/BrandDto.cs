@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Warehouse.API.DTO;
+﻿namespace Warehouse.API.DTO;
 
 public record BrandDto
 {

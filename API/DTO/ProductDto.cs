@@ -21,7 +21,7 @@ public record ProductDto
 
     public CategoryDto? Category { get; init; }
     
-    public ProviderDto? ProviderDto { get; init; }
+    public ProviderDto? Provider { get; init; }
 
     public BrandDto? Brand { get; init; }
 }
