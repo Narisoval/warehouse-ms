@@ -13,7 +13,7 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
         ;
     }
 
-    // The role of this method is to ensure that product
+    // The goal of this method is to ensure that product
     // with non existing brand, provider or category can't be added. 
     public new async Task Add(Product entity)
     {
@@ -22,6 +22,15 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
         await CheckCategoryExists(entity.CategoryId);
         
         await base.Add(entity);
+    }
+
+    public new async Task AddRange(IEnumerable<Product?> entities)
+    {
+        foreach (var product in entities)
+        {
+            if(product != null)
+                await Add(product);
+        }
     }
 
     public new async Task<Product?> Get(Guid id)
@@ -50,6 +59,7 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
             .Include(product => product.Images)
             .Include(product => product.Category)
             .Include(product => product.Provider)
+            .Where(product => product.Id == id)
             .FirstOrDefaultAsync();
     }
 
