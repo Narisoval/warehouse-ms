@@ -108,6 +108,8 @@ public class ProductMappingTests
         Assert.NotNull(provider);
         Assert.Equal(providerDto.ProviderId, provider.Id);
         Assert.Equal(providerDto.CompanyName, provider.CompanyName.Value);
+        Assert.Equal(providerDto.PhoneNumber,provider.PhoneNumber);
+        Assert.Equal(providerDto.Email,provider.Email.Value);
     }
 
     private void CheckCategoryMappedCorrectly(CategoryDto categoryDto, Category category)
