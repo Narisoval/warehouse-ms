@@ -34,9 +34,9 @@ public abstract class Repository<TEntity,TContext> : IRepository<TEntity> where 
         await Context.Set<TEntity>().AddAsync(entity);
     }
 
-    public void AddRange(IEnumerable<TEntity> entities)
+    public async Task AddRange(IEnumerable<TEntity?> entities)
     {
-        Context.Set<TEntity>().AddRange(entities);
+        await Context.Set<TEntity>().AddRangeAsync(entities);
     }
 
     public void Remove(TEntity entity)
