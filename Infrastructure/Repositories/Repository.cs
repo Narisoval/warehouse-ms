@@ -39,6 +39,19 @@ public abstract class Repository<TEntity,TContext> : IRepository<TEntity> where 
         await Context.Set<TEntity>().AddRangeAsync(entities);
     }
 
+    public async Task<bool> Update(TEntity entity)
+    {
+        var entityExists = await Context.Set<TEntity>().AnyAsync(e => e.Id == entity.Id);
+        
+        if (!entityExists)
+        {
+            return false; 
+        }
+        
+        Context.Set<TEntity>().Update(entity);
+        return true;
+    }
+
     public void Remove(TEntity entity)
     {
         Context.Set<TEntity>().Remove(entity);
