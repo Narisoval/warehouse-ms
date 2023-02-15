@@ -7,9 +7,6 @@ public abstract class Entity : IEquatable<Entity>
     
     protected Entity(Guid? id)
     {
-        if(id == Guid.Empty)
-            throw new InvalidEnumArgumentException("Id should be a valid Guid");
-        
         Id = id ?? throw new ArgumentNullException(nameof(id));
     }
     
