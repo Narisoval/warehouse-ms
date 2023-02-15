@@ -16,4 +16,6 @@ public interface IRepository<TEntity> where  TEntity : Entity
    
    void Remove(TEntity entity);
    void RemoveRange(IEnumerable<TEntity> entities);
+
+   Task<bool> Remove(Guid id);
 }

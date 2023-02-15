@@ -61,4 +61,15 @@ public abstract class Repository<TEntity,TContext> : IRepository<TEntity> where 
     {
         Context.Set<TEntity>().RemoveRange(entities);
     }
+
+    public async Task<bool> Remove(Guid id)
+    {
+        var entityFromDb = await Get(id);
+        
+        if (entityFromDb == null)
+            return false;
+
+        Context.Set<TEntity>().Remove(entityFromDb);
+        return true;
+    }
 }
