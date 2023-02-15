@@ -73,6 +73,23 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
             .ToListAsync();
     }
 
+    public new async Task<bool> Update(Product entity)
+    {
+        var productFromDb = await Context.Products
+            .Include(product => product.Images)
+            .FirstOrDefaultAsync(product => product.Id == entity.Id);
+            
+        
+        if (productFromDb == null)
+            return false;
+        
+        Context.Products.Entry(productFromDb).CurrentValues.SetValues(entity);
+        productFromDb.Images?.Clear();
+        productFromDb.ChangeAllImages(entity.Images);
+        
+        return true;
+    }
+
     private async Task CheckBrandExists(Guid id)
     {
         bool brandExists = await Context.Brands.AnyAsync(brand => brand.Id == id);
