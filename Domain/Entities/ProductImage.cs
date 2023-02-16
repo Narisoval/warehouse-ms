@@ -23,4 +23,10 @@ public class ProductImage : Entity
     {
         return new ProductImage(id, image,isMain);
     }
+
+    public static ProductImage Create(Image image, bool isMain)
+    {
+        Guid id = Guid.NewGuid();
+        return new ProductImage(id,image,isMain);
+    }
 }
