@@ -1,6 +1,7 @@
 using Domain.Entities;
 using Domain.ValueObjects;
 using Warehouse.API.DTO;
+using Warehouse.API.DTO.Product;
 
 namespace Warehouse.API.Common.Mapping;
 
@@ -10,7 +11,6 @@ public static class ProductImageMappingConfig
     {
         return new ProductImageDto
         {
-            ProductImageId = productImage.Id,
             Image = productImage.Image.Value,
             IsMain = productImage.IsMain,
         };
@@ -36,7 +36,6 @@ public static class ProductImageMappingConfig
     public static ProductImage ToEntity(this ProductImageDto productImageDto)
     {
         return ProductImage.Create(
-            productImageDto.ProductImageId,
             Image.From(productImageDto.Image),
             productImageDto.IsMain
         );

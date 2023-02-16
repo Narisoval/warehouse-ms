@@ -1,10 +1,12 @@
 using Domain.Entities;
 using Domain.ValueObjects;
 using Warehouse.API.DTO;
+using Warehouse.API.DTO.Brand;
+using Warehouse.API.DTO.Product;
 
 namespace Warehouse.API.Common.Mapping;
 
-public static class ProductMappingConfig 
+public static class ProductMappingConfig
 {
     public static ProductDto ToDto(this Product product)
     {
@@ -18,27 +20,44 @@ public static class ProductMappingConfig
             Images = product.Images.ToDtos(),
             Sale = product.Sale.Value,
             IsActive = product.IsActive,
-            Brand = product.Brand?.ToDto(),
-            Category = product.Category?.ToDto(),
-            Provider = product.Provider?.ToDto()
+            Brand = product.Brand?.ToUpdateDto(),
+            Category = product.Category?.Name.Value,
+            Provider = product.Provider?.ToUpdateDto()
         };
     }
-    
-    public static Product ToEntity(this ProductDto productDto)
+
+    public static Product ToEntity(this ProductUpdateDto productDto)
     {
         return Product.Create(
-            productDto.ProductId,
             ProductName.From(productDto.Name),
             Quantity.From(productDto.Quantity),
             Price.From(productDto.FullPrice),
-            ProductImages.From(productDto.Images.ToEntities()),
+            productDto.Images == null ? null : ProductImages.From(productDto.Images?.ToEntities()),
             ProductDescription.From(productDto.Description),
             productDto.IsActive,
             Sale.From(productDto.Sale),
-            productDto.Provider?.ToEntity(),
-            productDto.Brand?.ToEntity(),
-            productDto.Category?.ToEntity() 
+            productDto.ProviderId,
+            productDto.BrandId,
+            productDto.CategoryId
         );
-
     }
+
+    public static Product ToEntity(this ProductUpdateDto productDto, Guid id)
+    {
+        return Product.Create(
+            id,
+            ProductName.From(productDto.Name),
+            Quantity.From(productDto.Quantity),
+            Price.From(productDto.FullPrice),
+            productDto.Images == null ? null : ProductImages.From(productDto.Images?.ToEntities()),
+            ProductDescription.From(productDto.Description),
+            productDto.IsActive,
+            Sale.From(productDto.Sale),
+            productDto.ProviderId,
+            productDto.BrandId,
+            productDto.CategoryId
+        );
+    }
+
+    
 }
