@@ -1,4 +1,5 @@
 using Infrastructure;
+using Warehouse.API.DTO.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseExceptionHandlingMiddleware();
 
 app.MapControllers();
 app.Run();
