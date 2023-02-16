@@ -1,4 +1,4 @@
-namespace Warehouse.API.DTO;
+namespace Warehouse.API.DTO.Provider;
 
 public record ProviderDto
 {
