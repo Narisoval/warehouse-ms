@@ -9,7 +9,7 @@ public class Product : Entity
     public Quantity Quantity { get; private set; }
     public Price FullPrice { get; private set; }
 
-    private ProductImages _productImages;
+    private ProductImages? _productImages;
     public IList<ProductImage>? Images
     {
         get => _productImages?.Value;
@@ -29,42 +29,11 @@ public class Product : Entity
     public Category? Category { get; private set; }
     public Guid CategoryId { get; private set; }
 
-    private Product(
-        Guid id,
-        ProductName productName,
+    public static Product Create(
+        Guid id, ProductName productName,
         Quantity quantity,
         Price fullPrice,
-        ProductImages productImages,
-        ProductDescription productDescription,
-        bool isActive,
-        Sale sale,
-        Provider? provider,
-        Brand? brand,
-        Category? category) : base(id)
-    {
-        Name = productName ?? throw new ArgumentNullException(nameof(productName));
-        Quantity = quantity ?? throw new ArgumentNullException(nameof(quantity));
-        FullPrice = fullPrice ?? throw new ArgumentNullException(nameof(fullPrice));
-        _productImages = productImages ?? throw new ArgumentNullException(nameof(productImages));
-        Description = productDescription ?? throw new ArgumentNullException(nameof(productDescription));
-        IsActive = isActive;
-        Sale = sale ?? throw new ArgumentNullException(nameof(sale));
-       
-        ChangeProvider(provider);
-        ChangeBrand(brand);
-        ChangeCategory(category);
-    }
-
-    //For EF 
-    private Product()
-    {
-    }
-
-    public static Product Create(Guid id,
-        ProductName productName,
-        Quantity quantity,
-        Price fullPrice,
-        ProductImages productImages,
+        ProductImages? productImages,
         ProductDescription productDescription,
         bool isActive,
         Sale sale,
@@ -76,6 +45,116 @@ public class Product : Entity
             provider, brand, category);
     }
 
+    public static Product Create(
+        ProductName productName, 
+        Quantity quantity, 
+        Price fullPrice, 
+        ProductImages? images, 
+        ProductDescription productDescription, 
+        bool isActive, 
+        Sale sale, 
+        Guid providerId, 
+        Guid productId, 
+        Guid categoryId)
+    {
+        Guid id = Guid.NewGuid();
+        return new Product(id,productName,quantity,fullPrice,images,productDescription,
+            isActive,sale,providerId,productId,categoryId);
+    }
+    
+    public static Product Create(
+        Guid id,
+        ProductName productName, 
+        Quantity quantity, 
+        Price fullPrice, 
+        ProductImages? images, 
+        ProductDescription productDescription, 
+        bool isActive, 
+        Sale sale, 
+        Guid providerId, 
+        Guid productId, 
+        Guid categoryId)
+    {
+        return new Product(id,productName,quantity,fullPrice,images,productDescription,
+            isActive,sale,providerId,productId,categoryId);
+    }
+    
+    private Product(
+        Guid id,
+        ProductName productName,
+        Quantity quantity,
+        Price fullPrice,
+        ProductImages? productImages,
+        ProductDescription productDescription,
+        bool isActive,
+        Sale sale,
+        Provider? provider,
+        Brand? brand,
+        Category? category) : this(id,productName,quantity,fullPrice,productImages,productDescription,isActive,sale)
+    {
+        ChangeProvider(provider);
+        ChangeBrand(brand);
+        ChangeCategory(category);
+    }
+    
+    private Product(
+        Guid id,
+        ProductName productName,
+        Quantity quantity,
+        Price fullPrice,
+        ProductImages? productImages,
+        ProductDescription productDescription,
+        bool isActive,
+        Sale sale,
+        Guid providerId,
+        Guid brandId,
+        Guid categoryId) : this(id,productName,quantity,fullPrice,productImages,productDescription,isActive,sale)
+    {
+        if (providerId == Guid.Empty)
+        {
+            throw new ArgumentException("Provider id is invalid");
+        }
+        
+        if (brandId == Guid.Empty)
+        {
+            throw new ArgumentException("Brand id is invalid");
+        }
+        
+        if (categoryId == Guid.Empty)
+        {
+            throw new ArgumentException("Category id is invalid");
+        }
+        
+        ProviderId = providerId;
+        BrandId = brandId;
+        CategoryId = categoryId;
+    }
+    
+    private Product(
+        Guid id,
+        ProductName productName,
+        Quantity quantity,
+        Price fullPrice,
+        ProductImages? productImages,
+        ProductDescription productDescription,
+        bool isActive,
+        Sale sale) : base(id)
+    {
+        Name = productName ?? throw new ArgumentNullException(nameof(productName));
+        Quantity = quantity ?? throw new ArgumentNullException(nameof(quantity));
+        FullPrice = fullPrice ?? throw new ArgumentNullException(nameof(fullPrice));
+        _productImages = productImages;
+        Description = productDescription ?? throw new ArgumentNullException(nameof(productDescription));
+        IsActive = isActive;
+        Sale = sale ?? throw new ArgumentNullException(nameof(sale));
+    }
+    
+    //For EF 
+    private Product()
+    {
+    }
+
+    
     public void ChangeName(ProductName? productName)
     {
         Name = productName ?? throw new ArgumentNullException(nameof(productName));
@@ -182,4 +261,5 @@ public class Product : Entity
 
         Category = null;
     }
+    
 }
