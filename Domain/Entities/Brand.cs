@@ -28,4 +28,9 @@ public class Brand : Entity
         return new Brand(id, brandName, brandImage, description);
     }
 
+    public static Brand Create(BrandName? brandName, Image? brandImage, BrandDescription? description)
+    {
+        Guid id = Guid.NewGuid();
+        return new Brand(id,brandName,brandImage,description);
+    }
 }
