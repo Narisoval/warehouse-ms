@@ -147,6 +147,8 @@ public class Product : Entity
         Description = productDescription ?? throw new ArgumentNullException(nameof(productDescription));
         IsActive = isActive;
         Sale = sale ?? throw new ArgumentNullException(nameof(sale));
+        
+        SetProductImagesNavigationalProperties();
     }
     
     //For EF 
@@ -262,4 +264,15 @@ public class Product : Entity
         Category = null;
     }
     
+    private void SetProductImagesNavigationalProperties()
+    {
+        if (_productImages != null) ;
+        {
+            foreach (var image in _productImages.Value)
+            {
+                image.ProductId = Id;
+                image.Product = this;
+            }
+        }
+    }
 }
