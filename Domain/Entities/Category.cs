@@ -18,4 +18,10 @@ public class Category : Entity
     {
         return new Category(id, name);
     }
+
+    public static Category Create(CategoryName name)
+    {
+        Guid id = Guid.NewGuid();
+        return new Category(id, name);
+    }
 }
