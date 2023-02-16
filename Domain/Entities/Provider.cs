@@ -21,4 +21,10 @@ public class Provider : Entity
     {
         return new Provider(id, companyName, phoneNumber, email);
     }
+
+    public static Provider Create(CompanyName companyName, string phoneNumber, Email email)
+    {
+        Guid id = Guid.NewGuid();
+        return new Provider(id, companyName, phoneNumber, email);
+    }
 }
