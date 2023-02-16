@@ -8,7 +8,7 @@ namespace Infrastructure.IntegrationTests;
 
 public class WarehouseDbContextGenerator : IAsyncLifetime
 {
-    private readonly TestcontainerDatabase _postgresqlContainer = new TestcontainersBuilder<PostgreSqlTestcontainer>()
+    private readonly TestcontainerDatabase _postgresqlContainer = new ContainerBuilder<PostgreSqlTestcontainer>()
         .WithDatabase(new PostgreSqlTestcontainerConfiguration
         {
             Database = "db",
@@ -19,6 +19,7 @@ public class WarehouseDbContextGenerator : IAsyncLifetime
 
     public WarehouseDbContext GetContext()
     {
+        Console.WriteLine("CONTAINER CREATED ON PORT " + _postgresqlContainer.GetMappedPublicPort(5432));
         var contextOptions = new DbContextOptionsBuilder<WarehouseDbContext>()
             .UseNpgsql(_postgresqlContainer.ConnectionString)
             .Options;

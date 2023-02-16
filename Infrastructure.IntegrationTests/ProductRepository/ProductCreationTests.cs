@@ -1,9 +1,8 @@
 using Domain.UnitTests.Fixtures;
 using FluentAssertions;
 using Infrastructure.Data;
-using Org.BouncyCastle.Crypto.Engines;
 
-namespace Infrastructure.IntegrationTests;
+namespace Infrastructure.IntegrationTests.ProductRepository;
 
 public class ProductCreationTests : IClassFixture<WarehouseDbContextGenerator>
 {
@@ -68,7 +67,6 @@ public class ProductCreationTests : IClassFixture<WarehouseDbContextGenerator>
        //Act 
        await _unitOfWork.Products.Add(testProduct);
        var entitiesWritten = await _unitOfWork.Complete();
-       
        //Assert
        entitiesWritten.Should().BeGreaterThan(0);
     }

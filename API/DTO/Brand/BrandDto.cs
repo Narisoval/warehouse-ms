@@ -1,4 +1,4 @@
-namespace Warehouse.API.DTO;
+namespace Warehouse.API.DTO.Brand;
 
 public record BrandDto
 {
@@ -9,6 +9,4 @@ public record BrandDto
     public string Image { get; init; }
 
     public string Description { get; set; }
-    
-    public IList<ProductDto>? Products { get; set; }
 }
