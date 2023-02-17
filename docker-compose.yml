@@ -1,0 +1,42 @@
+version: '3.8'
+
+networks:
+  dev:
+    driver: bridge
+    
+services:
+  warehouse:
+    image: warehouse
+    depends_on:
+      - "warehouse_db" 
+    container_name: warehouse_api
+    ports:
+      - "8080:80"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ConnectionStrings__postgres=User ID=postgres;Password=12345;Server=warehouse_db;Port=5432;Database=warehouse_development;
+    command: >
+      sh -c "dotnet ef database update -p Infrastructure -s API; dotnet API.dll" 
+    networks:
+      - dev
+      
+  warehouse_db:
+    image: postgres:15.2-alpine
+    container_name: warehouse_db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=warehouse_development
+    ports:
+      - "5433:5432"
+    restart: always
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - dev
+      
+volumes:
+  postgres-data:
+      
