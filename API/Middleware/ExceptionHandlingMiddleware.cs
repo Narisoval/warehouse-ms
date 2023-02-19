@@ -3,7 +3,7 @@ using Domain.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Warehouse.API.DTO.Middleware;
+namespace Warehouse.API.Middleware;
 
 public static class ExceptionHandlingMiddleware
 {
@@ -21,10 +21,12 @@ public static class ExceptionHandlingMiddleware
         var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
         var exception = exceptionHandlerPathFeature?.Error;
 
-        ProblemDetails problem = new ProblemDetails();
-        problem = exception is ArgumentException or DomainException 
+        var problem = exception is ArgumentException or DomainException or FormatException
             ? ConstructValidationProblemDetails(exception) : ConstructServerErrorProblemDetails();
 
+        if(problem.Status != null)
+            context.Response.StatusCode = (int)problem.Status;
+        
         await WriteProblem(problem, context);
     }
 

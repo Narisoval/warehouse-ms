@@ -1,5 +1,5 @@
 using Infrastructure;
-using Warehouse.API.DTO.Middleware;
+using Warehouse.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
