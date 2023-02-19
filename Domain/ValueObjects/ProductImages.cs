@@ -11,8 +11,8 @@ public class ProductImages : ValueOf<IList<ProductImage>,ProductImages>
     protected override void Validate()
     {
         if (Value == null)
-            throw new ArgumentNullException(nameof(Value), "Product images can't be null");
-        
+            return;
+
         //This check is necessary for retrieving products for DB to work correctly.
         //Because when getting Products from db with ProductImages included,
         //EF initializes an empty list of ProductImage that is going through this validation logic.
