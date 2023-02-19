@@ -10,7 +10,8 @@ public class ImageTests
     [InlineData("https://storage.googleapis.com/eCommerceApp/kitten.hjkl")]
     [InlineData("https://storage.googleapis.com/eCommerceApp/kitten.sh")]
     [InlineData("httttps://storage.googleapis.com/eCommerceApp/kitten.jpg")]
-    [InlineData("")]
+    [InlineData("https://storage.  .com/eCommerceApp/kitten.jpg")]
+    [InlineData("https://happyme nin  socks.png")]
     public void Should_ThrowException_When_ImageUrlIsIncorrect(string? image)
     {
         Assert.Throws<FormatException>(() => Domain.ValueObjects.Image.From(image));

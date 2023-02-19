@@ -16,13 +16,12 @@ public sealed class Image : ValueOf<string,Image>
         {
             throw new FormatException($"{Value} is not a valid image url");
         }
-
     }
 
     private static bool IsValidImageUrl(string imageUrl)
     {
         // This pattern is a really basic and allows some strange URLs like https:///.jpg 
-        var pattern = @"(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|jpeg|png|svg|ico|bmp|webp)";
+        var pattern = @"(http(s?):)([/|.|\w|-])*\.(?:jpg|jpeg|png|svg|ico|bmp|webp)";
         var match = Regex.Match(imageUrl, pattern);
         return match.Success;
     }
