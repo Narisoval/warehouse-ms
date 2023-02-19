@@ -6,18 +6,22 @@ namespace Domain.Entities;
 public class Product : Entity
 {
     public ProductName Name { get; private set; }
+    
     public Quantity Quantity { get; private set; }
+    
     public Price FullPrice { get; private set; }
 
     private ProductImages? _productImages;
     public IList<ProductImage>? Images
     {
         get => _productImages?.Value;
-        private set => _productImages = ProductImages.From(value!);
+        set => _productImages = ProductImages.From(value!);
     }
 
     public ProductDescription Description { get; private set; }
+    
     public bool IsActive { get; private set; }
+    
     public Sale Sale { get; private set; }
 
     public Provider? Provider { get; private set; }
@@ -30,7 +34,8 @@ public class Product : Entity
     public Guid CategoryId { get; private set; }
 
     public static Product Create(
-        Guid id, ProductName productName,
+        Guid id, 
+        ProductName productName,
         Quantity quantity,
         Price fullPrice,
         ProductImages? productImages,
@@ -43,23 +48,6 @@ public class Product : Entity
     {
         return new Product(id, productName, quantity, fullPrice, productImages, productDescription, isActive, sale,
             provider, brand, category);
-    }
-
-    public static Product Create(
-        ProductName productName, 
-        Quantity quantity, 
-        Price fullPrice, 
-        ProductImages? images, 
-        ProductDescription productDescription, 
-        bool isActive, 
-        Sale sale, 
-        Guid providerId, 
-        Guid productId, 
-        Guid categoryId)
-    {
-        Guid id = Guid.NewGuid();
-        return new Product(id,productName,quantity,fullPrice,images,productDescription,
-            isActive,sale,providerId,productId,categoryId);
     }
     
     public static Product Create(
@@ -78,6 +66,24 @@ public class Product : Entity
         return new Product(id,productName,quantity,fullPrice,images,productDescription,
             isActive,sale,providerId,productId,categoryId);
     }
+    
+    public static Product Create(
+        ProductName productName, 
+        Quantity quantity, 
+        Price fullPrice, 
+        ProductImages? images, 
+        ProductDescription productDescription, 
+        bool isActive, 
+        Sale sale, 
+        Guid providerId, 
+        Guid brandId, 
+        Guid categoryId)
+    {
+        Guid id = Guid.NewGuid();
+        return new Product(id,productName,quantity,fullPrice,images,productDescription,
+            isActive,sale,providerId,brandId,categoryId);
+    }
+    
     
     private Product(
         Guid id,
@@ -157,122 +163,39 @@ public class Product : Entity
     }
 
     
-    public void ChangeName(ProductName? productName)
-    {
-        Name = productName ?? throw new ArgumentNullException(nameof(productName));
-    }
-
-    public void DecreaseQuantityBy(int amount)
-    {
-        Quantity = Quantity.From(Quantity.Value - amount);
-    }
-
-    public void IncreaseQuantityBy(int amount)
-    {
-        if (amount < 0)
-            throw new ArgumentOutOfRangeException(nameof(amount), "Can't increase quantity by negative amount");
-        Quantity = Quantity.From(Quantity.Value + amount);
-    }
-
-    public void ChangeFullPrice(Price? fullPrice)
-    {
-        FullPrice = fullPrice ?? throw new ArgumentNullException(nameof(fullPrice));
-    }
-
     public void ChangeAllImages(IList<ProductImage>? images)
     {
         _productImages = ProductImages.From(images!);
+        SetProductImagesNavigationalProperties();
     }
     
-    public void ChangeMainImage(Image? imageToChangeTo)
+    private void ChangeProvider(Provider? provider)
     {
-        Guid mainImageId = GetMainImage().Id;
-        ChangeImage(mainImageId,imageToChangeTo);
+        if (provider == null) return;
+        Provider = provider;
+        ProviderId = provider.Id;
     }
     
-    public ProductImage GetMainImage()
+    private void ChangeBrand(Brand? brand)
     {
-        ProductImage mainImage = _productImages.Value
-            .First(productImage => productImage.IsMain);
-        return mainImage;
+        if (brand == null) return;
+        Brand = brand;
+        BrandId = brand.Id;
     }
     
-    public void ChangeImage(Guid? imageId, Image? imageToChangeTo)
+    private void ChangeCategory(Category? category)
     {
-        if (imageToChangeTo == null)
-            throw new ArgumentNullException(nameof(imageToChangeTo));
-
-        if (imageId == null)
-            throw new ArgumentNullException(nameof(imageId));
-
-        ProductImage productImageToChange = _productImages.GetProductImageById(imageId.Value);
-        productImageToChange.Image = imageToChangeTo;
+        if (category == null) return;
+        Category = category;
+        CategoryId = category.Id;
     }
-
-    public void ChangeDescription(ProductDescription? productDescription)
-    {
-        Description = productDescription ?? throw new ArgumentNullException(nameof(productDescription));
-    }
-
-    public void EnableProduct()
-    {
-        IsActive = true;
-    }
-
-    public void DisableProduct()
-    {
-        IsActive = false;
-    }
-
-    public void ChangeSale(Sale? sale)
-    {
-        Sale = sale ?? throw new ArgumentNullException(nameof(sale));
-    }
-
-    public void ChangeBrand(Brand? brand)
-    {
-        if (brand != null)
-        {
-            Brand = brand;
-            BrandId = brand.Id;
-            return;
-        }
-        
-        Brand = null;
-    }
-
-    public void ChangeProvider(Provider? provider)
-    {
-        if (provider != null)
-        {
-            Provider = provider; 
-            ProviderId = provider.Id;
-            return;
-        }
-        Provider = null;
-    }
-
-    public void ChangeCategory(Category? category)
-    {
-        if (category != null)
-        {
-            Category = category;
-            CategoryId = category.Id;
-            return;
-        }
-
-        Category = null;
-    }
-    
     private void SetProductImagesNavigationalProperties()
     {
-        if (_productImages != null) ;
+        if (_productImages == null ||  _productImages.Value == null) return;
+        foreach (var image in _productImages?.Value!)
         {
-            foreach (var image in _productImages.Value)
-            {
-                image.ProductId = Id;
-                image.Product = this;
-            }
+            image.ProductId = Id;
+            image.Product = this;
         }
     }
 }
