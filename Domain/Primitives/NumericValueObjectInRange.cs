@@ -1,3 +1,4 @@
+using System.Reflection;
 using ValueOf;
 
 namespace Domain.Primitives;
@@ -15,7 +16,7 @@ public abstract class NumericValueObjectInRange<TValue,TThis> : ValueOf<TValue,T
         {
             throw new ArgumentOutOfRangeException
             (nameof(Value),
-                Value,$"Price of a product cannot be less than {Range.Min} or more than {Range.Max}");
+                Value,$"{typeof(TThis).GetTypeInfo().Name} cannot be less than {Range.Min} or more than {Range.Max}");
             
         }
     }
