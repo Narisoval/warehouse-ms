@@ -1,5 +1,5 @@
 ﻿using Warehouse.API.DTO.Brand;
-using Warehouse.API.DTO.Provider;
+using Warehouse.API.DTO.ProviderDtos;
 
 namespace Warehouse.API.DTO.Product;
 

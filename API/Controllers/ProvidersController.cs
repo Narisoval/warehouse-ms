@@ -1,7 +1,12 @@
+using System.Net.Mime;
+using Domain.Entities;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
 using Warehouse.API.Common.Mapping;
-using Warehouse.API.DTO.Provider;
+using Warehouse.API.DTO.Bindings;
+using Warehouse.API.DTO.ProviderDtos;
+using Warehouse.API.DTO.SwaggerExamples;
 
 namespace Warehouse.API.Controllers;
 
@@ -41,26 +46,31 @@ public class ProvidersController : ControllerBase
     }
 
     [HttpPost]
+    [Produces("application/json")]
+    [Consumes("application/json")]
     [ProducesResponseType(typeof(ProviderDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ProviderDto>> CreateProvider(ProviderUpdateDto providerDto)
+    [SwaggerRequestExample(typeof(ProviderUpdateDto),typeof(ProviderUpdateDtoExample))]
+    public async Task<ActionResult<ProviderDto>> CreateProvider(
+        [FromBody] Provider provider)
     {
-        var providerEntity = providerDto.ToEntity();
-
-        await _unitOfWork.Providers.Add(providerEntity);
+        await _unitOfWork.Providers.Add(provider);
         await _unitOfWork.Complete();
 
         return CreatedAtAction(nameof(GetProvider),
-            new { id = providerEntity.Id }, providerEntity.ToDto());
+            new { id = provider.Id }, provider.ToDto());
     }
 
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateProvider(ProviderUpdateDto providerDto, Guid id)
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerRequestExample(typeof(ProviderUpdateDto),typeof(ProviderUpdateDtoExample))]
+    public async Task<IActionResult> UpdateProvider(
+        [FromBody]Provider provider, [FromRoute] Guid id)
     {
-        var providerEntity = providerDto.ToEntity(id);
-        var providerUpdateSuccessfully = await _unitOfWork.Providers.Update(providerEntity);
+        var providerUpdateSuccessfully = await _unitOfWork.Providers.Update(provider);
 
         if (!providerUpdateSuccessfully)
             return GetProviderNotFoundResponse(id);
@@ -68,6 +78,7 @@ public class ProvidersController : ControllerBase
         await _unitOfWork.Complete();
         
         return NoContent();
+
     }
 
     [HttpDelete("{id:guid}")]

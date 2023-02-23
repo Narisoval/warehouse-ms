@@ -11,7 +11,18 @@
     </ItemGroup> 
     
     <ItemGroup>
+      <PackageReference Include="FluentResults" Version="3.15.2" />
       <PackageReference Include="ValueOf" Version="2.0.31" />
+    </ItemGroup> 
+    
+    <ItemGroup>
+      <Folder Include="Result" />
+    </ItemGroup> 
+    
+    <ItemGroup>
+      <Reference Include="FluentValidator">
+        <HintPath>..\..\..\.nuget\packages\fluentvalidator\2.0.4\lib\netstandard1.3\FluentValidator.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

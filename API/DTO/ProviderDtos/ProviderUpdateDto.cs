@@ -1,6 +1,6 @@
-namespace Warehouse.API.DTO.Provider;
+namespace Warehouse.API.DTO.ProviderDtos;
 
-public class ProviderUpdateDto
+public record ProviderUpdateDto
 {
     public string CompanyName { get; init; } = "";
 

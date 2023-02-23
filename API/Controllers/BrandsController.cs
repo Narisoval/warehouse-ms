@@ -41,6 +41,7 @@ public class BrandsController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(BrandDto), 201)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<BrandDto>> CreateBrand(BrandUpdateDto brandDto)
     {
         var brand = brandDto.ToEntity();

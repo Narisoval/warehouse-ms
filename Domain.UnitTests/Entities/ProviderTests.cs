@@ -7,8 +7,8 @@ namespace Domain.UnitTests.Entities;
 public class ProviderTests
 {
     private static readonly Guid TestId = Guid.NewGuid();
-    private static readonly Email TestEmail = Email.From("example@email.com");
-    private static readonly CompanyName TestCompanyName = CompanyName.From("Hammermen dev.");
+    private static readonly Email TestEmail = Email.From("example@email.com").Value;
+    private static readonly CompanyName TestCompanyName = CompanyName.From("Hammermen dev.").Value;
     private static readonly string TestPhoneNumber = "+3806894583948";
 
     [Fact]
@@ -36,7 +36,7 @@ public class ProviderTests
     public void Should_CreateProvider_When_AllArgumentsAreValid()
     {
         //Act
-        var sut = Provider.Create(TestId, TestCompanyName, TestPhoneNumber, TestEmail);
+        var sut = Provider.Create(TestId, TestCompanyName, TestPhoneNumber, TestEmail).Value;
         
         //Assert
         sut.Id.Should().Be(TestId);

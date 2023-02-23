@@ -1,5 +1,7 @@
+using Domain.Errors;
 using Domain.Primitives;
 using Domain.ValueObjects;
+using FluentResults;
 
 namespace Domain.Entities;
 
@@ -17,8 +19,14 @@ public class Provider : Entity
         Email = email ?? throw new ArgumentNullException(nameof(email));
     }
 
-    public static Provider Create(Guid id, CompanyName? companyName, string? phoneNumber, Email? email)
+    public static Result<Provider> Create(Guid id, CompanyName? companyName, string? phoneNumber, Email? email)
     {
+        if (id == Guid.Empty)
+        {
+            return new Result<Provider>()
+                .WithError(new EmptyGuidError(nameof(Provider)));
+        }
+
         return new Provider(id, companyName, phoneNumber, email);
     }
 

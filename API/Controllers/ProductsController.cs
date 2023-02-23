@@ -49,7 +49,6 @@ public class ProductsController : ControllerBase
     {
         var productEntity = productDto.ToEntity();
        
-        //TODO handle validation errors
         await _unitOfWork.Products.Add(productEntity);
         await _unitOfWork.Complete();
 

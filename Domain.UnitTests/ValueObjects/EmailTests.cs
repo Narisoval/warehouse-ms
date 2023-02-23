@@ -1,4 +1,5 @@
 using Domain.ValueObjects;
+using FluentAssertions;
 
 namespace Domain.UnitTests.ValueObjects;
 
@@ -13,7 +14,7 @@ public class EmailTests
         var result = Email.From(email);
 
         // Assert
-        Assert.Equal(email, result.Value);
+        Assert.Equal(email, result.Value.Value);
     }
 
     [Theory]
@@ -22,19 +23,25 @@ public class EmailTests
     [InlineData("username@.com")]
     [InlineData("@example.com")]
     [InlineData("example@example.com....")]
-    public void Should_ThrowArgumentException_When_FormatIsIncorrect(string email)
+    public void Should_ReturnFaultedResult_When_FormatIsIncorrect(string email)
     {
-        Assert.Throws<FormatException>(() => Email.From(email));
+        //Act
+        var emailResult = Email.From(email);
+        
+        //Assert
+        emailResult.IsFailed.Should().BeTrue();
     }
     
     [Fact]
-    public void Should_ThrowArgumentNullException_When_EmailIsNull()
+    public void Should_ReturnFaultedResult_When_EmailIsNull()
     {
         // Arrange
         string? email = null;
 
-        // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => Email.From(email));
-
+        // Act
+        var emailResult = Email.From(email);
+        
+        //Assert
+        emailResult.IsFailed.Should().BeTrue();
     }
 }

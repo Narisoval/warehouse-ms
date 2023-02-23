@@ -14,10 +14,10 @@ public class ProviderConfiguration : IEntityTypeConfiguration<Provider>
              
         builder.Property(provider => provider.CompanyName)
             .HasConversion(companyName => companyName.Value,
-                value => CompanyName.From(value));   
+                value => CompanyName.From(value).Value);   
         
         builder.Property(provider => provider.Email)
             .HasConversion(email => email.Value,
-            value => Email.From(value));   
+            value => Email.From(value).Value);   
 }
 }

@@ -1,12 +1,12 @@
-namespace Warehouse.API.DTO.Provider;
+namespace Warehouse.API.DTO.ProviderDtos;
 
-public record ProviderDto
+public record ProviderDto 
 {
-    public Guid ProviderId { get; init; }
+    public Guid ProviderId { get; set; }
 
     public string CompanyName { get; init; } = "";
 
     public string PhoneNumber { get; init; } = "";
-    
+
     public string Email { get; init; } = "";
 };

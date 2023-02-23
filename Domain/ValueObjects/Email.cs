@@ -1,21 +1,36 @@
-using ValueOf;
+using Domain.Primitives;
+using FluentResults;
 
 
 namespace Domain.ValueObjects;
 
-public sealed class Email : ValueOf<string,Email>
+public sealed class Email : ValueObject 
 {
-    protected override void Validate()
+    public string Value { get; private init; }
+    
+    private Email(string email)
     {
-        if (Value == null)
+        Value = email;
+    }
+    
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
+    }
+    
+    public static Result<Email> From(string? email)
+    {
+        if (email == null)
         {
-            throw new ArgumentNullException(nameof(Value));
+            return new Result<Email>().WithError(new Error("Email cannot be null"));
         }
 
-        if (!IsCorrectFormat(Value))
+        if (!IsCorrectFormat(email))
         {
-            throw new FormatException($"{Value} is not a valid email");
+            return new Result<Email>().WithError(new Error($"{email} is not a valid email"));
         }
+
+        return new Email(email);
     }
 
     private static bool IsCorrectFormat(string email)
@@ -34,4 +49,5 @@ public sealed class Email : ValueOf<string,Email>
         
         return true;
     }
+
 }

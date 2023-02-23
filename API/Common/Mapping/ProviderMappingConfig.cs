@@ -1,6 +1,7 @@
 using Domain.Entities;
 using Domain.ValueObjects;
-using Warehouse.API.DTO.Provider;
+using Warehouse.API.DTO.Bindings;
+using Warehouse.API.DTO.ProviderDtos;
 
 namespace Warehouse.API.Common.Mapping;
 
@@ -31,18 +32,18 @@ public static class ProviderMappingConfig
     {
         return Provider.Create(
             providerDto.ProviderId,
-            CompanyName.From(providerDto.CompanyName),
+            CompanyName.From(providerDto.CompanyName).Value,
             providerDto.PhoneNumber,
-            Email.From(providerDto.Email)
-        );
+            Email.From(providerDto.Email).Value
+        ).Value;
     }
 
     public static Provider ToEntity(this ProviderUpdateDto providerUpdateDto)
     {
         return Provider.Create(
-            CompanyName.From(providerUpdateDto.CompanyName),
+            CompanyName.From(providerUpdateDto.CompanyName).Value,
             providerUpdateDto.PhoneNumber,
-            Email.From(providerUpdateDto.Email)
+            Email.From(providerUpdateDto.Email).Value
         );
     }
 
@@ -50,9 +51,9 @@ public static class ProviderMappingConfig
     {
         return Provider.Create(
             id,
-            CompanyName.From(providerUpdateDto.CompanyName),
+            CompanyName.From(providerUpdateDto.CompanyName).Value,
             providerUpdateDto.PhoneNumber,
-            Email.From(providerUpdateDto.Email)
-        );
+            Email.From(providerUpdateDto.Email).Value
+        ).Value;
     }
 }
