@@ -1,10 +1,8 @@
-using System.Net.Mime;
 using Domain.Entities;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 using Warehouse.API.Common.Mapping;
-using Warehouse.API.DTO.Bindings;
 using Warehouse.API.DTO.ProviderDtos;
 using Warehouse.API.DTO.SwaggerExamples;
 
@@ -22,6 +20,7 @@ public class ProvidersController : ControllerBase
     }
 
     [HttpGet("all")]
+    [Produces("application/json")]
     [ProducesResponseType(typeof(IEnumerable<ProviderDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ProviderDto>>> GetProviders()
     {
@@ -33,6 +32,7 @@ public class ProvidersController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [Produces("application/json")]
     [ProducesResponseType(typeof(ProviderDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProviderDto>> GetProvider([FromRoute] Guid id)
@@ -48,7 +48,6 @@ public class ProvidersController : ControllerBase
     [HttpPost]
     [Produces("application/json")]
     [Consumes("application/json")]
-    [ProducesResponseType(typeof(ProviderDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [SwaggerRequestExample(typeof(ProviderUpdateDto),typeof(ProviderUpdateDtoExample))]
@@ -63,6 +62,7 @@ public class ProvidersController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

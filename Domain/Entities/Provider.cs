@@ -7,26 +7,39 @@ namespace Domain.Entities;
 
 public class Provider : Entity
 {
-    public CompanyName CompanyName { get; set; }
-    public string PhoneNumber { get; set; }
-    public Email Email { get; set; }
+    public CompanyName CompanyName { get; private set; }
+    public string PhoneNumber { get; private set; }
+    public Email Email { get; private set; }
 
     public IReadOnlyCollection<Product>? Products { get; set; }
-    private Provider(Guid id, CompanyName? companyName, string? phoneNumber, Email? email) : base(id)
+    
+    private Provider(Guid id, CompanyName companyName, string phoneNumber, Email email) : base(id)
     {
-        CompanyName = companyName ?? throw new ArgumentNullException(nameof(companyName)) ;
-        PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
-        Email = email ?? throw new ArgumentNullException(nameof(email));
+        CompanyName = companyName; 
+        PhoneNumber = phoneNumber; 
+        Email = email;
     }
 
     public static Result<Provider> Create(Guid id, CompanyName? companyName, string? phoneNumber, Email? email)
     {
+        Result<Provider> result = new Result<Provider>();
+        
         if (id == Guid.Empty)
-        {
             return new Result<Provider>()
                 .WithError(new EmptyGuidError(nameof(Provider)));
-        }
 
+        if (companyName! == null!)
+            result.WithError(new NullArgumentError(nameof(CompanyName)));
+        
+        if (phoneNumber == null)
+            result.WithError(new NullArgumentError(nameof(PhoneNumber)));
+        
+        if (email! == null!)
+            result.WithError(new NullArgumentError(nameof(Email)));
+        
+        if (result.Errors.Count != 0)
+            return result;
+        
         return new Provider(id, companyName, phoneNumber, email);
     }
 

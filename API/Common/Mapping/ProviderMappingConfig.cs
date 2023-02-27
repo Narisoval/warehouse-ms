@@ -1,5 +1,4 @@
 using Domain.Entities;
-using Domain.ValueObjects;
 using Warehouse.API.DTO.Bindings;
 using Warehouse.API.DTO.ProviderDtos;
 
@@ -26,34 +25,5 @@ public static class ProviderMappingConfig
             Email = provider.Email.Value,
             PhoneNumber = provider.PhoneNumber
         };
-    }
-
-    public static Provider ToEntity(this ProviderDto providerDto)
-    {
-        return Provider.Create(
-            providerDto.ProviderId,
-            CompanyName.From(providerDto.CompanyName).Value,
-            providerDto.PhoneNumber,
-            Email.From(providerDto.Email).Value
-        ).Value;
-    }
-
-    public static Provider ToEntity(this ProviderUpdateDto providerUpdateDto)
-    {
-        return Provider.Create(
-            CompanyName.From(providerUpdateDto.CompanyName).Value,
-            providerUpdateDto.PhoneNumber,
-            Email.From(providerUpdateDto.Email).Value
-        );
-    }
-
-    public static Provider ToEntity(this ProviderUpdateDto providerUpdateDto, Guid id)
-    {
-        return Provider.Create(
-            id,
-            CompanyName.From(providerUpdateDto.CompanyName).Value,
-            providerUpdateDto.PhoneNumber,
-            Email.From(providerUpdateDto.Email).Value
-        ).Value;
     }
 }

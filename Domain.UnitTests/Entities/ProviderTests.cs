@@ -1,6 +1,7 @@
 using Domain.Entities;
 using Domain.ValueObjects;
 using FluentAssertions;
+using FluentResults;
 
 namespace Domain.UnitTests.Entities;
 
@@ -12,24 +13,42 @@ public class ProviderTests
     private static readonly string TestPhoneNumber = "+3806894583948";
 
     [Fact]
-    public void Should_ThrowException_When_CompanyNameIsNull()
+    public void Should_ReturnFailedResult_When_CompanyNameIsNull()
     {
+        //Arrange
         CompanyName? companyName = null;
-        Assert.Throws<ArgumentNullException>(() => Provider.Create(TestId, companyName, TestPhoneNumber, TestEmail));
+        
+        //Act
+        var sut = Provider.Create(TestId, companyName, TestPhoneNumber, TestEmail);
+        
+        //Assert
+        AssertHasOneError(sut);
     }
 
     [Fact]
-    public void Should_ThrowException_When_PhoneNumberIsNull()
+    public void Should_ReturnFailedResult_When_PhoneNumberIsNull()
     {
+        //Arrange
         string? phoneNumber = null;
-        Assert.Throws<ArgumentNullException>(() => Provider.Create(TestId, TestCompanyName, phoneNumber, TestEmail));
+        
+        //Act
+        var sut = Provider.Create(TestId, TestCompanyName, phoneNumber, TestEmail);
+        
+        //Assert
+        AssertHasOneError(sut);
     }
-
+    
     [Fact]
-    public void Should_ThrowException_When_EmailIsNull()
+    public void Should_ReturnFailedResult_When_EmailIsNull()
     {
+        //Arrange 
         Email? email = null;
-        Assert.Throws<ArgumentNullException>(() => Provider.Create(TestId, TestCompanyName, TestPhoneNumber, email));
+        
+        //Act
+        var sut = Provider.Create(TestId, TestCompanyName, TestPhoneNumber, email);
+            
+        //Assert
+        AssertHasOneError(sut);
     }
 
     [Fact]
@@ -43,5 +62,11 @@ public class ProviderTests
         sut.CompanyName.Should().BeEquivalentTo(TestCompanyName);
         sut.PhoneNumber.Should().Be(TestPhoneNumber);
         sut.Email.Should().BeEquivalentTo(TestEmail);
+    }
+    
+    private void AssertHasOneError(Result<Provider> result)
+    {
+        result.IsFailed.Should().BeTrue();
+        result.Errors.Count.Should().Be(1);
     }
 }
