@@ -1,8 +1,8 @@
-namespace Warehouse.API.DTO.Brand;
+namespace Warehouse.API.DTO.BrandDtos;
 
 public record BrandDto
 {
-    public Guid BrandId { get; init; }
+    public Guid BrandId { get; set; }
 
     public string Name { get; init; }
 

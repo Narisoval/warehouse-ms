@@ -8,8 +8,8 @@ public static class BrandsFixture
     public static Brand GetTestBrand()
     {
         return Brand.Create(
-            Guid.NewGuid(), BrandName.From("Adidas"),
-            Image.From("http://Logo.png"), 
-            BrandDescription.From("Fjsdkfjsdlkfjsldkjflksdjflksdjflksdjflksdjglkdfjglkdf"));
+            Guid.NewGuid(), BrandName.From("Adidas").Value,
+            Image.From("http://Logo.png").Value, 
+            BrandDescription.From("Fjsdkfjsdlkfjsldkjflksdjflksdjflksdjflksdjglkdfjglkdf").Value).Value;
     }
 }

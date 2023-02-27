@@ -44,7 +44,7 @@ public class ProductTests
 
         // Act
         var createdProduct = Product.Create(
-            Guid.NewGuid(), 
+           productFormFixture.Id, 
             productFormFixture.Name,
             productFormFixture.Quantity, 
             productFormFixture.FullPrice, 
@@ -62,7 +62,7 @@ public class ProductTests
     }
 
     [Fact]
-    public void CreateProduct_ShouldCreateProductCreateMethodWithIdIsCalled()
+    public void CreateProduct_ShouldCreateProductWhenCreateMethodWithIdIsCalled()
     {
         // Arrange
         var productFormFixture = ProductsFixture.GetTestProduct();
@@ -90,7 +90,7 @@ public class ProductTests
         product1.Name.Should().Be(product2.Name);
         product1.Quantity.Should().Be(product2.Quantity);
         product1.FullPrice.Should().Be(product2.FullPrice);
-        product1.Images.Should().BeEmpty();
+        product1.Images.Should().BeEquivalentTo(product2.Images);
         product1.Description.Should().Be(product2.Description);
         product1.IsActive.Should().Be(product2.IsActive);
         product1.Sale.Should().Be(product2.Sale);

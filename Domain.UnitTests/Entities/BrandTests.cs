@@ -1,5 +1,7 @@
 using Domain.Entities;
 using Domain.ValueObjects;
+using FluentAssertions;
+using FluentResults;
 
 namespace Domain.UnitTests.Entities;
 
@@ -10,12 +12,12 @@ public class BrandTests
     {
         //Arrange
         var id = Guid.NewGuid();
-        var brandName = BrandName.From("BrandName");
-        var brandImage = Image.From("https://image.jpg");
-        var brandDescription = BrandDescription.From("This is a brand description");
+        var brandName = BrandName.From("BrandName").Value;
+        var brandImage = Image.From("https://image.jpg").Value;
+        var brandDescription = BrandDescription.From("This is a brand description").Value;
     
         //Act
-        var brand = Brand.Create(id, brandName, brandImage, brandDescription);
+        var brand = Brand.Create(id, brandName, brandImage, brandDescription).Value;
     
         //Assert
         Assert.Equal(id, brand.Id);
@@ -25,27 +27,27 @@ public class BrandTests
     }
 
     [Fact]
-    public void Should_ThrowException_When_SomeOfTheConstructorArgumentsAreNull()
+    public void Should_ReturnFailedResult_When_SomeOfTheConstructorArgumentsAreNull()
     {
         // Arrange
         var id = Guid.NewGuid();
-        var brandName = BrandName.From("BrandName");
-        var image = Image.From("https://image.jpg");
-        var description = BrandDescription.From("This is a brand description");
-        var validArguments = new List<object?>() { brandName, image, description };
+        var brandName = BrandName.From("BrandName").Value;
+        var image = Image.From("https://image.jpg").Value;
+        var description = BrandDescription.From("This is a brand description").Value;
+        var arguments = new List<object?>() { brandName, image, description };
 
         // Act and Assert
-        for (int i = 0; i < validArguments.Count; i++)
+        for (int i = 0; i < arguments.Count; i++)
         {
-            var currValidArgument = validArguments[i];
-            validArguments[i] = null;
-            Assert.Throws<ArgumentNullException>(() => CreateBrand(id,validArguments));
-            validArguments[i] = currValidArgument;
+            var argument = arguments[i];
+            arguments[i] = null;
+            CreateBrand(id, arguments).IsFailed.Should().BeTrue();
+            arguments[i] = argument;
         }
     }
 
 
-    private Brand CreateBrand(Guid id, List<object?> arguments)
+    private Result<Brand> CreateBrand(Guid id, List<object?> arguments)
     {
         return Brand.Create(id,(BrandName)arguments[0]!,(Image)arguments[1]!,
             (BrandDescription)arguments[2]!);

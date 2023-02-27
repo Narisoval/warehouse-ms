@@ -1,4 +1,4 @@
-namespace Warehouse.API.DTO.Brand;
+namespace Warehouse.API.DTO.BrandDtos;
 
 public record BrandUpdateDto
 {

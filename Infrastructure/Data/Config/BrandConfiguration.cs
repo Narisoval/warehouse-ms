@@ -16,19 +16,19 @@ public class BrandConfiguration : IEntityTypeConfiguration<Brand>
         builder.Property(b => b.Name)
             .HasConversion(
                 name => name.Value,
-                value => BrandName.From(value))
+                value => BrandName.From(value).Value)
             .HasColumnName("Name");
 
         builder.Property(b => b.Image)
             .HasConversion(
                 img => img.Value,
-                value => Image.From(value))
+                value => Image.From(value).Value)
             .HasColumnName("Image");
 
         builder.Property(b => b.Description)
             .HasConversion(
                 description => description.Value,
-                value => BrandDescription.From(value))
+                value => BrandDescription.From(value).Value)
             .HasColumnName("Description");
     }
 }

@@ -32,7 +32,9 @@ public class ProductImagesTests
         //Arrange
         for (int i = 0; i <= amount; i++)
         {
-            var img = ProductImage.Create(Guid.NewGuid(), Image.From($"https://{Guid.NewGuid()}.png"), isMain);
+            var img = ProductImage.Create(
+                Guid.NewGuid(), 
+                Image.From($"https://{Guid.NewGuid()}.png").Value, isMain);
             images.Add(img);
         }
 

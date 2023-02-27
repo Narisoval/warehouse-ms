@@ -1,7 +1,5 @@
 using Domain.Entities;
-using Domain.ValueObjects;
-using Warehouse.API.DTO;
-using Warehouse.API.DTO.Brand;
+using Warehouse.API.DTO.BrandDtos;
 
 namespace Warehouse.API.Common.Mapping;
 
@@ -27,22 +25,5 @@ public static class BrandMappingConfig
             Description = brand.Description.Value,
             Image = brand.Image.Value
         };
-    }
-    
-    public static Brand ToEntity(this BrandUpdateDto updateDto)
-    {
-        return Brand.Create(
-            BrandName.From(updateDto.Name),
-            Image.From(updateDto.Image),
-            BrandDescription.From(updateDto.Description));
-    }
-
-    public static Brand ToEntity(this BrandUpdateDto dto, Guid id)
-    {
-        return Brand.Create(
-            id,
-            BrandName.From(dto.Name),
-            Image.From(dto.Image),
-            BrandDescription.From(dto.Description));
     }
 }

@@ -1,7 +1,6 @@
 using Domain.Entities;
 using Domain.ValueObjects;
 using Warehouse.API.DTO;
-using Warehouse.API.DTO.Brand;
 using Warehouse.API.DTO.Product;
 
 namespace Warehouse.API.Common.Mapping;

@@ -20,7 +20,7 @@ public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
         builder.Property(productImage => productImage.Image)
             .HasConversion(
                 image => image.Value,
-                value => Image.From(value))
+                value => Image.From(value).Value)
             .HasColumnName("Image");
     }
 }

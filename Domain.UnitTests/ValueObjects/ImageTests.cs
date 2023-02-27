@@ -1,37 +1,69 @@
 using FluentAssertions;
+using Domain.ValueObjects;
 
 namespace Domain.UnitTests.ValueObjects;
 
+    public record TestImage(string Value, int NumberOfErrors);
+    public static class TextImageExtensions 
+    {
+        public static object[] ToObjectList(this TestImage image)
+        {
+            return new object[] { image };
+        }
+    }
 public class ImageTests
 {
-    [Theory]
-    [InlineData("https://storage.googleapis.com/eCommerceApp/kitten.docx")]
-    [InlineData("https://storage.googleapis.com/eCommerceApp/kitten.jjj")]
-    [InlineData("https://storage.googleapis.com/eCommerceApp/kitten.hjkl")]
-    [InlineData("https://storage.googleapis.com/eCommerceApp/kitten.sh")]
-    [InlineData("httttps://storage.googleapis.com/eCommerceApp/kitten.jpg")]
-    [InlineData("https://storage.  .com/eCommerceApp/kitten.jpg")]
-    [InlineData("https://happyme nin  socks.png")]
-    public void Should_ThrowException_When_ImageUrlIsIncorrect(string? image)
+    public static IEnumerable<object[]> GetTestImages()
     {
-        Assert.Throws<FormatException>(() => Domain.ValueObjects.Image.From(image));
+        yield return new TestImage("https://storage.googleapis.com/eCommerceApp/kitten.docx", 1)
+            .ToObjectList();
+        
+        yield return new TestImage("https://storage.googleapis.com/eCommerceApp/kitten.jjj", 1).
+            ToObjectList();
+        
+        yield return new TestImage("htt://storage.googleapis.com/eCommerceApp/kitten.sh", 2)
+            .ToObjectList();
+        
+        yield return new TestImage("", 3).ToObjectList();
+        
+        yield return new TestImage(".jpg", 2).ToObjectList();
+    }
+    [Theory]
+    [MemberData(nameof(GetTestImages))]
+    public void Should_ReturnFailedResultWithCorrectNumberOfErrors_When_ImageUrlIsIncorrect(TestImage testImage)
+    {
+        // Act
+        var sut = Image.From(testImage.Value);
+        
+        //Assert
+        sut.IsFailed.Should().BeTrue();
+        sut.Errors.Count.Should().Be(testImage.NumberOfErrors);
     }
     
     [Fact]
-    public void Should_ThrowException_When_ImageUrlIsNull()
+    public void Should_ReturnFailedResult_When_ImageUrlIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => Domain.ValueObjects.Image.From(null));
+        //Arrange
+        string image = null!;
+        
+        //Act
+        var sut = Image.From(image);
+        
+        //Assert
+        sut.IsFailed.Should().BeTrue();
     }
     
     [Fact]
     public void Should_CreateImage_When_ImageUrlIsValid()
     {
         //Arrange
-        string imageUrl = "https://image.jpg ";
+        string imageUrl = "https://image.jpg";
         //Act
-        var sut = Domain.ValueObjects.Image.From(imageUrl);
+        var sut = Image.From(imageUrl);
         //Assert
-        sut.Value.Should().Be(imageUrl);
+        sut.IsSuccess.Should().BeTrue();
+        var imageValueObject = sut.Value;
+        imageValueObject.Value.Should().Be(imageUrl);
     }
     
 }

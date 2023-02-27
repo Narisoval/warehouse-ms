@@ -36,7 +36,7 @@ public static class ProductImageMappingConfig
     public static ProductImage ToEntity(this ProductImageDto productImageDto)
     {
         return ProductImage.Create(
-            Image.From(productImageDto.Image),
+            Image.From(productImageDto.Image).Value,
             productImageDto.IsMain
         );
     }

@@ -1,29 +1,61 @@
-using System.Text.RegularExpressions;
-using ValueOf;
+using Domain.Errors;
+using Domain.Primitives;
+using FluentResults;
 
 namespace Domain.ValueObjects;
 
-public sealed class Image : ValueOf<string,Image>
+public sealed class Image : ValueObject 
 {
-    protected override void Validate()
+    public string Value { get; }
+
+    private Image(string imageUrl)
     {
-        if (Value is null)
-        {
-            throw new ArgumentNullException(nameof(Value),"Image can't be null");
-        }
-        
-        if (!IsValidImageUrl(Value))
-        {
-            throw new FormatException($"{Value} is not a valid image url");
-        }
+        Value = imageUrl;
+    } 
+    
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
     }
 
-    private static bool IsValidImageUrl(string imageUrl)
+    public static Result<Image> From(string? imageUrl)
     {
-        // This pattern is a really basic and allows some strange URLs like https:///.jpg 
-        var pattern = @"(http(s?):)([/|.|\w|-])*\.(?:jpg|jpeg|png|svg|ico|bmp|webp)";
-        var match = Regex.Match(imageUrl, pattern);
-        return match.Success;
+        var validationResult = Validate(imageUrl);
+       
+        if(validationResult.IsFailed)
+            return new Result<Image>().WithErrors(validationResult.Errors);
+        
+        return new Image(imageUrl!);
+    }
+
+    private static Result Validate(string? imageUrl)
+    {
+        if (imageUrl == null)
+            return new Result().WithError(new NullArgumentError(nameof(Image)));
+
+        return ValidateImageUrl(imageUrl);
+    }
+    
+    private static Result ValidateImageUrl(string url)
+    {
+        Result result = new Result();
+        
+        if (!Uri.TryCreate(url, UriKind.Absolute, out _))
+            result.WithError($"{url} is in the correct url format");
+
+        bool hasValidUriScheme = url.StartsWith("http://") || url.StartsWith("https://");
+        
+        if(!hasValidUriScheme)
+            result.WithError($"{url} doesn't have http or https url scheme");
+
+        string[] validExtensions = { ".jpg", ".jpeg", ".png", ".bmp", ".svg" };
+
+        bool endsWithRightExtension = validExtensions.Any(url.EndsWith);
+
+        if (!endsWithRightExtension)
+            return result.WithError($"{url} does not end with the correct image extension");
+
+        return result;
     }
     
 }

@@ -1,5 +1,7 @@
+using Domain.Errors;
 using Domain.Primitives;
 using Domain.ValueObjects;
+using FluentResults;
 
 namespace Domain.Entities;
 
@@ -11,26 +13,48 @@ public class Brand : Entity
 
     public IReadOnlyCollection<Product>? Products { get; set; }
 
+    //for EF
     private Brand()
     {
         
     }
     
-    private Brand(Guid id, BrandName? brandName, Image? brandImage, BrandDescription? description) : base(id)
+    private Brand(Guid id, BrandName brandName, Image brandImage, BrandDescription brandDescription) : base(id)
     {
-        Name = brandName ?? throw new ArgumentNullException(nameof(brandName));
-        Image = brandImage ?? throw new ArgumentNullException(nameof(brandImage));
-        Description = description ?? throw new ArgumentNullException(nameof(description));
+        Name = brandName;
+        Image = brandImage;
+        Description = brandDescription;
     }
 
-    public static Brand Create(Guid id, BrandName? brandName, Image? brandImage, BrandDescription? description)
+    public static Result<Brand> Create(Guid id, BrandName? brandName, Image? brandImage, BrandDescription? brandDescription)
     {
-        return new Brand(id, brandName, brandImage, description);
+        Result<Brand> result = new Result<Brand>();
+        if (id == Guid.Empty)
+            return new Result<Brand>()
+                .WithError(new EmptyGuidError(nameof(Brand)));
+        
+        if (brandName! == null!)
+            result.WithError(new NullArgumentError(nameof(Name)));
+        
+        if (brandImage! == null!)
+            result.WithError(new NullArgumentError(nameof(Image)));
+        
+        if(brandDescription! == null!)
+            result.WithError(new NullArgumentError(nameof(brandDescription)));
+
+        if (result.Errors.Count != 0)
+            return result;
+        
+        return new Brand(
+            id: id,
+            brandName: brandName!,
+            brandImage: brandImage!, 
+            brandDescription: brandDescription!);
     }
 
-    public static Brand Create(BrandName? brandName, Image? brandImage, BrandDescription? description)
+    public static Result<Brand> Create(BrandName? brandName, Image? brandImage, BrandDescription? brandDescription)
     {
         Guid id = Guid.NewGuid();
-        return new Brand(id,brandName,brandImage,description);
+        return Create(id,brandName,brandImage,brandDescription);
     }
 }

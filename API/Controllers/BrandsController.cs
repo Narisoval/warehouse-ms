@@ -1,7 +1,10 @@
+using Domain.Entities;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
 using Warehouse.API.Common.Mapping;
-using Warehouse.API.DTO.Brand;
+using Warehouse.API.DTO.BrandDtos;
+using Warehouse.API.DTO.SwaggerExamples;
 
 namespace Warehouse.API.Controllers;
 
@@ -17,6 +20,7 @@ public class BrandsController : ControllerBase
     }
 
     [HttpGet("all")]
+    [Produces("application/json")]
     [ProducesResponseType(typeof(IEnumerable<BrandDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<BrandDto>>> GetBrands()
     {
@@ -28,6 +32,7 @@ public class BrandsController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [Produces("application/json")]
     [ProducesResponseType(typeof(BrandDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<BrandDto>> GetBrand([FromRoute] Guid id)
@@ -40,12 +45,13 @@ public class BrandsController : ControllerBase
     }
 
     [HttpPost]
+    [Produces("application/json")]
+    [Consumes("application/json")]
     [ProducesResponseType(typeof(BrandDto), 201)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<BrandDto>> CreateBrand(BrandUpdateDto brandDto)
+    [SwaggerRequestExample(typeof(BrandUpdateDto),typeof(BrandUpdateDtoExample))]
+    public async Task<ActionResult<BrandDto>> CreateBrand([FromBody] Brand brand)
     {
-        var brand = brandDto.ToEntity();
-
         await _unitOfWork.Brands.Add(brand);
         await _unitOfWork.Complete();
 
@@ -54,12 +60,16 @@ public class BrandsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Consumes("application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateBrand(BrandUpdateDto brandDto, Guid id)
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerRequestExample(typeof(BrandUpdateDto),typeof(BrandUpdateDtoExample))]
+    public async Task<IActionResult> UpdateBrand(
+        [FromBody] Brand brand
+        ,[FromRoute] Guid id)
     {
-        var brandEntity = brandDto.ToEntity(id);
-        var brandUpdatedSuccessfully = await _unitOfWork.Brands.Update(brandEntity);
+        var brandUpdatedSuccessfully = await _unitOfWork.Brands.Update(brand);
 
         if (!brandUpdatedSuccessfully)
             return GetBrandNotFoundResponse(id);
@@ -86,6 +96,6 @@ public class BrandsController : ControllerBase
 
     private NotFoundObjectResult GetBrandNotFoundResponse(Guid id)
     {
-        return NotFound($"Brand with id {id} does not exist {id}");
+        return NotFound($"Brand with id {id} does not exist");
     }
 }
