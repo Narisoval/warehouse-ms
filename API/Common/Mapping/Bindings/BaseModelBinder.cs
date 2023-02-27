@@ -1,7 +1,7 @@
 using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Warehouse.API.DTO.Bindings;
+namespace Warehouse.API.Common.Mapping.Bindings;
 
 public abstract class BaseModelBinder : IModelBinder
 {

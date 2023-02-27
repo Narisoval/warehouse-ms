@@ -5,7 +5,7 @@ using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Warehouse.API.DTO.BrandDtos;
 
-namespace Warehouse.API.DTO.Bindings;
+namespace Warehouse.API.Common.Mapping.Bindings;
 
 public class BrandEntityModelBinder : BaseModelBinder
 {
