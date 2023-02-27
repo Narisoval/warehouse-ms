@@ -5,16 +5,15 @@ using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Warehouse.API.DTO.BrandDtos;
 
-namespace Warehouse.API.Common.Mapping.Bindings;
+namespace Warehouse.API.Common.Bindings;
 
 public class BrandEntityModelBinder : BaseModelBinder
 {
-    private ModelBindingContext _bindingContext = null!;
-    
     public override async Task BindModelAsync(ModelBindingContext bindingContext)
     {
-        _bindingContext = bindingContext;
-        if (!CheckIfContentTypeIsJson(bindingContext))
+        BindingContext = bindingContext;
+        
+        if (!CheckIfContentTypeIsJson())
             return;
 
         try
@@ -23,7 +22,7 @@ public class BrandEntityModelBinder : BaseModelBinder
         }
         catch (JsonException ex)
         {
-            _bindingContext.ModelState.AddModelError(
+            BindingContext.ModelState.AddModelError(
                 "ObjectFormatError",
                 $"{ex.InnerException?.Message} The following json element caused a problem: {ex.Path}");
         }
@@ -32,7 +31,7 @@ public class BrandEntityModelBinder : BaseModelBinder
     private async Task BindBrandEntityAsync()
     {
         // Check if the route has a guid "id" route parameter
-        if (TryGetIdFromRoute(_bindingContext, out var guidId))
+        if (TryGetIdFromRoute(out var guidId))
         {
             if (guidId != null) await BindFromDtoAsync(guidId.Value);
             return;
@@ -43,7 +42,7 @@ public class BrandEntityModelBinder : BaseModelBinder
 
     private async Task BindFromDtoAsync(Guid id)
     {
-        BrandDto brandDto = (await _bindingContext.HttpContext.Request
+        BrandDto brandDto = (await BindingContext.HttpContext.Request
             .ReadFromJsonAsync<BrandDto>())!;
 
         brandDto.BrandId = id;
@@ -53,7 +52,7 @@ public class BrandEntityModelBinder : BaseModelBinder
 
     private async Task BindUpdateDtoAsync()
     {
-        BrandUpdateDto brandUpdateDto = (await _bindingContext.HttpContext.Request
+        BrandUpdateDto brandUpdateDto = (await BindingContext.HttpContext.Request
             .ReadFromJsonAsync<BrandUpdateDto>())!;
         ConvertUpdateDtoToEntity(brandUpdateDto);
     }
@@ -80,7 +79,7 @@ public class BrandEntityModelBinder : BaseModelBinder
             return;
         }
         
-        _bindingContext.Result = ModelBindingResult.Success(brandResult.Value);
+        BindingContext.Result = ModelBindingResult.Success(brandResult.Value);
     }
 
     private bool CheckIfResultsAreSuccessful(
@@ -97,7 +96,7 @@ public class BrandEntityModelBinder : BaseModelBinder
         if(brandImageResult.IsFailed)
             AddModelErrors(brandImageResult, "BrandImage");
             
-        return _bindingContext.ModelState.ErrorCount == 0;
+        return BindingContext.ModelState.ErrorCount == 0;
     }
 
     private void ConvertUpdateDtoToEntity(BrandUpdateDto brandUpdateDto)
@@ -114,14 +113,6 @@ public class BrandEntityModelBinder : BaseModelBinder
             brandImage: brandImageResult.Value,
             brandDescription: brandDescriptionResult.Value);
         
-        _bindingContext.Result = ModelBindingResult.Success(brand.Value);
-    }
-    
-    private void AddModelErrors<T>(Result<T> result, string key)
-    {
-        foreach (var error in result.Errors)
-        {
-            _bindingContext.ModelState.AddModelError(key,error.Message);    
-        }
+        BindingContext.Result = ModelBindingResult.Success(brand.Value);
     }
 }

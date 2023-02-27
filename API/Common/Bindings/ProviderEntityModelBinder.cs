@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.ValueObjects;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Warehouse.API.Common.Bindings;
 using Warehouse.API.DTO.ProviderDtos;
 
 namespace Warehouse.API.Common.Mapping.Bindings;
@@ -11,12 +12,14 @@ public class ProviderEntityModelBinder : BaseModelBinder
 {
     public override async Task BindModelAsync(ModelBindingContext bindingContext)
     {
-        if (!CheckIfContentTypeIsJson(bindingContext))
+        BindingContext = bindingContext;
+        
+        if (!CheckIfContentTypeIsJson())
             return;
 
         try
         {
-            await BindProviderEntityAsync(bindingContext);
+            await BindProviderEntityAsync();
         }
         catch (JsonException ex)
         {
@@ -26,44 +29,44 @@ public class ProviderEntityModelBinder : BaseModelBinder
         }
     }
 
-    private async Task BindProviderEntityAsync(ModelBindingContext bindingContext)
+    private async Task BindProviderEntityAsync()
     {
         // Check if the route has a guid "id" route parameter
-        if (TryGetIdFromRoute(bindingContext, out var guidId))
+        if (TryGetIdFromRoute(out var guidId)) 
         {
-            if (guidId != null) await BindFromDtoAsync(bindingContext, guidId.Value);
+            if (guidId != null) await BindFromDtoAsync(guidId.Value);
             return;
         }
         
-        await BindFromUpdateDtoAsync(bindingContext);
+        await BindFromUpdateDtoAsync();
     }
 
-    private async Task BindFromDtoAsync(ModelBindingContext bindingContext, Guid id)
+    private async Task BindFromDtoAsync(Guid id)
     {
-        ProviderDto providerDto = (await bindingContext.HttpContext.Request
+        ProviderDto providerDto = (await BindingContext.HttpContext.Request
             .ReadFromJsonAsync<ProviderDto>())!;
 
         providerDto.ProviderId = id;
 
-        ConvertDtoToEntity(providerDto, bindingContext);
+        ConvertDtoToEntity(providerDto);
     }
     
-    private async Task BindFromUpdateDtoAsync(ModelBindingContext bindingContext)
+    private async Task BindFromUpdateDtoAsync()
     {
-        ProviderUpdateDto providerUpdateDto = (await bindingContext.HttpContext.Request
+        ProviderUpdateDto providerUpdateDto = (await BindingContext.HttpContext.Request
             .ReadFromJsonAsync<ProviderUpdateDto>())!;
 
-        ConvertUpdateDtoToEntity(providerUpdateDto, bindingContext);
+        ConvertUpdateDtoToEntity(providerUpdateDto);
     }
 
-    private void ConvertDtoToEntity(ProviderDto providerDto, ModelBindingContext ctx)
+    private void ConvertDtoToEntity(ProviderDto providerDto)
     {
         var emailResult = Email.From(providerDto.Email);
         var companyNameResult = CompanyName.From(providerDto.CompanyName);
         var phoneNumber = providerDto.PhoneNumber;
         var id = providerDto.ProviderId;
 
-        if(!CheckIfResultsAreSuccessful(emailResult,companyNameResult,ctx))
+        if(!CheckIfResultsAreSuccessful(emailResult,companyNameResult))
             return;
 
         var providerResult = Provider.Create(
@@ -74,20 +77,20 @@ public class ProviderEntityModelBinder : BaseModelBinder
 
         if (!providerResult.IsFailed)
         {
-            ctx.Result = ModelBindingResult.Success(providerResult.Value);
+            BindingContext.Result = ModelBindingResult.Success(providerResult.Value);
             return;
         }
 
-        ctx.ModelState.AddModelError("Provider", providerResult.Errors.First().Message);
+        BindingContext.ModelState.AddModelError("Provider", providerResult.Errors.First().Message);
     }
 
-    private void ConvertUpdateDtoToEntity(ProviderUpdateDto providerDto, ModelBindingContext ctx)
+    private void ConvertUpdateDtoToEntity(ProviderUpdateDto providerDto)
     {
         var emailResult = Email.From(providerDto.Email);
         var companyNameResult = CompanyName.From(providerDto.CompanyName);
         var phoneNumber = providerDto.PhoneNumber;
 
-        if(!CheckIfResultsAreSuccessful(emailResult,companyNameResult,ctx))
+        if(!CheckIfResultsAreSuccessful(emailResult,companyNameResult))
             return;
 
         var provider = Provider.Create(
@@ -95,21 +98,20 @@ public class ProviderEntityModelBinder : BaseModelBinder
             phoneNumber: phoneNumber,
             email: emailResult.Value);
 
-        ctx.Result = ModelBindingResult.Success(provider);
+        BindingContext.Result = ModelBindingResult.Success(provider);
     }
 
     private bool CheckIfResultsAreSuccessful(
         Result<Email> emailResult, 
-        Result<CompanyName> companyNameResult, 
-        ModelBindingContext ctx)
+        Result<CompanyName> companyNameResult)
     {
         
         if (emailResult.IsFailed)
-            ctx.ModelState.AddModelError("Email", emailResult.Errors.First().Message);
+            AddModelErrors(emailResult,"Email");
 
         if (companyNameResult.IsFailed)
-            ctx.ModelState.AddModelError("CompanyName", companyNameResult.Errors.First().Message);
+            AddModelErrors(companyNameResult,"CompanyName");
 
-        return ctx.ModelState.ErrorCount == 0;
+        return BindingContext.ModelState.ErrorCount == 0;
     }
 }
