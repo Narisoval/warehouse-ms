@@ -61,19 +61,9 @@ public class EntityTests
         areEntitiesNotEqual.Should().BeTrue();
     }
     
-    [Fact]
-    public void Should_ThrowException_When_CreatingEntityWithNullId()
-    {
-        //Arrange
-        Guid? id = null;
-        
-        //Act & Assert
-        Assert.Throws<ArgumentNullException>(() => new TestEntity(id));
-    }
-
     private class TestEntity : Entity
     {
-        public TestEntity(Guid? id) : base(id)
+        public TestEntity(Guid id) : base(id)
         {
             ;
         }

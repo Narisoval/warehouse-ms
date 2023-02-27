@@ -1,13 +1,11 @@
-using System.ComponentModel;
-
 namespace Domain.Primitives;
 public abstract class Entity : IEquatable<Entity>
 {
     public Guid Id { get; }
     
-    protected Entity(Guid? id)
+    protected Entity(Guid id)
     {
-        Id = id ?? throw new ArgumentNullException(nameof(id));
+        Id = id;
     }
     
     //For EF
