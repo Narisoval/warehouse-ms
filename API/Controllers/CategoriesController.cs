@@ -1,8 +1,10 @@
 using Domain.Entities;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
 using Warehouse.API.Common.Mapping;
 using Warehouse.API.DTO.Category;
+using Warehouse.API.DTO.SwaggerExamples;
 
 namespace Warehouse.API.Controllers;
 
@@ -43,6 +45,7 @@ public class CategoriesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(CategoryDto), 201)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerRequestExample(typeof(CategoryUpdateDto),typeof(CategoryUpdateDtoExample))]
     public async Task<ActionResult<CategoryDto>> CreateCategory([FromBody] Category category)
     {
         await _unitOfWork.Categories.Add(category);
@@ -56,6 +59,7 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [SwaggerRequestExample(typeof(CategoryUpdateDto),typeof(CategoryUpdateDtoExample))]
     public async Task<IActionResult> UpdateCategory([FromBody] Category category, [FromRoute] Guid id)
     {
         var categoryUpdatedSuccessfully = await _unitOfWork.Categories.Update(category);
