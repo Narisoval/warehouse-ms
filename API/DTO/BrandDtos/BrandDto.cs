@@ -1,9 +1,9 @@
 namespace Warehouse.API.DTO.BrandDtos;
 
-public record BrandDto
+public record BrandDto : IEntityDto
 {
-    public Guid BrandId { get; set; }
-
+    public Guid Id { get; set; }
+    
     public string Name { get; init; }
 
     public string Image { get; init; }

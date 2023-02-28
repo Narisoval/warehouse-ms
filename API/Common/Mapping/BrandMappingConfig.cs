@@ -9,7 +9,7 @@ public static class BrandMappingConfig
     {
         return new BrandDto
         {
-            BrandId = brand.Id,
+            Id = brand.Id,
             Name = brand.Name.Value,
             Image = brand.Image.Value,
             Description = brand.Description.Value

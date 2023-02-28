@@ -9,7 +9,7 @@ public static class CategoryMappingConfig
     {
         return new CategoryDto
         {
-            CategoryId = category.Id,
+            Id = category.Id,
             Name = category.Name.Value,
         };
     }

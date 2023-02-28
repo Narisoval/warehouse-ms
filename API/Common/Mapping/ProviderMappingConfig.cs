@@ -9,7 +9,7 @@ public static class ProviderMappingConfig
     {
         return new ProviderDto
         {
-            ProviderId = provider.Id,
+            Id = provider.Id,
             Email = provider.Email.Value,
             PhoneNumber = provider.PhoneNumber,
             CompanyName = provider.CompanyName.Value

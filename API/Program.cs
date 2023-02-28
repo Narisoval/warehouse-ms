@@ -1,6 +1,6 @@
 using Infrastructure;
 using Swashbuckle.AspNetCore.Filters;
-using Warehouse.API.Common.Bindings;
+using Warehouse.API.Common.Binders;
 using Warehouse.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
