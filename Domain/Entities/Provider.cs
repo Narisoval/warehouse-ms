@@ -25,8 +25,7 @@ public class Provider : Entity
         Result<Provider> result = new Result<Provider>();
         
         if (id == Guid.Empty)
-            return new Result<Provider>()
-                .WithError(new EmptyGuidError(nameof(Provider)));
+            result.WithError(new EmptyGuidError(nameof(Provider)));
 
         if (companyName! == null!)
             result.WithError(new NullArgumentError(nameof(CompanyName)));
@@ -40,7 +39,7 @@ public class Provider : Entity
         if (result.Errors.Count != 0)
             return result;
         
-        return new Provider(id, companyName, phoneNumber, email);
+        return new Provider(id, companyName!, phoneNumber!, email!);
     }
 
     public static Provider Create(CompanyName companyName, string phoneNumber, Email email)

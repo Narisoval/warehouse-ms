@@ -29,9 +29,9 @@ public class Brand : Entity
     public static Result<Brand> Create(Guid id, BrandName? brandName, Image? brandImage, BrandDescription? brandDescription)
     {
         Result<Brand> result = new Result<Brand>();
+        
         if (id == Guid.Empty)
-            return new Result<Brand>()
-                .WithError(new EmptyGuidError(nameof(Brand)));
+            result.WithError(new EmptyGuidError(nameof(Brand)));
         
         if (brandName! == null!)
             result.WithError(new NullArgumentError(nameof(Name)));
