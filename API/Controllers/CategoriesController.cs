@@ -1,3 +1,4 @@
+using Domain.Entities;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Warehouse.API.Common.Mapping;
@@ -41,24 +42,23 @@ public class CategoriesController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(CategoryDto), 201)]
-    public async Task<ActionResult<CategoryDto>> CreateCategory(CategoryUpdateDto categoryDto)
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<CategoryDto>> CreateCategory([FromBody] Category category)
     {
-        var categoryEntity = categoryDto.ToEntity();
-        
-        await _unitOfWork.Categories.Add(categoryEntity);
+        await _unitOfWork.Categories.Add(category);
         await _unitOfWork.Complete();
 
         return CreatedAtAction(nameof(GetCategory),
-            new { id = categoryEntity.Id }, categoryEntity.ToDto());
+            new { id = category.Id }, category.ToDto());
     }
 
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateCategory(CategoryUpdateDto categoryDto, Guid id)
+    public async Task<IActionResult> UpdateCategory([FromBody] Category category, [FromRoute] Guid id)
     {
-        var categoryEntity = categoryDto.ToEntity(id);
-        var categoryUpdatedSuccessfully = await _unitOfWork.Categories.Update(categoryEntity);
+        var categoryUpdatedSuccessfully = await _unitOfWork.Categories.Update(category);
 
         if (!categoryUpdatedSuccessfully)
             return GetCategoryNotFoundResponse(id);

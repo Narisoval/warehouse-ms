@@ -7,6 +7,6 @@ public static class CategoriesFixture
 {
    public static Category GetTestCategory()
    {
-      return Category.Create(Guid.NewGuid(), CategoryName.From("Shoes"));
+      return Category.Create(Guid.NewGuid(), CategoryName.From("Shoes").Value).Value;
    }
 }

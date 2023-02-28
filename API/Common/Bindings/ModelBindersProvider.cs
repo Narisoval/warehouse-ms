@@ -2,7 +2,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
-namespace Warehouse.API.Common.Mapping.Bindings;
+namespace Warehouse.API.Common.Bindings;
 
 public class ModelBindersProvider : IModelBinderProvider
 {
@@ -23,6 +23,8 @@ public class ModelBindersProvider : IModelBinderProvider
             case var _ when modelType == typeof(Brand):
                 return new BinderTypeModelBinder(typeof(BrandEntityModelBinder));
             
+            case var _ when modelType == typeof(Category):
+                return new BinderTypeModelBinder(typeof(CategoryEntityModelBinder));
             default:
                 return null;
         }

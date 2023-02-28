@@ -7,27 +7,31 @@ namespace Domain.UnitTests.Entities;
 public class CategoryTests
 {
     [Fact]
-    public void Should_ThrowException_When_ArgumentsAreNull()
+    public void Should_ReturnFailedResult_When_ArgumentsAreNull()
     {
         //Arrange
         CategoryName? categoryName = null;
         var id = Guid.NewGuid();
         
-        //Act & Asset
-        Assert.Throws<ArgumentNullException>(() => Category.Create(id, categoryName));
+        //Act
+        var categoryResult = Category.Create(id, categoryName);
+        
+        //Assert
+        categoryResult.IsFailed.Should().BeTrue();
     }
     [Fact]
     public void Should_CreateCategory_When_ArgumentsAreValid()
     {
         //Arrange
-        CategoryName? categoryName = CategoryName.From("type");
+        CategoryName? categoryName = CategoryName.From("type").Value;
         var id = Guid.NewGuid();
         
         //Act 
         var sut = Category.Create(id, categoryName);
         
         //Assert
-        sut.Name.Should().BeEquivalentTo(categoryName);
+        sut.IsSuccess.Should().BeTrue();
+        sut.Value.Name.Should().BeEquivalentTo(categoryName);
 
     }
     

@@ -14,7 +14,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 
         builder.Property(c => c.Name)
             .HasConversion(name => name.Value,
-                value => CategoryName.From(value))
-        .HasColumnName("Name");
+                value => CategoryName.From(value).Value)
+            .HasColumnName("Name");
     }
 }

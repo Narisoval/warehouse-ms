@@ -3,10 +3,9 @@ using Domain.Entities;
 using Domain.ValueObjects;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Warehouse.API.Common.Bindings;
 using Warehouse.API.DTO.ProviderDtos;
 
-namespace Warehouse.API.Common.Mapping.Bindings;
+namespace Warehouse.API.Common.Bindings;
 
 public class ProviderEntityModelBinder : BaseModelBinder
 {
