@@ -10,4 +10,8 @@ public class NullArgumentError : Error
     {
 
     }
+
+    public NullArgumentError() : base("This value can't be null")
+    {
+    }
 }

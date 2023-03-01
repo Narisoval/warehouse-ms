@@ -7,6 +7,12 @@ public class IncorrectLengthError : Error
     public IncorrectLengthError(string name, int minLength, int maxLength)
         : base($"{name} length should be between {minLength} and {maxLength}")
     {
-        
+        ;
+    }
+
+    public IncorrectLengthError( uint minLength, uint maxLength) :
+        base($"Length should be between {minLength} and {maxLength}")
+    {
+        ;
     }
 }

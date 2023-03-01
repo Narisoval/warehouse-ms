@@ -22,4 +22,14 @@ internal class Range<T> where T : struct, IComparable
     {
         return new Range<T>(min, max);
     }
+
+    public bool InRange(T num)
+    {
+        return num.CompareTo(Min) >= 0 && num.CompareTo(Max) <= 0;
+    }
+
+    public override string ToString()
+    {
+        return $"{Min} {Max}";
+    }
 }
