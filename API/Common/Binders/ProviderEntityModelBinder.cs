@@ -1,35 +1,14 @@
 using Domain.Entities;
 using Domain.ValueObjects;
 using FluentResults;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Warehouse.API.DTO.ProviderDtos;
 
 namespace Warehouse.API.Common.Binders;
 
-public sealed class ProviderEntityModelBinder : BaseModelBinder<ProviderDto,ProviderUpdateDto>
+public sealed class ProviderEntityModelBinder : BaseModelBinder<ProviderUpdateDto>
 {
-    protected override void ConvertDtoToEntity(ProviderDto providerDto)
-    {
-        var emailResult = Email.From(providerDto.Email);
-        var companyNameResult = CompanyName.From(providerDto.CompanyName);
-        var phoneNumber = providerDto.PhoneNumber;
-        var id = providerDto.Id;
-
-        if(!CheckIfResultsAreSuccessful(emailResult,companyNameResult))
-            return;
-
-        var providerResult = Provider.Create(
-            id: id,
-            companyName: companyNameResult.Value,
-            phoneNumber: phoneNumber,
-            email: emailResult.Value);
-
-        if (!CheckIfProviderIsCreatedSuccessfully(providerResult))
-            return;
-
-        BindingContext.ModelState.AddModelError("Provider", providerResult.Errors.First().Message);
-    }
-
-    protected override void ConvertUpdateDtoToEntity(ProviderUpdateDto providerDto)
+    protected override void ConvertDtoToEntity(ProviderUpdateDto providerDto, Guid? id)
     {
         var emailResult = Email.From(providerDto.Email);
         var companyNameResult = CompanyName.From(providerDto.CompanyName);
@@ -38,15 +17,27 @@ public sealed class ProviderEntityModelBinder : BaseModelBinder<ProviderDto,Prov
         if(!CheckIfResultsAreSuccessful(emailResult,companyNameResult))
             return;
 
-        var providerResult = Provider.Create(
-            companyName: companyNameResult.Value,
-            phoneNumber: phoneNumber,
-            email: emailResult.Value);
+        Result<Provider> providerResult;
+        if (id != null)
+        {
+            providerResult = Provider.Create(
+                id: id.Value,
+                companyName: companyNameResult.Value,
+                phoneNumber: phoneNumber,
+                email: emailResult.Value);
+        }
+        else
+        {
+            providerResult = Provider.Create(
+                companyName: companyNameResult.Value,
+                phoneNumber: phoneNumber,
+                email: emailResult.Value);
+        }
 
         if (!CheckIfProviderIsCreatedSuccessfully(providerResult))
             return;
-        
-        BindingContext.ModelState.AddModelError("Provider", providerResult.Errors.First().Message);
+
+        BindingContext.Result = ModelBindingResult.Success(providerResult.Value);
     }
 
     private bool CheckIfResultsAreSuccessful(Result<Email> emailResult, 
@@ -66,6 +57,6 @@ public sealed class ProviderEntityModelBinder : BaseModelBinder<ProviderDto,Prov
         if (providerResult.IsFailed)
             AddModelErrors(providerResult.Errors,"Provider");
         
-        return providerResult.IsFailed;
+        return providerResult.IsSuccess;
     }
 }

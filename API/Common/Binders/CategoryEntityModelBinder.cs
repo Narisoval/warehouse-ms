@@ -1,37 +1,23 @@
-using Domain.Entities;
 using Domain.ValueObjects;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Warehouse.API.DTO.Category;
+using Category = Domain.Entities.Category;
 
 namespace Warehouse.API.Common.Binders;
 
-public sealed class CategoryEntityModelBinder : BaseModelBinder<CategoryDto,CategoryUpdateDto>
+public sealed class CategoryEntityModelBinder : BaseModelBinder<CategoryUpdateDto>
 {
-    protected override void ConvertDtoToEntity(CategoryDto categoryDto)
+    protected override void ConvertDtoToEntity(CategoryUpdateDto categoryDto, Guid? id)
     {
         var categoryNameResult = CategoryName.From(categoryDto.Name);
-        var id = categoryDto.Id;
         
         if(!CheckIfResultsAreSuccessful(categoryNameResult))
             return;
-        
-        var categoryResult = Category.Create(id, categoryNameResult.Value);
-        
-        if(!CheckIfCategoryIsCreatedSuccessfully(categoryResult))
-            return;
-        
-        BindingContext.Result = ModelBindingResult.Success(categoryResult.Value);
-    }
 
-    protected override void ConvertUpdateDtoToEntity(CategoryUpdateDto categoryDto)
-    {
-        var categoryNameResult = CategoryName.From(categoryDto.Name);
-
-        if(!CheckIfResultsAreSuccessful(categoryNameResult))
-            return;
-        
-        var categoryResult = Category.Create(categoryNameResult.Value);
+        Result<Category> categoryResult = id != null ? 
+            Category.Create(id.Value, categoryNameResult.Value) : 
+            Category.Create(categoryNameResult.Value);
         
         if(!CheckIfCategoryIsCreatedSuccessfully(categoryResult))
             return;
@@ -52,7 +38,7 @@ public sealed class CategoryEntityModelBinder : BaseModelBinder<CategoryDto,Cate
         if (categoryResult.IsFailed)
             AddModelErrors(categoryResult.Errors,"Category");
 
-        return categoryResult.IsFailed;
+        return categoryResult.IsSuccess;
 
     }
 }

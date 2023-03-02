@@ -2,16 +2,13 @@ using System.Net.Mime;
 using System.Text.Json;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Warehouse.API.DTO;
 
 namespace Warehouse.API.Common.Binders;
 
-public abstract class BaseModelBinder<TDto,TUpdateDto>: IModelBinder 
-    where TDto : IEntityDto
+public abstract class BaseModelBinder<TDto>: IModelBinder 
 {
     protected ModelBindingContext BindingContext = null!;
-    protected abstract void ConvertDtoToEntity(TDto dto);
-    protected abstract void ConvertUpdateDtoToEntity(TUpdateDto updateDto);
+    protected abstract void ConvertDtoToEntity(TDto dto, Guid? id);
     
     public async Task BindModelAsync(ModelBindingContext bindingContext)
     {
@@ -52,13 +49,8 @@ public abstract class BaseModelBinder<TDto,TUpdateDto>: IModelBinder
     
     private async Task BindEntityAsync()
     {
-        if (TryGetIdFromRoute(out var guidId)) 
-        {
-            if (guidId != null) await BindFromDtoAsync(guidId.Value);
-            return;
-        }
-        
-        await BindFromUpdateDtoAsync();
+        TryGetIdFromRoute(out var guidId);
+        await BindFromDtoAsync(guidId);
     }
     
     private void HandleJsonException(JsonException ex)
@@ -87,25 +79,15 @@ public abstract class BaseModelBinder<TDto,TUpdateDto>: IModelBinder
         guidId = null;
         return false;
     }
-    
-    private async Task BindFromDtoAsync(Guid id)
+
+    private async Task BindFromDtoAsync(Guid? id = null)
     {
         var dto = (await BindingContext.HttpContext.Request
             .ReadFromJsonAsync<TDto>())!;
         
-        dto.Id = id;
-
-        ConvertDtoToEntity(dto);
+        ConvertDtoToEntity(dto,id);
     }
 
-    private async Task BindFromUpdateDtoAsync()
-    {
-        var updateDto = (await BindingContext.HttpContext.Request
-            .ReadFromJsonAsync<TUpdateDto>())!;
-        
-        ConvertUpdateDtoToEntity(updateDto);
-    }
-    
     protected void AddModelErrors(List<IError> errors, string key)
     {
         foreach (var error in errors)

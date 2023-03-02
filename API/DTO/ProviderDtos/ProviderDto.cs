@@ -1,6 +1,6 @@
 namespace Warehouse.API.DTO.ProviderDtos;
 
-public record ProviderDto : IEntityDto
+public record ProviderDto  
 {
     public Guid Id { get; set; }
     

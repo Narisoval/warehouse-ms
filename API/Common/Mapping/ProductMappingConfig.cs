@@ -11,7 +11,7 @@ public static class ProductMappingConfig
     {
         return new ProductDto
         {
-            ProductId = product.Id,
+            Id = product.Id,
             Name = product.Name.Value,
             Quantity = product.Quantity.Value,
             FullPrice = product.FullPrice.Value,
@@ -28,34 +28,34 @@ public static class ProductMappingConfig
     public static Product ToEntity(this ProductUpdateDto productDto)
     {
         return Product.Create(
-            ProductName.From(productDto.Name),
-            Quantity.From(productDto.Quantity),
-            Price.From(productDto.FullPrice),
-            productDto.Images == null ? null : ProductImages.From(productDto.Images?.ToEntities()),
-            ProductDescription.From(productDto.Description),
+            ProductName.From(productDto.Name).Value,
+            Quantity.From(productDto.Quantity).Value,
+            Price.From(productDto.FullPrice).Value,
+            productDto.Images == null ? null : ProductImages.From(productDto.Images?.ToEntities()).Value,
+            ProductDescription.From(productDto.Description).Value,
             productDto.IsActive,
-            Sale.From(productDto.Sale),
+            Sale.From(productDto.Sale).Value,
             productDto.ProviderId,
             productDto.BrandId,
             productDto.CategoryId
-        );
+        ).Value;
     }
 
     public static Product ToEntity(this ProductUpdateDto productDto, Guid id)
     {
         return Product.Create(
             id,
-            ProductName.From(productDto.Name),
-            Quantity.From(productDto.Quantity),
-            Price.From(productDto.FullPrice),
-            productDto.Images == null ? null : ProductImages.From(productDto.Images?.ToEntities()),
-            ProductDescription.From(productDto.Description),
+            ProductName.From(productDto.Name).Value,
+            Quantity.From(productDto.Quantity).Value,
+            Price.From(productDto.FullPrice).Value,
+            productDto.Images == null ? null : ProductImages.From(productDto.Images?.ToEntities()).Value,
+            ProductDescription.From(productDto.Description).Value,
             productDto.IsActive,
-            Sale.From(productDto.Sale),
+            Sale.From(productDto.Sale).Value,
             productDto.ProviderId,
             productDto.BrandId,
             productDto.CategoryId
-        );
+        ).Value;
     }
 
     

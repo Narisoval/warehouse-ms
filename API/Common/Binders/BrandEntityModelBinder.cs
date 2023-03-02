@@ -6,23 +6,33 @@ using Warehouse.API.DTO.BrandDtos;
 
 namespace Warehouse.API.Common.Binders;
 
-public sealed class BrandEntityModelBinder : BaseModelBinder<BrandDto,BrandUpdateDto>
+public sealed class BrandEntityModelBinder : BaseModelBinder<BrandDto>
 {
-    protected override void ConvertDtoToEntity(BrandDto brandDto)
+    protected override void ConvertDtoToEntity(BrandDto brandDto, Guid? id)
     {
         var brandNameResult = BrandName.From(brandDto.Name);
         var brandDescriptionResult = BrandDescription.From(brandDto.Description);
         var brandImageResult = Image.From(brandDto.Image);
-        var id = brandDto.Id;
 
         if (!CheckIfResultsAreSuccessful(brandNameResult, brandDescriptionResult, brandImageResult))
             return;
-        
-        var brandResult = Brand.Create(
-            id: id, 
-            brandName: brandNameResult.Value,
-            brandImage: brandImageResult.Value,
-            brandDescription: brandDescriptionResult.Value);
+
+        Result<Brand> brandResult;
+        if (id != null)
+        {
+            brandResult = Brand.Create(
+                id: id.Value, 
+                brandName: brandNameResult.Value,
+                brandImage: brandImageResult.Value,
+                brandDescription: brandDescriptionResult.Value);
+        }
+        else
+        {
+            brandResult = Brand.Create(
+                brandName: brandNameResult.Value,
+                brandImage: brandImageResult.Value,
+                brandDescription: brandDescriptionResult.Value);
+        }
 
         if (!CheckIfBrandIsCreatedSuccessfully(brandResult))
             return;
@@ -30,26 +40,6 @@ public sealed class BrandEntityModelBinder : BaseModelBinder<BrandDto,BrandUpdat
         BindingContext.Result = ModelBindingResult.Success(brandResult.Value);
     }
 
-    protected override void ConvertUpdateDtoToEntity(BrandUpdateDto brandUpdateDto)
-    {
-        var brandNameResult = BrandName.From(brandUpdateDto.Name);
-        var brandDescriptionResult = BrandDescription.From(brandUpdateDto.Description);
-        var brandImageResult = Image.From(brandUpdateDto.Image);
-
-        if (!CheckIfResultsAreSuccessful(brandNameResult, brandDescriptionResult, brandImageResult))
-            return;
-        
-        var brandResult = Brand.Create(
-            brandName: brandNameResult.Value,
-            brandImage: brandImageResult.Value,
-            brandDescription: brandDescriptionResult.Value);
-        
-        if (!CheckIfBrandIsCreatedSuccessfully(brandResult))
-            return;
-        
-        BindingContext.Result = ModelBindingResult.Success(brandResult.Value);
-    }
-    
     private bool CheckIfResultsAreSuccessful(
         Result<BrandName> brandNameResult, 
         Result<BrandDescription> brandDescriptionResult, 
@@ -71,6 +61,7 @@ public sealed class BrandEntityModelBinder : BaseModelBinder<BrandDto,BrandUpdat
     {
         if(brandResult.IsFailed)
             AddModelErrors(brandResult.Errors,"Brand");
-        return brandResult.IsFailed;
+        
+        return brandResult.IsSuccess;
     }
 }
