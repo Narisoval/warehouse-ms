@@ -1,31 +1,44 @@
 using Domain.Entities;
-using Domain.Exceptions;
 using Domain.ValueObjects;
+using FluentAssertions;
+using FluentResults;
 
 namespace Domain.UnitTests.ValueObjects;
 
 public class ProductImagesTests
 {
     [Fact]
-    public void Should_ThrowException_When_ThereIsMoreThanMaximumMainImages()
+    public void Should_ReturnFailedResult_When_ThereIsMoreThanMaximumMainImages()
     {
         //Arrange
         var images = GenerateProductImages(ProductImages.MaxAmountOfMainImages+1,true);
         
-        //Act && Assert
-        Assert.Throws<TooManyMainImagesDomainException>(() => ProductImages.From(images));
+        //Act 
+        var sut = ProductImages.From(images);
+        
+        //Assert
+        AssertFailedResultWithOneError(sut);
     }
     
     [Fact]
-    public void Should_ThrowException_When_ThereIsNoMainImage()
+    public void Should_ReturnFailedResult_When_ThereIsNoMainImage()
     {
         //Arrange
         var images = GenerateProductImages(15, false);
 
-        //Act && Assert
-        Assert.Throws<NoMainImagesDomainException>(() => ProductImages.From(images));
+        //Act 
+        var sut = ProductImages.From(images);
+        
+        //Assert
+        AssertFailedResultWithOneError(sut);
     }
 
+    private void AssertFailedResultWithOneError(Result<ProductImages> result)
+    {
+        result.IsFailed.Should().BeTrue();
+        result.Errors.Count.Should().Be(1);
+    }
+    
     private List<ProductImage> GenerateProductImages(int amount, bool isMain)
     {
         var images = new List<ProductImage>();
@@ -34,7 +47,7 @@ public class ProductImagesTests
         {
             var img = ProductImage.Create(
                 Guid.NewGuid(), 
-                Image.From($"https://{Guid.NewGuid()}.png").Value, isMain);
+                Image.From($"https://{Guid.NewGuid()}.png").Value, isMain).Value;
             images.Add(img);
         }
 

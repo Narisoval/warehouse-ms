@@ -1,10 +1,12 @@
 using Domain.Entities;
+using FluentResults;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Filters;
 using Warehouse.API.Common.Mapping;
-using Warehouse.API.DTO;
-using Warehouse.API.DTO.Category;
-using Warehouse.API.DTO.Product;
+using Warehouse.API.DTO.ProductDtos;
+using Warehouse.API.DTO.SwaggerExamples;
+using Warehouse.API.Helpers;
 
 namespace Warehouse.API.Controllers;
 
@@ -44,27 +46,35 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(CategoryDto), 201)]
-    public async Task<ActionResult<ProductDto>> CreateProduct(ProductUpdateDto productDto)
+    [ProducesResponseType(typeof(ProductDto), 201)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [SwaggerRequestExample(typeof(ProductUpdateDto),typeof(ProductUpdateDtoExample))]
+    public async Task<ActionResult<ProductDto>> CreateProduct([FromBody] Product product)
     {
-        var productEntity = productDto.ToEntity();
-       
-        await _unitOfWork.Products.Add(productEntity);
+        var productResult = await _unitOfWork.Products.Add(product);
+
+        if (productResult.IsFailed)
+            return HandleForeignKeyViolations(productResult.Errors);
+        
         await _unitOfWork.Complete();
 
         return CreatedAtAction(nameof(GetProduct), 
-            new { id = productEntity.Id}, productEntity.ToDto());
+            new { id = product.Id}, product.ToDto());
     }
 
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateProduct(ProductUpdateDto productDto, Guid id)
+    [SwaggerRequestExample(typeof(ProductUpdateDto),typeof(ProductUpdateDtoExample))]
+    public async Task<IActionResult> UpdateProduct([FromBody] Product product, [FromRoute] Guid id)
     {
-        var productEntity = productDto.ToEntity(id);
-        var productUpdateSuccessfully = await _unitOfWork.Products.Update(productEntity);
+        var productUpdatedSuccessfully = await _unitOfWork.Products.Update(product);
 
-        if (!productUpdateSuccessfully)
+        if (productUpdatedSuccessfully.IsFailed)
+           return HandleForeignKeyViolations(productUpdatedSuccessfully.Errors);
+        
+        if (!productUpdatedSuccessfully.Value)
             return GetProductNotFoundResponse(id);
 
         await _unitOfWork.Complete();
@@ -75,7 +85,7 @@ public class ProductsController : ControllerBase
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteProduct(Guid id)
+    public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
     {
         var wasProductRemoved = await _unitOfWork.Products.Remove(id);
 
@@ -91,4 +101,11 @@ public class ProductsController : ControllerBase
     {
         return NotFound($"Product with id {id} does not exist");
     }
+
+    private ActionResult HandleForeignKeyViolations(List<IError> errors)
+    {
+        errors.AddModelErrors(ModelState,"product");
+        return BadRequest(ModelState);
+    }
+    
 }

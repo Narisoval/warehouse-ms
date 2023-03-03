@@ -3,13 +3,13 @@ using Warehouse.API.DTO.BrandDtos;
 
 namespace Warehouse.API.Common.Mapping;
 
-public static class BrandMappingConfig 
+public static class BrandMapping 
 {
     public static BrandDto ToDto(this Brand brand)
     {
         return new BrandDto
         {
-            Id = brand.Id,
+            BrandId = brand.Id,
             Name = brand.Name.Value,
             Image = brand.Image.Value,
             Description = brand.Description.Value

@@ -1,16 +1,29 @@
-using ValueOf;
+
+using Domain.Primitives;
+using FluentResults;
 
 namespace Domain.ValueObjects;
 
-public sealed class Quantity : ValueOf<int,Quantity>
+public sealed class Quantity : ValueObject 
 {
-    protected override void Validate()
+    public int Value { get; }
+
+    private Quantity(int quantity)
     {
-        if (Value < 0)
-        {
-            throw new ArgumentOutOfRangeException
-                (nameof(Value),"Quantity of a product cannot be less than 0");
-        }
+        Value = quantity;
     }
 
+    public static Result<Quantity> From(int quantity)
+    {
+        if (quantity < 0)
+            return new Result<Quantity>()
+                .WithError(new Error("Quantity can't be less than zero"));
+
+        return new Quantity(quantity);
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
+    }
 }

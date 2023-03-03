@@ -1,5 +1,7 @@
-﻿using Domain.Primitives;
+﻿using Domain.Errors;
+using Domain.Primitives;
 using Domain.ValueObjects;
+using FluentResults;
 
 namespace Domain.Entities;
 
@@ -15,7 +17,7 @@ public class Product : Entity
     public IList<ProductImage>? Images
     {
         get => _productImages?.Value;
-        set => _productImages = ProductImages.From(value!);
+        set => _productImages = ProductImages.From(value).Value;
     }
 
     public ProductDescription Description { get; private set; }
@@ -33,74 +35,70 @@ public class Product : Entity
     public Category? Category { get; private set; }
     public Guid CategoryId { get; private set; }
 
-    public static Product Create(
-        Guid id, 
-        ProductName productName,
-        Quantity quantity,
-        Price fullPrice,
-        ProductImages? productImages,
-        ProductDescription productDescription,
-        bool isActive,
-        Sale sale,
-        Provider? provider,
-        Brand? brand,
-        Category? category)
-    {
-        return new Product(id, productName, quantity, fullPrice, productImages, productDescription, isActive, sale,
-            provider, brand, category);
-    }
-    
-    public static Product Create(
+    public static Result<Product> Create(
         Guid id,
-        ProductName productName, 
-        Quantity quantity, 
-        Price fullPrice, 
+        ProductName? productName, 
+        Quantity? quantity, 
+        Price? fullPrice, 
         ProductImages? images, 
-        ProductDescription productDescription, 
+        ProductDescription? productDescription, 
         bool isActive, 
-        Sale sale, 
+        Sale? sale, 
         Guid providerId, 
-        Guid productId, 
+        Guid brandId, 
         Guid categoryId)
     {
-        return new Product(id,productName,quantity,fullPrice,images,productDescription,
-            isActive,sale,providerId,productId,categoryId);
+        var result = new Result<Product>();
+        
+        if(id == Guid.Empty)
+            result.WithError(new EmptyGuidError("Product"));
+        
+        if (providerId == Guid.Empty)
+            result.WithError(new EmptyGuidError("Provider"));
+        
+        if (brandId == Guid.Empty)
+            result.WithError(new EmptyGuidError("Brand"));
+        
+        if (categoryId == Guid.Empty)
+            result.WithError(new EmptyGuidError("Category"));
+        
+        if (productName == null)
+            result.WithError(new NullArgumentError(nameof(Name)));
+        
+        if (quantity == null)
+            result.WithError(new NullArgumentError(nameof(Quantity)));
+        
+        if (fullPrice == null)
+            result.WithError(new NullArgumentError(nameof(FullPrice)));
+
+        if (productDescription == null)
+            result.WithError(new NullArgumentError(nameof(Description)));
+        
+        if(sale == null)
+            result.WithError(new NullArgumentError(nameof(Description)));
+
+        if (result.IsFailed)
+            return result;
+        
+        return new Product(id,productName!,quantity!,fullPrice!,images,productDescription!,
+            isActive,sale!,providerId,brandId,categoryId);
     }
     
-    public static Product Create(
-        ProductName productName, 
-        Quantity quantity, 
-        Price fullPrice, 
+    public static Result<Product> Create(
+        ProductName? productName, 
+        Quantity? quantity, 
+        Price? fullPrice, 
         ProductImages? images, 
-        ProductDescription productDescription, 
+        ProductDescription? productDescription, 
         bool isActive, 
-        Sale sale, 
+        Sale? sale, 
         Guid providerId, 
         Guid brandId, 
         Guid categoryId)
     {
         Guid id = Guid.NewGuid();
-        return new Product(id,productName,quantity,fullPrice,images,productDescription,
+        return Create(id,productName,quantity,fullPrice,images,productDescription,
             isActive,sale,providerId,brandId,categoryId);
-    }
-    
-    
-    private Product(
-        Guid id,
-        ProductName productName,
-        Quantity quantity,
-        Price fullPrice,
-        ProductImages? productImages,
-        ProductDescription productDescription,
-        bool isActive,
-        Sale sale,
-        Provider? provider,
-        Brand? brand,
-        Category? category) : this(id,productName,quantity,fullPrice,productImages,productDescription,isActive,sale)
-    {
-        ChangeProvider(provider);
-        ChangeBrand(brand);
-        ChangeCategory(category);
     }
     
     private Product(
@@ -116,21 +114,6 @@ public class Product : Entity
         Guid brandId,
         Guid categoryId) : this(id,productName,quantity,fullPrice,productImages,productDescription,isActive,sale)
     {
-        if (providerId == Guid.Empty)
-        {
-            throw new ArgumentException("Provider id is invalid");
-        }
-        
-        if (brandId == Guid.Empty)
-        {
-            throw new ArgumentException("Brand id is invalid");
-        }
-        
-        if (categoryId == Guid.Empty)
-        {
-            throw new ArgumentException("Category id is invalid");
-        }
-        
         ProviderId = providerId;
         BrandId = brandId;
         CategoryId = categoryId;
@@ -146,49 +129,25 @@ public class Product : Entity
         bool isActive,
         Sale sale) : base(id)
     {
-        Name = productName ?? throw new ArgumentNullException(nameof(productName));
-        Quantity = quantity ?? throw new ArgumentNullException(nameof(quantity));
-        FullPrice = fullPrice ?? throw new ArgumentNullException(nameof(fullPrice));
+        Name = productName;
+        Quantity = quantity;
+        FullPrice = fullPrice;
         _productImages = productImages;
-        Description = productDescription ?? throw new ArgumentNullException(nameof(productDescription));
+        Description = productDescription;
         IsActive = isActive;
-        Sale = sale ?? throw new ArgumentNullException(nameof(sale));
+        Sale = sale;
         
         SetProductImagesNavigationalProperties();
     }
     
-    //For EF 
-    private Product()
-    {
-    }
 
     
     public void ChangeAllImages(IList<ProductImage>? images)
     {
-        _productImages = ProductImages.From(images!);
+        _productImages = ProductImages.From(images).Value;
         SetProductImagesNavigationalProperties();
     }
     
-    private void ChangeProvider(Provider? provider)
-    {
-        if (provider == null) return;
-        Provider = provider;
-        ProviderId = provider.Id;
-    }
-    
-    private void ChangeBrand(Brand? brand)
-    {
-        if (brand == null) return;
-        Brand = brand;
-        BrandId = brand.Id;
-    }
-    
-    private void ChangeCategory(Category? category)
-    {
-        if (category == null) return;
-        Category = category;
-        CategoryId = category.Id;
-    }
     private void SetProductImagesNavigationalProperties()
     {
         if (_productImages == null ||  _productImages.Value == null) return;
@@ -197,5 +156,10 @@ public class Product : Entity
             image.ProductId = Id;
             image.Product = this;
         }
+    }
+    
+    //For EF 
+    private Product()
+    {
     }
 }

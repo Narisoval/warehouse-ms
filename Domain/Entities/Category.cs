@@ -23,13 +23,10 @@ public class Category : Entity
         if (id == Guid.Empty)
             result.WithError(new EmptyGuidError(nameof(Category)));
             
-        if (categoryName! == null!)
+        if (categoryName == null)
             result.WithError(new NullArgumentError(nameof(categoryName)));
         
-        if (result.Errors.Count != 0)
-            return result;
-        
-        return new Category(id, categoryName!);
+        return result.IsFailed ? result : new Category(id, categoryName!);
     }
 
     public static Result<Category> Create(CategoryName? name)

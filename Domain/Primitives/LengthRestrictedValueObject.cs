@@ -31,12 +31,13 @@ public class LengthRestrictedValueObject<T> : ValueObject
     private Result<T> Validate(string? value, IRanged<uint> ranged)
     {
         if (value == null)
-            return new Result().WithError(new NullArgumentError(nameof(T)));
+            return new Result().WithError(new NullArgumentError(typeof(T).Name));
 
         if (!ranged.Range.InRange((uint)value.Length))
-            return new Result().WithError(
-                new IncorrectLengthError(
+            return new Result()
+                .WithError(new IncorrectLengthError(typeof(T).Name,
                     ranged.Range.Min, ranged.Range.Max));
+        
         return Result.Ok();
     }
 }

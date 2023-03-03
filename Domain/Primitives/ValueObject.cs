@@ -19,7 +19,7 @@ public abstract class ValueObject : IEquatable<ValueObject>
         return Equals((object?)other);
     }
 
-    public static bool operator ==(ValueObject right, ValueObject left)
+    public static bool operator ==(ValueObject? right, ValueObject? left)
     {
         return Equals(left, right);
     }

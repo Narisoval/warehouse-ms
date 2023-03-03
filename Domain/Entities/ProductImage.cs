@@ -1,5 +1,7 @@
+using Domain.Errors;
 using Domain.Primitives;
 using Domain.ValueObjects;
+using FluentResults;
 
 namespace Domain.Entities;
 
@@ -15,18 +17,21 @@ public class ProductImage : Entity
 
     private ProductImage(Guid id, Image image, bool isMain) : base(id)
     {
-        Image = image ?? throw new ArgumentNullException(nameof(image));
+        Image = image;
         IsMain = isMain;
     }
 
-    public static ProductImage Create(Guid id, Image image, bool isMain)
+    public static Result<ProductImage> Create(Guid id, Image? image, bool isMain)
     {
+        if (image == null)
+            return new Result<ProductImage>().WithError(new NullArgumentError(nameof(Image)));
+        
         return new ProductImage(id, image,isMain);
     }
 
-    public static ProductImage Create(Image image, bool isMain)
+    public static Result<ProductImage> Create(Image? image, bool isMain)
     {
         Guid id = Guid.NewGuid();
-        return new ProductImage(id,image,isMain);
+        return Create(id,image,isMain);
     }
 }

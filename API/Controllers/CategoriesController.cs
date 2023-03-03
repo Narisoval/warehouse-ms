@@ -3,7 +3,7 @@ using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 using Warehouse.API.Common.Mapping;
-using Warehouse.API.DTO.Category;
+using Warehouse.API.DTO.CategoryDtos;
 using Warehouse.API.DTO.SwaggerExamples;
 
 namespace Warehouse.API.Controllers;

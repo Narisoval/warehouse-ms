@@ -2,7 +2,7 @@ namespace Warehouse.API.DTO.ProviderDtos;
 
 public record ProviderDto  
 {
-    public Guid Id { get; set; }
+    public Guid ProviderId { get; set; }
     
     public string CompanyName { get; init; } = "";
 

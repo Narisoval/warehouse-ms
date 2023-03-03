@@ -1,5 +1,5 @@
 using Swashbuckle.AspNetCore.Filters;
-using Warehouse.API.DTO.Category;
+using Warehouse.API.DTO.CategoryDtos;
 
 namespace Warehouse.API.DTO.SwaggerExamples;
 

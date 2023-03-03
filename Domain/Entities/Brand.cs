@@ -33,16 +33,16 @@ public class Brand : Entity
         if (id == Guid.Empty)
             result.WithError(new EmptyGuidError(nameof(Brand)));
         
-        if (brandName! == null!)
+        if (brandName == null)
             result.WithError(new NullArgumentError(nameof(Name)));
         
-        if (brandImage! == null!)
+        if (brandImage == null)
             result.WithError(new NullArgumentError(nameof(Image)));
         
-        if(brandDescription! == null!)
+        if(brandDescription == null)
             result.WithError(new NullArgumentError(nameof(brandDescription)));
 
-        if (result.Errors.Count != 0)
+        if (result.IsFailed)
             return result;
         
         return new Brand(

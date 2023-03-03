@@ -2,7 +2,7 @@ using Domain.Primitives;
 
 namespace Domain.ValueObjects;
 
-public sealed class Price : NumericValueObjectInRange<decimal,Price>
+public sealed class Price : RangedValueObject<Price,decimal>, IRanged<decimal>
 {
-    internal override Range<decimal> Range => Range<decimal>.Create(0.5M, 1_000_000M);
+    Range<decimal> IRanged<decimal>.Range => Range<decimal>.Create(0.5M, 1_000_000M);
 }

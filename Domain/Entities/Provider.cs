@@ -33,10 +33,10 @@ public class Provider : Entity
         if (phoneNumber == null)
             result.WithError(new NullArgumentError(nameof(PhoneNumber)));
         
-        if (email! == null!)
+        if (email == null)
             result.WithError(new NullArgumentError(nameof(Email)));
         
-        if (result.Errors.Count != 0)
+        if (result.IsFailed)
             return result;
         
         return new Provider(id, companyName!, phoneNumber!, email!);

@@ -1,4 +1,4 @@
-namespace Warehouse.API.DTO.Category;
+namespace Warehouse.API.DTO.CategoryDtos;
 
 public class CategoryUpdateDto
 {

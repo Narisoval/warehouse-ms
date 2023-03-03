@@ -32,7 +32,7 @@ public class RangedValueObject<TThis,TValue> : ValueObject
     {
         if (!ranged.Range.InRange(value))
             return new Result<TThis>().WithError(
-                new OutOfRangeError(ranged.Range.ToString()));
+                new OutOfRangeError(typeof(TThis).Name,ranged.Range.ToString()));
                 
         return Result.Ok();
     }

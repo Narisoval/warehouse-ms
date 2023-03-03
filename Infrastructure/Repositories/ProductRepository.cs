@@ -1,4 +1,5 @@
 using Domain.Entities;
+using FluentResults;
 using Infrastructure.Data;
 using Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -15,13 +16,36 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
 
     // The goal of this method is to ensure that product
     // with non existing brand, provider or category can't be added. 
-    public new async Task Add(Product entity)
+    public new async Task<Result> Add(Product entity)
     {
-        await CheckBrandExists(entity.BrandId);
-        await CheckProviderExists(entity.ProviderId);
-        await CheckCategoryExists(entity.CategoryId);
+        var result = await CheckForeignKeys(entity);
         
-        await base.Add(entity);
+        if (result.IsSuccess)
+            await base.Add(entity);
+        
+        return result;
+    }
+    
+    public new async Task<Result<bool>> Update(Product entity)
+    {
+        var result = await CheckForeignKeys(entity);
+
+        if (result.IsFailed)
+            return result;
+        
+        var productFromDb = await Context.Products
+            .Include(product => product.Images)
+            .FirstOrDefaultAsync(product => product.Id == entity.Id);
+            
+        
+        if (productFromDb == null)
+            return false;
+        
+        Context.Products.Entry(productFromDb).CurrentValues.SetValues(entity);
+        productFromDb.Images?.Clear();
+        productFromDb.ChangeAllImages(entity.Images);
+        
+        return true;
     }
 
     public new async Task AddRange(IEnumerable<Product?> entities)
@@ -73,47 +97,33 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
             .ToListAsync();
     }
 
-    public new async Task<bool> Update(Product entity)
+    private async Task<Result> CheckForeignKeys(Product entity)
     {
-        var productFromDb = await Context.Products
-            .Include(product => product.Images)
-            .FirstOrDefaultAsync(product => product.Id == entity.Id);
-            
-        
-        if (productFromDb == null)
-            return false;
-        
-        Context.Products.Entry(productFromDb).CurrentValues.SetValues(entity);
-        productFromDb.Images?.Clear();
-        productFromDb.ChangeAllImages(entity.Images);
-        
-        return true;
+        var result = new Result(); 
+        await CheckBrandExists(entity.BrandId,result);
+        await CheckProviderExists(entity.ProviderId,result);
+        await CheckCategoryExists(entity.CategoryId,result);
+        return result;
     }
-
-    private async Task CheckBrandExists(Guid id)
+    
+    private async Task CheckBrandExists(Guid id, Result result)
     {
         bool brandExists = await Context.Brands.AnyAsync(brand => brand.Id == id);
         if (!brandExists)
-        {
-            throw new InvalidOperationException("Product's brand does not exist.");
-        }
+            result.WithError("Product's brand does not exist.");
     }
     
-    private async Task CheckProviderExists(Guid id)
+    private async Task CheckProviderExists(Guid id, Result result)
     {
         bool providerExists = await Context.Providers.AnyAsync(provider => provider.Id == id);
         if (!providerExists)
-        {
-            throw new InvalidOperationException("Product's provider does not exist.");
-        }
+            result.WithError("Product's provider does not exist.");
     }
 
-    private async Task CheckCategoryExists(Guid id)
+    private async Task CheckCategoryExists(Guid id, Result result)
     {
         bool categoryExists = await Context.Categories.AnyAsync(provider => provider.Id == id);
         if (!categoryExists)
-        {
-            throw new InvalidOperationException("Product's category does not exist.");
-        }
+            result.WithError("Product's category does not exist.");
     }
 }

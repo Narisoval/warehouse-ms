@@ -2,7 +2,7 @@ using Domain.Primitives;
 
 namespace Domain.ValueObjects;
 
-public sealed class ProductName : StringValueObjectWithLengthRestrictions<ProductName>
+public sealed class ProductName : LengthRestrictedValueObject<ProductName>, IRanged<uint>
 {
-    internal override Range<int> LengthRange => Range<int>.Create(10, 70);
+    Range<uint> IRanged<uint>.Range { get; } = Range<uint>.Create(10, 70);
 }

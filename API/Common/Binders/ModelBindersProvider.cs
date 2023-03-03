@@ -25,6 +25,10 @@ public class ModelBindersProvider : IModelBinderProvider
             
             case var _ when modelType == typeof(Category):
                 return new BinderTypeModelBinder(typeof(CategoryEntityModelBinder));
+            
+            case var _ when modelType == typeof(Product):
+                return new BinderTypeModelBinder(typeof(ProductEntityModelBinder));
+            
             default:
                 return null;
         }

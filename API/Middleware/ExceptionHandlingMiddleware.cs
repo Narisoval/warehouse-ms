@@ -1,5 +1,4 @@
 using System.Text.Json;
-using Domain.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +20,7 @@ public static class ExceptionHandlingMiddleware
         var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
         var exception = exceptionHandlerPathFeature?.Error;
 
-        var problem = exception is ArgumentException or DomainException or FormatException
+        var problem = exception is ArgumentException or FormatException
             ? ConstructValidationProblemDetails(exception) : ConstructServerErrorProblemDetails();
 
         if(problem.Status != null)

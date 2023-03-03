@@ -1,13 +1,13 @@
 using Domain.Entities;
 using Domain.ValueObjects;
-using Warehouse.API.DTO;
-using Warehouse.API.DTO.Product;
+using FluentResults;
+using Warehouse.API.DTO.ProductDtos;
 
 namespace Warehouse.API.Common.Mapping;
 
-public static class ProductImageMappingConfig
+public static class ProductImageMapping
 {
-    public static ProductImageDto ToDTo(this ProductImage productImage)
+    public static ProductImageDto ToDto(this ProductImage productImage)
     {
         return new ProductImageDto
         {
@@ -27,7 +27,7 @@ public static class ProductImageMappingConfig
         
         foreach (var productImage in productImages)
         {
-            productImageDtos.Add(productImage.ToDTo());
+            productImageDtos.Add(productImage.ToDto());
         }
 
         return productImageDtos;
@@ -37,8 +37,7 @@ public static class ProductImageMappingConfig
     {
         return ProductImage.Create(
             Image.From(productImageDto.Image).Value,
-            productImageDto.IsMain
-        );
+            productImageDto.IsMain).Value;
     }
     
     public static IList<ProductImage>? ToEntities(this IList<ProductImageDto>? productImagesDtos)
@@ -56,5 +55,28 @@ public static class ProductImageMappingConfig
         }
 
         return productImages;
+    }
+    
+    public static Result<ProductImages> ToProductImagesResult(this IList<ProductImageDto> productImagesDtos)
+    {
+        Result<ProductImages> productImagesResult = new();
+        List<ProductImage> productImageEntities = new() ;
+        
+        
+        foreach (var dto in productImagesDtos)
+        {
+            var imageResult = Image.From(dto.Image);
+            if (imageResult.IsFailed)
+            {
+                productImagesResult.WithErrors(imageResult.Errors);
+                continue;
+            }
+            productImageEntities.Add(ProductImage.Create(imageResult.Value,dto.IsMain).Value);
+        }
+
+        if (productImagesResult.IsFailed)
+            return productImagesResult;
+        
+        return ProductImages.From(productImageEntities);
     }
 }

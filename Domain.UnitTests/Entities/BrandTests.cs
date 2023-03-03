@@ -1,4 +1,5 @@
 using Domain.Entities;
+using Domain.Primitives;
 using Domain.ValueObjects;
 using FluentAssertions;
 using FluentResults;
@@ -27,30 +28,31 @@ public class BrandTests
     }
 
     [Fact]
-    public void Should_ReturnFailedResult_When_SomeOfTheConstructorArgumentsAreNull()
+    public void Should_ReturnFailedResult_When_SomeArgumentsAreNull()
     {
         // Arrange
         var id = Guid.NewGuid();
         var brandName = BrandName.From("BrandName").Value;
         var image = Image.From("https://image.jpg").Value;
         var description = BrandDescription.From("This is a brand description").Value;
-        var arguments = new List<object?>() { brandName, image, description };
+        var arguments = new List<ValueObject?> { brandName, image, description };
 
         // Act and Assert
         for (int i = 0; i < arguments.Count; i++)
         {
-            var argument = arguments[i];
             arguments[i] = null;
-            CreateBrand(id, arguments).IsFailed.Should().BeTrue();
-            arguments[i] = argument;
+            var brandResult = CreateBrand(id, arguments);
+            brandResult.IsFailed.Should().BeTrue();
+            brandResult.Errors.Count.Should().Be(i+1);
         }
     }
 
-
-    private Result<Brand> CreateBrand(Guid id, List<object?> arguments)
+    private Result<Brand> CreateBrand(Guid id, List<ValueObject?> arguments)
     {
-        return Brand.Create(id,(BrandName)arguments[0]!,(Image)arguments[1]!,
-            (BrandDescription)arguments[2]!);
+        return Brand.Create(id,
+            (BrandName?)arguments[0],
+            (Image?)arguments[1]!,
+            (BrandDescription?)arguments[2]!);
     }
     
     

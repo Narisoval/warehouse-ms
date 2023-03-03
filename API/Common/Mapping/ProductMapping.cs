@@ -1,17 +1,17 @@
 using Domain.Entities;
 using Domain.ValueObjects;
 using Warehouse.API.DTO;
-using Warehouse.API.DTO.Product;
+using Warehouse.API.DTO.ProductDtos;
 
 namespace Warehouse.API.Common.Mapping;
 
-public static class ProductMappingConfig
+public static class ProductMapping
 {
     public static ProductDto ToDto(this Product product)
     {
         return new ProductDto
         {
-            Id = product.Id,
+            ProductId = product.Id,
             Name = product.Name.Value,
             Quantity = product.Quantity.Value,
             FullPrice = product.FullPrice.Value,

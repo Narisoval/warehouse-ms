@@ -1,15 +1,15 @@
 using Domain.Entities;
-using Warehouse.API.DTO.Category;
+using Warehouse.API.DTO.CategoryDtos;
 
 namespace Warehouse.API.Common.Mapping;
 
-public static class CategoryMappingConfig 
+public static class CategoryMapping 
 {
     public static CategoryDto ToDto(this Category category)
     {
         return new CategoryDto
         {
-            Id = category.Id,
+            CategoryId = category.Id,
             Name = category.Name.Value,
         };
     }

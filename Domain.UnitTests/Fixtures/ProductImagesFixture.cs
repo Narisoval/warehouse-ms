@@ -9,11 +9,11 @@ public static class ProductImagesFixture
     {
         List<ProductImage> productImagesList = new List<ProductImage>()
         {
-            ProductImage.Create(Guid.NewGuid(), Image.From("https://imagesss/chair1.png").Value,true),
-            ProductImage.Create(Guid.NewGuid(), Image.From("https://imagess/chair2.png").Value,false),
-            ProductImage.Create(Guid.NewGuid(), Image.From("https://imagess/chair3.png").Value,false)
+            ProductImage.Create(Guid.NewGuid(), Image.From("https://imagesss/chair1.png").Value,true).Value,
+            ProductImage.Create(Guid.NewGuid(), Image.From("https://imagess/chair2.png").Value,false).Value,
+            ProductImage.Create(Guid.NewGuid(), Image.From("https://imagess/chair3.png").Value,false).Value
         };
         
-        return ProductImages.From(productImagesList);
+        return ProductImages.From(productImagesList).Value;
     }
 }

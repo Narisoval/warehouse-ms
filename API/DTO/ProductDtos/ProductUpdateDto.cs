@@ -1,4 +1,4 @@
-namespace Warehouse.API.DTO.Product;
+namespace Warehouse.API.DTO.ProductDtos;
 
 public class ProductUpdateDto
 {

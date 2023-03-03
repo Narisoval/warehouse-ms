@@ -1,7 +1,7 @@
 using Domain.ValueObjects;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Warehouse.API.DTO.Category;
+using Warehouse.API.DTO.CategoryDtos;
 using Category = Domain.Entities.Category;
 
 namespace Warehouse.API.Common.Binders;

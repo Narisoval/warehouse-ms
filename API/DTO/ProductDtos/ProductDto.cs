@@ -1,11 +1,11 @@
 ﻿using Warehouse.API.DTO.BrandDtos;
 using Warehouse.API.DTO.ProviderDtos;
 
-namespace Warehouse.API.DTO.Product;
+namespace Warehouse.API.DTO.ProductDtos;
 
-public record ProductDto
+public record ProductDto 
 {
-    public Guid ProductId { get; init; } = default;
+    public Guid ProductId { get; set; }
 
     public string Name { get; init; } = "";
 
