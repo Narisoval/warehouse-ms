@@ -17,7 +17,7 @@ public class ProductImagesTests
         var sut = ProductImages.From(images);
         
         //Assert
-        AssertFailedResultWithOneError(sut);
+        sut.AssertIsFailed(1);
     }
     
     [Fact]
@@ -30,15 +30,9 @@ public class ProductImagesTests
         var sut = ProductImages.From(images);
         
         //Assert
-        AssertFailedResultWithOneError(sut);
+        sut.AssertIsFailed(1);
     }
 
-    private void AssertFailedResultWithOneError(Result<ProductImages> result)
-    {
-        result.IsFailed.Should().BeTrue();
-        result.Errors.Count.Should().Be(1);
-    }
-    
     private List<ProductImage> GenerateProductImages(int amount, bool isMain)
     {
         var images = new List<ProductImage>();
@@ -53,5 +47,4 @@ public class ProductImagesTests
 
         return images;
     }
-    
 }

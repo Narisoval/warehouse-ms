@@ -29,8 +29,7 @@ public class RangedValueObjectTests
         var sut = TestValueObject.From(value);
         
         //Assert
-        sut.IsFailed.Should().BeTrue();
-        sut.Errors.Count.Should().Be(1);
+        sut.AssertIsFailed(1);
     }
     
     [Theory]

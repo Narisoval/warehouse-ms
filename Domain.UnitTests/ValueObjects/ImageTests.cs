@@ -36,8 +36,7 @@ public class ImageTests
         var sut = Image.From(testImage.Value);
         
         //Assert
-        sut.IsFailed.Should().BeTrue();
-        sut.Errors.Count.Should().Be(testImage.NumberOfErrors);
+        sut.AssertIsFailed(testImage.NumberOfErrors);
     }
     
     [Fact]
@@ -50,7 +49,7 @@ public class ImageTests
         var sut = Image.From(image);
         
         //Assert
-        sut.IsFailed.Should().BeTrue();
+        sut.AssertIsFailed(1);
     }
     
     [Fact]
@@ -65,5 +64,4 @@ public class ImageTests
         var imageValueObject = sut.Value;
         imageValueObject.Value.Should().Be(imageUrl);
     }
-    
 }

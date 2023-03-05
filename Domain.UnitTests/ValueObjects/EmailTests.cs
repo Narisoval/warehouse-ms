@@ -29,7 +29,7 @@ public class EmailTests
         var emailResult = Email.From(email);
         
         //Assert
-        emailResult.IsFailed.Should().BeTrue();
+        emailResult.AssertIsFailed(1); 
     }
     
     [Fact]
@@ -42,6 +42,6 @@ public class EmailTests
         var emailResult = Email.From(email);
         
         //Assert
-        emailResult.IsFailed.Should().BeTrue();
+        emailResult.AssertIsFailed(1);
     }
 }

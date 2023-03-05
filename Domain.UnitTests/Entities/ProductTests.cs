@@ -119,8 +119,7 @@ public class ProductTests
             categoryId: _categoryId);
         
         //Assert
-        productResult.IsFailed.Should().BeTrue();
-        productResult.Errors.Count.Should().Be(1);
+        productResult.AssertIsFailed(1);
     }
     
     [Fact]
@@ -147,8 +146,7 @@ public class ProductTests
             categoryId: categoryId);
         
         //Assert
-        productResult.IsFailed.Should().BeTrue();
-        productResult.Errors.Count.Should().Be(4);
+        productResult.AssertIsFailed(4);
     }
 
     [Fact]

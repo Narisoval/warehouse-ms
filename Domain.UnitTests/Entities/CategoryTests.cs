@@ -35,7 +35,6 @@ public class CategoryTests
         sut.IsSuccess.Should().BeTrue();
         sut.Value.Id.Should().NotBe(Guid.Empty);
         sut.Value.Name.Should().BeEquivalentTo(_categoryName);
-
     }
     
     [Fact]
