@@ -10,16 +10,14 @@ public class Provider : Entity
     public CompanyName CompanyName { get; private set; }
     public string PhoneNumber { get; private set; }
     public Email Email { get; private set; }
-
     public IReadOnlyCollection<Product>? Products { get; set; }
     
-    private Provider(Guid id, CompanyName companyName, string phoneNumber, Email email) : base(id)
+    public static Result<Provider> Create(CompanyName? companyName, string? phoneNumber, Email? email)
     {
-        CompanyName = companyName; 
-        PhoneNumber = phoneNumber; 
-        Email = email;
+        Guid id = Guid.NewGuid();
+        return Create(id, companyName, phoneNumber, email);
     }
-
+    
     public static Result<Provider> Create(Guid id, CompanyName? companyName, string? phoneNumber, Email? email)
     {
         Result<Provider> result = new Result<Provider>();
@@ -27,7 +25,7 @@ public class Provider : Entity
         if (id == Guid.Empty)
             result.WithError(new EmptyGuidError(nameof(Provider)));
 
-        if (companyName! == null!)
+        if (companyName == null)
             result.WithError(new NullArgumentError(nameof(CompanyName)));
         
         if (phoneNumber == null)
@@ -41,10 +39,11 @@ public class Provider : Entity
         
         return new Provider(id, companyName!, phoneNumber!, email!);
     }
-
-    public static Result<Provider> Create(CompanyName companyName, string phoneNumber, Email email)
+    
+    private Provider(Guid id, CompanyName companyName, string phoneNumber, Email email) : base(id)
     {
-        Guid id = Guid.NewGuid();
-        return Create(id, companyName, phoneNumber, email);
+        CompanyName = companyName; 
+        PhoneNumber = phoneNumber; 
+        Email = email;
     }
 }
