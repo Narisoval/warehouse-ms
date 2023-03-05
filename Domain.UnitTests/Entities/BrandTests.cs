@@ -8,52 +8,94 @@ namespace Domain.UnitTests.Entities;
 
 public class BrandTests
 {
+    private readonly Guid _id = Guid.NewGuid();
+    private readonly BrandName _brandName = BrandName.From("BrandName").Value;
+    private readonly Image _image = Image.From("https://image.jpg").Value;
+    private readonly BrandDescription _description = BrandDescription.From("This is a brand description").Value;
+
     [Fact]
     public void Should_Create_Brand_When_All_Properties_Are_Provided()
     {
-        //Arrange
-        var id = Guid.NewGuid();
-        var brandName = BrandName.From("BrandName").Value;
-        var brandImage = Image.From("https://image.jpg").Value;
-        var brandDescription = BrandDescription.From("This is a brand description").Value;
-    
         //Act
-        var brand = Brand.Create(id, brandName, brandImage, brandDescription).Value;
-    
+        var brandResult = Brand.Create(_id, _brandName, _image, _description);
+
         //Assert
-        Assert.Equal(id, brand.Id);
-        Assert.Equal(brandName, brand.Name);
-        Assert.Equal(brandImage, brand.Image);
-        Assert.Equal(brandDescription, brand.Description);
+        Assert.Equal(_id, brandResult.Value.Id);
+        AssertBrandCreatedCorrectly(brandResult);
     }
 
+    private void AssertBrandCreatedCorrectly(Result<Brand> brandResult)
+    { 
+        brandResult.IsSuccess.Should().BeTrue();
+        
+        var brand = brandResult.Value;
+        
+        Assert.Equal(_brandName, brand.Name);
+        Assert.Equal(_image, brand.Image);
+        Assert.Equal(_description, brand.Description);
+        
+    }
+
+    [Fact]
+    public void Should_Create_Brand_When_IdIsNotProvided()
+    {
+        //Act
+        var brandResult = Brand.Create(_brandName, _image, _description);
+    
+        //Assert
+        AssertBrandCreatedCorrectly(brandResult);
+    }
+    
+    [Fact]
+    public void Should_ReturnFailedResult_When_IdIsEmptyGuid()
+    {
+        //Act
+        var brandResult = Brand.Create(Guid.Empty, _brandName, _image, _description);
+    
+        //Assert
+        brandResult.AssertIsFailed(1);
+    }
     [Fact]
     public void Should_ReturnFailedResult_When_SomeArgumentsAreNull()
     {
         // Arrange
-        var id = Guid.NewGuid();
-        var brandName = BrandName.From("BrandName").Value;
-        var image = Image.From("https://image.jpg").Value;
-        var description = BrandDescription.From("This is a brand description").Value;
-        var arguments = new List<ValueObject?> { brandName, image, description };
+        var arguments = new List<ValueObject?> { _brandName, _image, _description };
 
         // Act and Assert
         for (int i = 0; i < arguments.Count; i++)
         {
             arguments[i] = null;
-            var brandResult = CreateBrand(id, arguments);
-            brandResult.IsFailed.Should().BeTrue();
-            brandResult.Errors.Count.Should().Be(i+1);
+            var brandResultWithoutId = CreateBrand(arguments,false);
+            var brandResultWithId = CreateBrand(arguments, true);
+                
+            brandResultWithId.AssertIsFailed(i+1);
+            brandResultWithoutId.AssertIsFailed(i+1);
         }
     }
 
-    private Result<Brand> CreateBrand(Guid id, List<ValueObject?> arguments)
+    private Result<Brand> CreateBrand(List<ValueObject?> arguments, bool withId)
     {
-        return Brand.Create(id,
+        if (withId)
+            return CreateBrandWithId(arguments);
+        
+        return CreateBrandWithoutId(arguments);
+    }
+
+    private Result<Brand> CreateBrandWithId(List<ValueObject?> arguments)
+    {
+        return Brand.Create(
+            _id,
             (BrandName?)arguments[0],
             (Image?)arguments[1]!,
-            (BrandDescription?)arguments[2]!);
+            (BrandDescription?)arguments[2]!);    
     }
     
-    
+    private Result<Brand> CreateBrandWithoutId(List<ValueObject?> arguments)
+    {
+        return Brand.Create(
+            (BrandName?)arguments[0],
+            (Image?)arguments[1]!,
+            (BrandDescription?)arguments[2]!);    
+    }
+
 }
