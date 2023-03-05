@@ -1,7 +1,7 @@
 using Domain.Entities;
 using Warehouse.API.DTO.BrandDtos;
 
-namespace Warehouse.API.Common.Mapping;
+namespace Warehouse.API.Helpers.Mapping;
 
 public static class BrandMapping 
 {

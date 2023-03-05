@@ -2,9 +2,8 @@ using System.Net.Mime;
 using System.Text.Json;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Warehouse.API.Helpers;
 
-namespace Warehouse.API.Common.Binders;
+namespace Warehouse.API.Helpers.Binders;
 
 public abstract class BaseModelBinder<TDto>: IModelBinder 
 {

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Warehouse.API.DTO.CategoryDtos;
 using Category = Domain.Entities.Category;
 
-namespace Warehouse.API.Common.Binders;
+namespace Warehouse.API.Helpers.Binders;
 
 public sealed class CategoryEntityModelBinder : BaseModelBinder<CategoryUpdateDto>
 {

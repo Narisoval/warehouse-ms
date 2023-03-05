@@ -2,7 +2,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
-namespace Warehouse.API.Common.Binders;
+namespace Warehouse.API.Helpers.Binders;
 
 public class ModelBindersProvider : IModelBinderProvider
 {

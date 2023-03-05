@@ -2,10 +2,10 @@ using Domain.Entities;
 using Domain.ValueObjects;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Warehouse.API.Common.Mapping;
 using Warehouse.API.DTO.ProductDtos;
+using Warehouse.API.Helpers.Mapping;
 
-namespace Warehouse.API.Common.Binders;
+namespace Warehouse.API.Helpers.Binders;
 public sealed class ProductEntityModelBinder : BaseModelBinder<ProductUpdateDto>
 {
     protected override void ConvertDtoToEntity(ProductUpdateDto dto, Guid? id)

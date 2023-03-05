@@ -3,10 +3,10 @@ using FluentResults;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
-using Warehouse.API.Common.Mapping;
 using Warehouse.API.DTO.ProductDtos;
 using Warehouse.API.DTO.SwaggerExamples;
 using Warehouse.API.Helpers;
+using Warehouse.API.Helpers.Mapping;
 
 namespace Warehouse.API.Controllers;
 

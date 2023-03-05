@@ -3,7 +3,7 @@ using Domain.ValueObjects;
 using FluentResults;
 using Warehouse.API.DTO.ProductDtos;
 
-namespace Warehouse.API.Common.Mapping;
+namespace Warehouse.API.Helpers.Mapping;
 
 public static class ProductImageMapping
 {
