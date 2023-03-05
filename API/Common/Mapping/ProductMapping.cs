@@ -1,6 +1,4 @@
 using Domain.Entities;
-using Domain.ValueObjects;
-using Warehouse.API.DTO;
 using Warehouse.API.DTO.ProductDtos;
 
 namespace Warehouse.API.Common.Mapping;
@@ -24,39 +22,4 @@ public static class ProductMapping
             Provider = product.Provider?.ToUpdateDto()
         };
     }
-
-    public static Product ToEntity(this ProductUpdateDto productDto)
-    {
-        return Product.Create(
-            ProductName.From(productDto.Name).Value,
-            Quantity.From(productDto.Quantity).Value,
-            Price.From(productDto.FullPrice).Value,
-            productDto.Images == null ? null : ProductImages.From(productDto.Images?.ToEntities()).Value,
-            ProductDescription.From(productDto.Description).Value,
-            productDto.IsActive,
-            Sale.From(productDto.Sale).Value,
-            productDto.ProviderId,
-            productDto.BrandId,
-            productDto.CategoryId
-        ).Value;
-    }
-
-    public static Product ToEntity(this ProductUpdateDto productDto, Guid id)
-    {
-        return Product.Create(
-            id,
-            ProductName.From(productDto.Name).Value,
-            Quantity.From(productDto.Quantity).Value,
-            Price.From(productDto.FullPrice).Value,
-            productDto.Images == null ? null : ProductImages.From(productDto.Images?.ToEntities()).Value,
-            ProductDescription.From(productDto.Description).Value,
-            productDto.IsActive,
-            Sale.From(productDto.Sale).Value,
-            productDto.ProviderId,
-            productDto.BrandId,
-            productDto.CategoryId
-        ).Value;
-    }
-
-    
 }
