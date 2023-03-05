@@ -1,26 +1,16 @@
 using Infrastructure;
-using Swashbuckle.AspNetCore.Filters;
-using Warehouse.API.Helpers.Binders;
+using Warehouse.API.Helpers;
 using Warehouse.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-builder.Services.AddControllers(options =>
-    {
-        options.ModelBinderProviders.Insert(0, new ModelBindersProvider());
-    }
-    );
+builder.Services.AddControllersWithBinders();
 
 builder.Services.AddPersistence(builder.Configuration);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.ExampleFilters();
-});
-builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
+builder.Services.AddSwagger();
 
 var app = builder.Build();
 
