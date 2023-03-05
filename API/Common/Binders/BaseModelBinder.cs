@@ -2,6 +2,7 @@ using System.Net.Mime;
 using System.Text.Json;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Warehouse.API.Helpers;
 
 namespace Warehouse.API.Common.Binders;
 
@@ -90,9 +91,6 @@ public abstract class BaseModelBinder<TDto>: IModelBinder
 
     protected void AddModelErrors(List<IError> errors, string key)
     {
-        foreach (var error in errors)
-        {
-            BindingContext.ModelState.AddModelError(key,error.Message);    
-        }
+        errors.AddModelErrors(BindingContext.ModelState, key);
     }
 }
