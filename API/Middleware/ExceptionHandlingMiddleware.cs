@@ -17,30 +17,14 @@ public static class ExceptionHandlingMiddleware
 
     private static async Task HandleException(HttpContext context)
     {
-        var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
-        var exception = exceptionHandlerPathFeature?.Error;
+        var problemDetails = ConstructServerErrorProblemDetails();
 
-        var problem = exception is ArgumentException or FormatException
-            ? ConstructValidationProblemDetails(exception) : ConstructServerErrorProblemDetails();
-
-        if(problem.Status != null)
-            context.Response.StatusCode = (int)problem.Status;
+        if(problemDetails.Status != null)
+            context.Response.StatusCode = (int)problemDetails.Status;
         
-        await WriteProblem(problem, context);
+        await WriteProblem(problemDetails, context);
     }
 
-    private static ProblemDetails ConstructValidationProblemDetails(Exception exception)
-    {
-        ProblemDetails problem = new()
-        {
-            Status = StatusCodes.Status400BadRequest,
-            Type = "Validation error",
-            Title = "Validation Error has occured",
-            Detail = exception.Message
-        };
-        return problem;
-    }
-    
     private static ProblemDetails ConstructServerErrorProblemDetails()
     {
         ProblemDetails problem = new()
