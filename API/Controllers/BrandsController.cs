@@ -50,13 +50,13 @@ public class BrandsController : ControllerBase
     [ProducesResponseType(typeof(BrandDto), 201)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [SwaggerRequestExample(typeof(BrandUpdateDto),typeof(BrandUpdateDtoExample))]
-    public async Task<ActionResult<BrandDto>> CreateBrand([FromBody] Brand brand)
+    public async Task<ActionResult<BrandDto>> CreateBrand([FromBody] Brand? brand)
     {
-        await _unitOfWork.Brands.Add(brand);
+        await _unitOfWork.Brands.Add(brand!);
         await _unitOfWork.Complete();
 
         return CreatedAtAction(nameof(GetBrand),
-            new { id = brand.Id }, brand.ToDto());
+            new { id = brand!.Id }, brand.ToDto());
     }
 
     [HttpPut("{id:guid}")]
@@ -66,10 +66,10 @@ public class BrandsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [SwaggerRequestExample(typeof(BrandUpdateDto),typeof(BrandUpdateDtoExample))]
     public async Task<IActionResult> UpdateBrand(
-        [FromBody] Brand brand
+        [FromBody] Brand? brand
         ,[FromRoute] Guid id)
     {
-        var brandUpdatedSuccessfully = await _unitOfWork.Brands.Update(brand);
+        var brandUpdatedSuccessfully = await _unitOfWork.Brands.Update(brand!);
 
         if (!brandUpdatedSuccessfully)
             return GetBrandNotFoundResponse(id);

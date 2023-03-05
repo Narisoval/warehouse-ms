@@ -52,13 +52,13 @@ public class ProvidersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [SwaggerRequestExample(typeof(ProviderUpdateDto),typeof(ProviderUpdateDtoExample))]
     public async Task<ActionResult<ProviderDto>> CreateProvider(
-        [FromBody] Provider provider)
+        [FromBody] Provider? provider)
     {
-        await _unitOfWork.Providers.Add(provider);
+        await _unitOfWork.Providers.Add(provider!);
         await _unitOfWork.Complete();
 
         return CreatedAtAction(nameof(GetProvider),
-            new { id = provider.Id }, provider.ToDto());
+            new { id = provider!.Id }, provider.ToDto());
     }
 
     [HttpPut("{id:guid}")]
@@ -68,9 +68,9 @@ public class ProvidersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [SwaggerRequestExample(typeof(ProviderUpdateDto),typeof(ProviderUpdateDtoExample))]
     public async Task<IActionResult> UpdateProvider(
-        [FromBody]Provider provider, [FromRoute] Guid id)
+        [FromBody]Provider? provider, [FromRoute] Guid id)
     {
-        var providerUpdateSuccessfully = await _unitOfWork.Providers.Update(provider);
+        var providerUpdateSuccessfully = await _unitOfWork.Providers.Update(provider!);
 
         if (!providerUpdateSuccessfully)
             return GetProviderNotFoundResponse(id);

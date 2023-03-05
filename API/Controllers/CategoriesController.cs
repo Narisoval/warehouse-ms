@@ -46,9 +46,9 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(typeof(CategoryDto), 201)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [SwaggerRequestExample(typeof(CategoryUpdateDto),typeof(CategoryUpdateDtoExample))]
-    public async Task<ActionResult<CategoryDto>> CreateCategory([FromBody] Category category)
+    public async Task<ActionResult<CategoryDto>> CreateCategory([FromBody] Category? category)
     {
-        await _unitOfWork.Categories.Add(category);
+        await _unitOfWork.Categories.Add(category!);
         await _unitOfWork.Complete();
 
         return CreatedAtAction(nameof(GetCategory),
@@ -60,9 +60,9 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [SwaggerRequestExample(typeof(CategoryUpdateDto),typeof(CategoryUpdateDtoExample))]
-    public async Task<IActionResult> UpdateCategory([FromBody] Category category, [FromRoute] Guid id)
+    public async Task<IActionResult> UpdateCategory([FromBody] Category? category, [FromRoute] Guid id)
     {
-        var categoryUpdatedSuccessfully = await _unitOfWork.Categories.Update(category);
+        var categoryUpdatedSuccessfully = await _unitOfWork.Categories.Update(category!);
 
         if (!categoryUpdatedSuccessfully)
             return GetCategoryNotFoundResponse(id);

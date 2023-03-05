@@ -49,9 +49,9 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(typeof(ProductDto), 201)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [SwaggerRequestExample(typeof(ProductUpdateDto),typeof(ProductUpdateDtoExample))]
-    public async Task<ActionResult<ProductDto>> CreateProduct([FromBody] Product product)
+    public async Task<ActionResult<ProductDto>> CreateProduct([FromBody] Product? product)
     {
-        var productResult = await _unitOfWork.Products.Add(product);
+        var productResult = await _unitOfWork.Products.Add(product!);
 
         if (productResult.IsFailed)
             return HandleForeignKeyViolations(productResult.Errors);
@@ -67,9 +67,9 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [SwaggerRequestExample(typeof(ProductUpdateDto),typeof(ProductUpdateDtoExample))]
-    public async Task<IActionResult> UpdateProduct([FromBody] Product product, [FromRoute] Guid id)
+    public async Task<IActionResult> UpdateProduct([FromBody] Product? product, [FromRoute] Guid id)
     {
-        var productUpdatedSuccessfully = await _unitOfWork.Products.Update(product);
+        var productUpdatedSuccessfully = await _unitOfWork.Products.Update(product!);
 
         if (productUpdatedSuccessfully.IsFailed)
            return HandleForeignKeyViolations(productUpdatedSuccessfully.Errors);
