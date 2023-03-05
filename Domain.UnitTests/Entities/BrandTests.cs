@@ -65,20 +65,12 @@ public class BrandTests
         for (int i = 0; i < arguments.Count; i++)
         {
             arguments[i] = null;
-            var brandResultWithoutId = CreateBrand(arguments,false);
-            var brandResultWithId = CreateBrand(arguments, true);
+            var brandResultWithoutId = CreateBrandWithoutId(arguments);
+            var brandResultWithId = CreateBrandWithId(arguments);
                 
             brandResultWithId.AssertIsFailed(i+1);
             brandResultWithoutId.AssertIsFailed(i+1);
         }
-    }
-
-    private Result<Brand> CreateBrand(List<ValueObject?> arguments, bool withId)
-    {
-        if (withId)
-            return CreateBrandWithId(arguments);
-        
-        return CreateBrandWithoutId(arguments);
     }
 
     private Result<Brand> CreateBrandWithId(List<ValueObject?> arguments)

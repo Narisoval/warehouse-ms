@@ -168,15 +168,12 @@ public class ProductTests
         {
             //Act 
             valueObjects[i] = null;
-            var productResultWithId = CreateProduct(valueObjects,_id);
-            var productResultWithoutId = CreateProduct(valueObjects);
+            var productResultWithId = CreateProductWithId(valueObjects);
+            var productResultWithoutId = CreatProductWithoutId(valueObjects);
             
             //Assert
-            productResultWithId.IsFailed.Should().BeTrue();
-            productResultWithId.Errors.Count.Should().Be(i+1);
-            
-            productResultWithoutId.IsFailed.Should().BeTrue();
-            productResultWithoutId.Errors.Count.Should().Be(i+1);
+            productResultWithId.AssertIsFailed(i+1);
+            productResultWithoutId.AssertIsFailed(i + 1);
         }
     }
     
@@ -196,16 +193,10 @@ public class ProductTests
         productResult.Value.CategoryId.Should().Be(_categoryId);
     }
     
-    
-    private Result<Product> CreateProduct(List<ValueObject?> arguments, Guid? productId = null)
-    {
-        return productId != null ? CreateProductWithId(productId.Value,arguments) : CreatProductWithoutId(arguments);
-    }
-
-    private Result<Product> CreateProductWithId(Guid id, List<ValueObject?> arguments)
+    private Result<Product> CreateProductWithId(List<ValueObject?> arguments)
     {
         return Product.Create(
-            id: id,
+            id: _id,
             productName: (ProductName?)arguments[0],
             quantity: (Quantity?)arguments[1]!,
             fullPrice: (Price?)arguments[2],
@@ -232,5 +223,4 @@ public class ProductTests
             brandId: _brandId,
             categoryId: _categoryId);
     }
-
 }
