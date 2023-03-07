@@ -347,27 +347,28 @@ Returns a single category by its GUID id.
 * 200 OK - The request was successful and the response contains a single category object.
 * 404 Not Found - The category with the specified id could not be found.
 * 500 Internal Server Error - The server encountered an error while processing the request.
-Response:
+ 
+***Response body:***
 
 [Category Response](#category-response)
 
-### ***`POST /api/categories`***
+### `POST /api/categories`
 Creates a new category.
 
 * 201 Created - The category was successfully created and the response contains the new category object.
 * 400 Bad Request - The request was malformed or missing required fields.
 * 500 Internal Server Error - The server encountered an error while processing the request.
 
-Request body:
+***Request body:***
 
 [Category Request](#category-response)
 
-Response body:
+***Response body:***
 
 [Category Response](#category-response)
 
 
-### ***`PUT /api/categories/{id}`***
+### `PUT /api/categories/{id}`
 Updates a provider by its GUID id.
 
 * 204 No Content on success
@@ -375,10 +376,10 @@ Updates a provider by its GUID id.
 * 404 Not Found if the provider with the specified ID was not found
 * 500 Internal Server Error - The server encountered an error while processing the request.
  
-Request body:
+***Request body:***
 
 [Category Request](#category-response)
-### ***`DELETE /api/categories/{id}`***
+### `DELETE /api/categories/{id}`
 Deletes a category by its GUID id.
 
 * 204 The category was successfully deleted. No content in the response body.
@@ -386,13 +387,13 @@ Deletes a category by its GUID id.
 * 500 Internal Server Error - The server encountered an error while processing the request.
  
 ## Providers
-### ***`GET /api/providers/all`***
+### `GET /api/providers/all`
 
 Returns all the providers in the warehouse.
 
-Response
 * 200 OK - The request was successful and the response contains an array of provider objects.
 * 500 Internal Server Error - The server encountered an error while processing the request.
+ 
 ***Response body:***
 ```json
 [
@@ -414,7 +415,7 @@ Response
 ]
 ```
 
-### ***`GET /api/providers/{id}`***
+### `GET /api/providers/{id}`
 
 Returns a single provider by its GUID id.
 
@@ -422,49 +423,50 @@ Returns a single provider by its GUID id.
 * 404 Not Found - The provider with the specified id could not be found.
 * 500 Internal Server Error - The server encountered an error while processing the request.
  
-Response body:
+***Response body:***
 
 [Provider response](#provider-response)
 
-### ***`POST /api/providers`***
+### `POST /api/providers`
 
 Creates a new provider.
 * 201 Created - The provider was successfully created and the response contains the new provider object.
 * 400 Bad Request - The request was malformed or missing required fields.
 * 500 Internal Server Error - The server encountered an error while processing the request.
   
-Request body:
+***Request body:***
 
 [Provider request](#provider-request)
 
-Response body:
+***Response body:***
 
 [Provider response](#provider-response)
 
-### ***`PUT /api/providers/{id}`***
+### `PUT /api/providers/{id}`
 * 204 No Content on success
 * 400 Bad Request if the request body is invalid
 * 404 Not Found if the provider with the specified ID was not found
 
 Updates a provider by its GUID id.
 
-Request body:
+***Request body:***
 
 [Provider request](#provider-request)
 
-### ***`DELETE /api/providers/{id}`***
+### `DELETE /api/providers/{id}`
 Deletes a provider by its GUID id.
 
-Response
 * 204 The provider was successfully deleted. No content in the response body.
 * 404 The provider with the specified ID was not found.
  
 ## Products
-### ***`GET /api/products/all`***
+### `GET /api/products/all`
 Returns all the products in the warehouse.
 
 * 200 OK - The request was successful and the response contains an array of products.
 * 500 Internal Server Error - The server encountered an error while processing the request.
+
+***Response body:***
 ```json
 [
   {
@@ -530,43 +532,43 @@ Returns all the products in the warehouse.
   }
 ]
 ```
-### ***`GET /api/products/{id}`***
+### `GET /api/products/{id}`
 Returns a single product by its GUID id.
 
 * 200 OK - The request was successful and the response contains a single product object.
 * 404 Not Found - The product with the specified id could not be found.
 * 500 Internal Server Error - The server encountered an error while processing the request.
  
-Response body:
+***Response body:***
 
 [Product response](#product-response)
 
-### ***`POST /api/products`***
+### `POST /api/products`
 
 * 201 Created - The product was successfully created and the response contains the new product object.
 * 400 Bad Request - The request was malformed or missing required fields.
 * 500 Internal Server Error - The server encountered an error while processing the request.
  
-Request body:
+***Request body:***
 
 [Product Request](#product-request)
 
-Response body:
+***Response body:***
 
 [Product response](#product-response)
 
-### ***`PUT /api/products/{id}`***
+### `PUT /api/products/{id}`
 
 * 204 No Content on success
 * 400 Bad Request if the request body is invalid
 * 404 Not Found if the product with the specified ID was not found
 * 500 Internal Server Error - The server encountered an error while processing the request.
 
-Request body:
+***Request body:***
 
 [Product Request](#product-request)
 
-### ***`DELETE /api/products/{id}`***
+### `DELETE /api/products/{id}`
 
 * 204 The product was successfully deleted. No content in the response body.
 * 404 The product with the specified ID
