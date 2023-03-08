@@ -11,16 +11,16 @@ public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
     {
         builder.ToTable("ProductImages");
         
-        builder.HasKey("Id","ProductId");
-        
-        builder.HasOne(pi => pi.Product)
-            .WithMany(p => p.Images)
-            .OnDelete(DeleteBehavior.Cascade); 
-        
         builder.Property(productImage => productImage.Image)
             .HasConversion(
                 image => image.Value,
                 value => Image.From(value).Value)
             .HasColumnName("Image");
+        
+        builder.HasKey("Image");
+        
+        builder.HasOne(pi => pi.Product)
+            .WithMany(pr => pr.Images)
+            .OnDelete(DeleteBehavior.Cascade); 
     }
 }

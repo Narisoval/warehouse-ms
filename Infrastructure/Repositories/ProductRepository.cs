@@ -14,8 +14,8 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
         ;
     }
 
-    // The goal of this method is to ensure that product
-    // with non existing brand, provider or category can't be added. 
+    // The goal of this method is to return an error when a product
+    // with non existing brand, provider or category is being added 
     public new async Task<Result> Add(Product entity)
     {
         var result = await CheckForeignKeys(entity);
@@ -26,25 +26,23 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
         return result;
     }
     
-    public new async Task<Result<bool>> Update(Product entity)
+    public new async Task<Result<bool>> Update(Product productWithNewValues)
     {
-        var result = await CheckForeignKeys(entity);
+        var result = await CheckForeignKeys(productWithNewValues);
 
         if (result.IsFailed)
             return result;
         
         var productFromDb = await Context.Products
             .Include(product => product.Images)
-            .FirstOrDefaultAsync(product => product.Id == entity.Id);
+            .FirstOrDefaultAsync(product => product.Id == productWithNewValues.Id);
             
         
         if (productFromDb == null)
             return false;
         
-        Context.Products.Entry(productFromDb).CurrentValues.SetValues(entity);
-        productFromDb.Images?.Clear();
-        productFromDb.ChangeAllImages(entity.Images);
-        
+        Context.Products.Entry(productFromDb).CurrentValues.SetValues(productWithNewValues);
+        productFromDb.SetProductImages(productWithNewValues.Images); 
         return true;
     }
 

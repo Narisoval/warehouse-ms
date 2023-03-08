@@ -5,33 +5,24 @@ using FluentResults;
 
 namespace Domain.Entities;
 
-public class ProductImage : Entity
+public class ProductImage 
 {
-    public Image Image { get; internal set; }
-
-    public bool IsMain { get; set; }
+    public Image Image { get; private set; }
     
-    public Product? Product { get; set; }
+    public Product? Product { get; internal set; }
     
-    public Guid ProductId { get; set; }
+    public Guid ProductId { get; internal set; }
 
-    private ProductImage(Guid id, Image image, bool isMain) : base(id)
+    private ProductImage(Image image) 
     {
         Image = image;
-        IsMain = isMain;
     }
 
-    public static Result<ProductImage> Create(Guid id, Image? image, bool isMain)
+    public static Result<ProductImage> Create(Image? image)
     {
         if (image == null)
             return new Result<ProductImage>().WithError(new NullArgumentError(nameof(Image)));
         
-        return new ProductImage(id, image,isMain);
-    }
-
-    public static Result<ProductImage> Create(Image? image, bool isMain)
-    {
-        Guid id = Guid.NewGuid();
-        return Create(id,image,isMain);
+        return new ProductImage(image);
     }
 }

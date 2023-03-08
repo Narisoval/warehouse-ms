@@ -10,8 +10,9 @@ public class ProductUpdateDto
  
      public string Description { get; init; } = "";
  
-     public IList<ProductImageDto>? Images { get; init; } = null!;
- 
+     public IReadOnlyCollection<string> Images { get; init; } = null!;
+
+     public string MainImage { get; init; }
      public decimal Sale { get; init; } = default;
  
      public bool IsActive { get; init; } = default;

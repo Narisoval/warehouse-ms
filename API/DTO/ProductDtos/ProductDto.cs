@@ -9,18 +9,19 @@ public record ProductDto
 
     public string Name { get; init; } = "";
 
-    public int Quantity { get; init; } = default;
+    public int Quantity { get; init; } 
 
-    public decimal FullPrice { get; init; } = default;
+    public decimal FullPrice { get; init; } 
 
     public string Description { get; init; } = "";
 
-    public IList<ProductImageDto>? Images { get; init; } = null!;
+    public string MainImage { get; init; } = "";
+    
+    public IReadOnlyCollection<string>? Images { get; init; } 
 
-    public decimal Sale { get; init; } = default;
+    public decimal Sale { get; init; }
 
-
-    public bool IsActive { get; init; } = default;
+    public bool IsActive { get; init; }
 
     public string? Category { get; init; }
     

@@ -1,3 +1,4 @@
+using System.Data;
 using Domain.Entities;
 using Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -37,11 +38,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasConversion(
                 sale => sale.Value,
                 value => Sale.From(value).Value);
-        
-        builder
-            .HasMany(p => p.Images)
-            .WithOne(p => p.Product)
-            .HasForeignKey(p => p.ProductId)
-            .OnDelete(DeleteBehavior.Cascade);
+        builder.Property(p => p.MainImage)
+            .HasConversion(value => value.Value,
+                value => Image.From(value).Value);
     }
 }

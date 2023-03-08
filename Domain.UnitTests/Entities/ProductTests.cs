@@ -1,53 +1,35 @@
 using Domain.Entities;
 using Domain.Primitives;
 using Domain.UnitTests.Fixtures;
+using static Domain.UnitTests.Fixtures.ProductsFixture;
 using Domain.ValueObjects;
 using FluentAssertions;
 using FluentResults;
-
 namespace Domain.UnitTests.Entities;
 
 public class ProductTests
 {
-    private readonly ProductName _name = ProductName.From("Kingston 3200 TB hard drive").Value;
-    
-    private readonly Quantity _quantity = Quantity.From(300).Value;
-    
-    private readonly Price _price = Price.From(500.99M).Value;
-    
-    private readonly ProductDescription _productDescription =
-        ProductDescription.From(new string('1', 50)).Value;
-    
-    private readonly bool _isActive = true;
-    
-    private readonly Sale _sale = Sale.From(0).Value;
-    
-    private readonly Guid _id = Guid.NewGuid();
-    private readonly ProductImages _productImages = ProductImagesFixture.GetTestProductImages();
-    private readonly Guid _brandId = Guid.NewGuid();
-    private readonly Guid _categoryId = Guid.NewGuid();
-    private readonly Guid _providerId = Guid.NewGuid();
-    
     [Fact]
     public void Should_CreateProduct_When_CreateMethodWithIdIsCalled()
     {
         // Act
         var productResult = Product.Create(
-            id: _id,
-            productName: _name,
-            quantity: _quantity,
-            fullPrice: _price,
-            images: _productImages,
-            productDescription: _productDescription,
-            isActive: _isActive,
-            sale: _sale,
-            providerId: _providerId,
-            brandId: _brandId,
-            categoryId: _categoryId);
+            id: _testId,
+            productName: TestName,
+            quantity: TestQuantity,
+            fullPrice: TestPrice,
+            mainImage: TestMainImage,
+            images: _testProductImages,
+            productDescription: TestProductDescription,
+            isActive: TestIsActive,
+            sale: TestSale,
+            providerId: _testProviderId,
+            brandId: _testBrandId,
+            categoryId: _testCategoryId);
 
         // Assert
         AssertProviderCreatedCorrectly(productResult);
-        productResult.Value.Id.Should().Be(_id);
+        productResult.Value.Id.Should().Be(_testId);
     }
 
     [Fact]
@@ -55,44 +37,52 @@ public class ProductTests
     {
         // Act
         var productResult = Product.Create(
-            productName: _name,
-            quantity: _quantity,
-            fullPrice: _price,
-            images: _productImages,
-            productDescription: _productDescription,
-            isActive: _isActive,
-            sale: _sale,
-            providerId: _providerId,
-            brandId: _brandId,
-            categoryId: _categoryId);
+            productName: TestName,
+            quantity: TestQuantity,
+            fullPrice: TestPrice,
+            mainImage: TestMainImage,
+            images: _testProductImages,
+            productDescription: TestProductDescription,
+            isActive: TestIsActive,
+            sale: TestSale,
+            providerId: _testProviderId,
+            brandId: _testBrandId,
+            categoryId: _testCategoryId);
 
         // Assert
         AssertProviderCreatedCorrectly(productResult);
+        productResult.Value.Id.Should().NotBe(Guid.Empty);
     }
     
     [Fact]
-    public void Should_ChangeAllImages_WhenCalled()
+    public void Should_SetProductImages_WhenCalled()
     {
         //Arrange
-        var sut = ProductsFixture.GetTestProduct();
+        var sut = GetTestProduct();
         var newImages = ProductImagesFixture.GetTestProductImages();
 
         //Act 
-        sut.ChangeAllImages(newImages.Value);
+        sut.SetProductImages(newImages);
 
         //Assert
-        sut.Images.Should().BeEquivalentTo(newImages.Value);
+        sut.Images.Should().BeEquivalentTo(newImages);
+        sut.Images.Should().NotBeNull();
+        foreach (var productImage in sut.Images)
+        {
+            productImage.ProductId.Should().Be(_testId);
+            productImage.Product.Should().Be(sut);
+        }
     }
 
     [Fact]
-    public void Should_SetImagesNull_When_ChangeAllImagesArgumentIsNull()
+    public void Should_SetImagesNull_When_SetProductImagesIsNull()
     {
         //Arrange
-        var sut = ProductsFixture.GetTestProduct();
-        IList<ProductImage>? newProductImages = null;
+        var sut = GetTestProduct();
+        IReadOnlyCollection<ProductImage>? newProductImages = null;
         
         //Act 
-        sut.ChangeAllImages(newProductImages);
+        sut.SetProductImages(newProductImages);
         
         // Assert 
         sut.Images.Should().BeNull();
@@ -107,16 +97,17 @@ public class ProductTests
         //Act
         var productResult = Product.Create(
             id,
-            productName: _name,
-            quantity: _quantity,
-            fullPrice: _price,
-            images: _productImages,
-            productDescription: _productDescription,
-            isActive: _isActive,
-            sale: _sale,
-            providerId: _providerId,
-            brandId: _brandId,
-            categoryId: _categoryId);
+            productName: TestName,
+            quantity: TestQuantity,
+            fullPrice: TestPrice,
+            mainImage: TestMainImage,
+            images: _testProductImages,
+            productDescription: TestProductDescription,
+            isActive: TestIsActive,
+            sale: TestSale,
+            providerId: _testProviderId,
+            brandId: _testBrandId,
+            categoryId: _testCategoryId);
         
         //Assert
         productResult.AssertIsFailed(1);
@@ -134,13 +125,14 @@ public class ProductTests
         //Act
         var productResult = Product.Create(
             id,
-            productName: _name,
-            quantity: _quantity,
-            fullPrice: _price,
-            images: _productImages,
-            productDescription: _productDescription,
-            isActive: _isActive,
-            sale: _sale,
+            productName: TestName,
+            quantity: TestQuantity,
+            fullPrice: TestPrice,
+            mainImage: TestMainImage,
+            images: _testProductImages,
+            productDescription: TestProductDescription,
+            isActive: TestIsActive,
+            sale: TestSale,
             providerId: providerId,
             brandId: brandId,
             categoryId: categoryId);
@@ -153,21 +145,23 @@ public class ProductTests
     public void Should_ReturnFailedResult_When_SomePropertiesAreNull()
     {
         //Arrange
-        var valueObjects = new List<ValueObject?>()
+        var nullableArguments = new List<object?>()
         {
-            _name,
-            _quantity,
-            _price,
-            _productDescription,
-            _sale
+            TestName,
+            TestQuantity,
+            TestPrice,
+            TestMainImage,
+            _testProductImages,
+            TestProductDescription,
+            TestSale
         };
         
-        for (int i = 0; i < valueObjects.Count; i++)
+        for (int i = 0; i < nullableArguments.Count; i++)
         {
             //Act 
-            valueObjects[i] = null;
-            var productResultWithId = CreateProductWithId(valueObjects);
-            var productResultWithoutId = CreatProductWithoutId(valueObjects);
+            nullableArguments[i] = null;
+            var productResultWithId = CreateProduct(nullableArguments,_testId);
+            var productResultWithoutId = CreateProduct(nullableArguments);
             
             //Assert
             productResultWithId.AssertIsFailed(i+1);
@@ -179,46 +173,56 @@ public class ProductTests
     {
         productResult.IsSuccess.Should().BeTrue();
         productResult.Value.Id.Should().NotBe(Guid.Empty);
-        productResult.Value.Name.Should().Be(_name);
-        productResult.Value.Quantity.Should().Be(_quantity);
-        productResult.Value.FullPrice.Should().Be(_price);
-        productResult.Value.Images.Should().BeEquivalentTo(_productImages.Value);
-        productResult.Value.Description.Should().Be(_productDescription);
-        productResult.Value.IsActive.Should().Be(_isActive);
-        productResult.Value.Sale.Should().BeEquivalentTo(_sale);
-        productResult.Value.ProviderId.Should().Be(_providerId);
-        productResult.Value.BrandId.Should().Be(_brandId);
-        productResult.Value.CategoryId.Should().Be(_categoryId);
+        productResult.Value.Name.Should().Be(TestName);
+        productResult.Value.Quantity.Should().Be(TestQuantity);
+        productResult.Value.FullPrice.Should().Be(TestPrice);
+        productResult.Value.Images.Should().BeEquivalentTo(_testProductImages);
+        productResult.Value.Description.Should().Be(TestProductDescription);
+        productResult.Value.IsActive.Should().Be(TestIsActive);
+        productResult.Value.Sale.Should().BeEquivalentTo(TestSale);
+        productResult.Value.ProviderId.Should().Be(_testProviderId);
+        productResult.Value.BrandId.Should().Be(_testBrandId);
+        productResult.Value.CategoryId.Should().Be(_testCategoryId);
     }
     
-    private Result<Product> CreateProductWithId(List<ValueObject?> arguments)
+    private Result<Product> CreateProduct(List<object?> arguments, Guid? id = null)
     {
+        var productName = (ProductName?)arguments[0];
+        var quantity = (Quantity?)arguments[1];
+        var price = (Price?)arguments[2];
+        var mainImage = (Image?)arguments[3];
+        var images = (IReadOnlyCollection<ProductImage>?)arguments[4];
+        var description = (ProductDescription?)arguments[5];
+        var sale = (Sale?)arguments[6];
+        if (id == null)
+        {
+            return Product.Create(
+                productName: productName,
+                quantity: quantity,
+                fullPrice: price,
+                mainImage: mainImage,
+                images: images,
+                productDescription: description,
+                isActive: true,
+                sale: sale,
+                providerId: _testProviderId,
+                brandId: _testBrandId,
+                categoryId: _testCategoryId);
+        }
+        
         return Product.Create(
-            id: _id,
-            productName: (ProductName?)arguments[0],
-            quantity: (Quantity?)arguments[1]!,
-            fullPrice: (Price?)arguments[2],
-            images: _productImages,
-            productDescription: (ProductDescription?)arguments[3],
+            id: id.Value,
+            productName: productName,
+            quantity: quantity,
+            fullPrice: price,
+            mainImage: mainImage,
+            images: images,
+            productDescription: description,
             isActive: true,
-            sale: (Sale?)arguments[4],
-            providerId: _providerId,
-            brandId: _brandId,
-            categoryId: _categoryId);
+            sale: sale,
+            providerId: _testProviderId,
+            brandId: _testBrandId,
+            categoryId: _testCategoryId);
     }
     
-    private Result<Product> CreatProductWithoutId(List<ValueObject?> arguments)
-    {
-        return Product.Create(
-            productName: (ProductName?)arguments[0],
-            quantity: (Quantity?)arguments[1]!,
-            fullPrice: (Price?)arguments[2],
-            images: _productImages,
-            productDescription: (ProductDescription?)arguments[3],
-            isActive: true,
-            sale: (Sale?)arguments[4],
-            providerId: _providerId,
-            brandId: _brandId,
-            categoryId: _categoryId);
-    }
 }

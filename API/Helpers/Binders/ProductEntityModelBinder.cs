@@ -3,7 +3,6 @@ using Domain.ValueObjects;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Warehouse.API.DTO.ProductDtos;
-using Warehouse.API.Helpers.Mapping;
 
 namespace Warehouse.API.Helpers.Binders;
 public sealed class ProductEntityModelBinder : BaseModelBinder<ProductUpdateDto>
@@ -14,11 +13,12 @@ public sealed class ProductEntityModelBinder : BaseModelBinder<ProductUpdateDto>
         var quantityResult = Quantity.From(dto.Quantity);
         var priceResult = Price.From(dto.FullPrice);
         var descriptionResult = ProductDescription.From(dto.Description);
-        var imagesResult = dto.Images?.ToProductImagesResult();
+        var mainImageResult = Image.From(dto.MainImage);
+        var imagesResult = ConvertImagesToResult(dto.Images);
         var saleResult = Sale.From(dto.Sale);
         
         if (!CheckIfResultsAreSuccessFull(productNameResult, quantityResult, 
-                priceResult, descriptionResult, imagesResult, saleResult))
+                priceResult, descriptionResult, mainImageResult,imagesResult, saleResult))
             return;
 
         Result<Product> productResult;
@@ -28,6 +28,7 @@ public sealed class ProductEntityModelBinder : BaseModelBinder<ProductUpdateDto>
                 productName: productNameResult.Value,
                 quantity: quantityResult.Value,
                 fullPrice: priceResult.Value,
+                mainImage: mainImageResult.Value,
                 images: imagesResult.Value,
                 productDescription: descriptionResult.Value,
                 isActive: dto.IsActive,
@@ -44,6 +45,7 @@ public sealed class ProductEntityModelBinder : BaseModelBinder<ProductUpdateDto>
                  productName: productNameResult.Value,
                  quantity: quantityResult.Value,
                  fullPrice: priceResult.Value,
+                 mainImage: mainImageResult.Value,
                  images: imagesResult.Value,
                  productDescription: descriptionResult.Value,
                  isActive: dto.IsActive,
@@ -60,8 +62,8 @@ public sealed class ProductEntityModelBinder : BaseModelBinder<ProductUpdateDto>
     }
 
     private bool CheckIfResultsAreSuccessFull(Result<ProductName> productNameResult, Result<Quantity> quantityResult,
-        Result<Price> priceResult, Result<ProductDescription> descriptionResult, 
-        Result<ProductImages> imagesResult, Result<Sale> saleResult)
+        Result<Price> priceResult, Result<ProductDescription> descriptionResult, Result<Image> mainImageResult,
+        Result<IReadOnlyCollection<ProductImage>> imagesResult, Result<Sale> saleResult)
     {
         if(productNameResult.IsFailed)
             AddModelErrors(productNameResult.Errors,"ProductName");
@@ -69,14 +71,14 @@ public sealed class ProductEntityModelBinder : BaseModelBinder<ProductUpdateDto>
         if(quantityResult.IsFailed)
             AddModelErrors(quantityResult.Errors,"Quantity");
         
-        if(descriptionResult.IsFailed)
-            AddModelErrors(descriptionResult.Errors,"ProductDescription");
-        
         if(priceResult.IsFailed)
             AddModelErrors(priceResult.Errors,"Price");
         
         if(descriptionResult.IsFailed)
             AddModelErrors(descriptionResult.Errors,"ProductDescription");
+        
+        if(mainImageResult.IsFailed) 
+            AddModelErrors(mainImageResult.Errors,"MainImage"); 
         
         if(imagesResult.IsFailed)
             AddModelErrors(imagesResult.Errors,"ProductImages");
@@ -93,5 +95,33 @@ public sealed class ProductEntityModelBinder : BaseModelBinder<ProductUpdateDto>
             AddModelErrors(productResult.Errors, "Product");
 
         return productResult.IsSuccess;
+    }
+
+    public Result<IReadOnlyCollection<ProductImage>> ConvertImagesToResult(IReadOnlyCollection<string> images)
+    {
+        var productImages = new List<ProductImage>();
+        var result = new Result<IReadOnlyCollection<ProductImage>>();
+        //TODO clean this up
+        foreach (var image in images)
+        {
+            var imageResult = Image.From(image);
+            if (imageResult.IsFailed)
+            {
+                result.WithErrors(imageResult.Errors);
+                continue;
+            }
+
+            var productImageResult = ProductImage.Create(imageResult.Value);
+            
+            if (productImageResult.IsFailed)
+            {
+                result.WithErrors(imageResult.Errors);
+                continue;
+            }
+            
+            productImages.Add(productImageResult.Value);
+        }
+
+        return result.WithValue(productImages);
     }
 }

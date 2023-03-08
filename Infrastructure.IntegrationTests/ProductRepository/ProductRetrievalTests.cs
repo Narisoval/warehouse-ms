@@ -118,20 +118,7 @@ public class ProductRetrievalTests : IClassFixture<WarehouseDbContextGenerator>,
 
         //Images
         Assert.Equal(product1.Images?.Count,product2.Images?.Count);
-        
-        if (product1.Images != null)
-        {
-            foreach (var image in product1.Images)
-            {
-                var imageFromProduct2 = product2.Images!
-                    .First(img => img.Id == image.Id);
-                    
-                Assert.NotNull(imageFromProduct2);
-                
-                Assert.Equal(image.Image.Value, imageFromProduct2.Image.Value);
-                Assert.Equal(image.IsMain, imageFromProduct2.IsMain);
-            }
-        }
+        Assert.Equal(product1.Images, product2.Images);    
     }
     
     private void GenerateTestProducts()

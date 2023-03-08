@@ -57,5 +57,4 @@ public sealed class Image : ValueObject
 
         return result;
     }
-    
 }

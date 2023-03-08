@@ -5,24 +5,26 @@ namespace Domain.UnitTests.Fixtures;
 
 public static class ProductsFixture
 {
-    private static readonly ProductName TestName = ProductName.From("Kingston 3200 TB hard drive").Value;
+    public static readonly ProductName TestName = ProductName.From("Kingston 3200 TB hard drive").Value;
     
-    private static readonly Quantity TestQuantity = Quantity.From(300).Value;
+    public static readonly Quantity TestQuantity = Quantity.From(300).Value;
     
-    private static readonly Price TestPrice = Price.From(500.99M).Value;
+    public static readonly Price TestPrice = Price.From(500.99M).Value;
     
-    private static readonly ProductDescription TestProductDescription =
+    public static readonly ProductDescription TestProductDescription =
         ProductDescription.From(new string('1', 50)).Value;
     
-    private static readonly bool TestIsActive = true;
+    public static readonly bool TestIsActive = true;
     
-    private static readonly Sale TestSale = Sale.From(0).Value;
+    public static readonly Sale TestSale = Sale.From(0).Value;
     
-    private static Guid _testId = Guid.NewGuid();
-    private static ProductImages _testProductImages = ProductImagesFixture.GetTestProductImages();
-    private static Guid _testBrandId = Guid.NewGuid();
-    private static Guid _testCategoryId = Guid.NewGuid();
-    private static Guid _testProviderId = Guid.NewGuid();
+    public static readonly Image TestMainImage = Image.From("https://mainImage.png").Value;
+    
+    public static Guid _testId = Guid.NewGuid();
+    public static IReadOnlyCollection<ProductImage> _testProductImages = ProductImagesFixture.GetTestProductImages();
+    public static Guid _testBrandId = Guid.NewGuid();
+    public static Guid _testCategoryId = Guid.NewGuid();
+    public static Guid _testProviderId = Guid.NewGuid();
 
     private static void ResetGuids()
     {
@@ -37,84 +39,92 @@ public static class ProductsFixture
     {
         ResetGuids();
         return Product.Create(
-            _testId,
-            TestName,
-            TestQuantity,
-            TestPrice,
-            _testProductImages,
-            TestProductDescription,
-            TestIsActive,
-            TestSale,
-            _testProviderId,
-            _testBrandId,
-            _testCategoryId).Value;
+            id: _testId,
+            productName: TestName,
+            quantity: TestQuantity,
+            fullPrice: TestPrice,
+            mainImage: TestMainImage,
+            images: _testProductImages,
+            productDescription: TestProductDescription,
+            isActive: TestIsActive,
+            sale: TestSale,
+            providerId: _testProviderId,
+            brandId: _testBrandId,
+            categoryId: _testCategoryId).Value;
     }
     
     public static Product GetTestProduct(int intQuantity)
     {
         ResetGuids();
-        
-        return Product.Create(_testId,
-            TestName,
-            Quantity.From(intQuantity).Value,
-            TestPrice,
-            _testProductImages,
-            TestProductDescription,
-            TestIsActive,
-            TestSale,
-            _testProviderId,
-            _testBrandId,
-            _testCategoryId).Value;
+        return Product.Create(
+            id: _testId,
+            productName: TestName,
+            quantity: Quantity.From(intQuantity).Value,
+            fullPrice: TestPrice,
+            mainImage: TestMainImage,
+            images: _testProductImages,
+            productDescription: TestProductDescription,
+            isActive: TestIsActive,
+            sale: TestSale,
+            providerId: _testProviderId,
+            brandId: _testBrandId,
+            categoryId: _testCategoryId).Value;
     }
     
     public static Product GetTestProduct(bool isActive)
     {
         ResetGuids();
-
-        return Product.Create(_testId,
-            TestName,
-            TestQuantity,
-            TestPrice,
-            _testProductImages,
-            TestProductDescription,
-            isActive,
-            TestSale,
-            _testProviderId,
-            _testBrandId,
-            _testCategoryId).Value;
+        
+        return Product.Create(
+            id: _testId,
+            productName: TestName,
+            quantity: TestQuantity,
+            fullPrice: TestPrice,
+            mainImage: TestMainImage,
+            images: _testProductImages,
+            productDescription: TestProductDescription,
+            isActive: isActive,
+            sale: TestSale,
+            providerId: _testProviderId,
+            brandId: _testBrandId,
+            categoryId: _testCategoryId).Value;
     }
     
-    public static Product GetTestProduct(ProductImages productImages)
+    public static Product GetTestProduct(IReadOnlyCollection<ProductImage> productImages)
     {
         ResetGuids();
         
-        return Product.Create(_testId,
-            TestName,
-            TestQuantity,
-            TestPrice,
-            productImages,
-            TestProductDescription,
-            TestIsActive,
-            TestSale,
-            _testProviderId,
-            _testBrandId,
-            _testCategoryId).Value;
+        return Product.Create(
+            id: _testId,
+            productName: TestName,
+            quantity: TestQuantity,
+            fullPrice: TestPrice,
+            mainImage: TestMainImage,
+            images: productImages,
+            productDescription: TestProductDescription,
+            isActive: TestIsActive,
+            sale: TestSale,
+            providerId: _testProviderId,
+            brandId: _testBrandId,
+            categoryId: _testCategoryId).Value;
     }
 
     public static Product GetTestProduct(Guid id)
     {
          ResetGuids();
          
-         return Product.Create(id,
-             TestName,
-             TestQuantity,
-             TestPrice,
-             _testProductImages,
-             TestProductDescription,
-             TestIsActive,
-             TestSale,
-             _testProviderId,
-             _testBrandId,
-             _testCategoryId).Value;       
+        return Product.Create(
+            id: id, 
+            productName: TestName,
+            quantity: TestQuantity,
+            fullPrice: TestPrice,
+            mainImage: TestMainImage,
+            images: _testProductImages,
+            productDescription: TestProductDescription,
+            isActive: TestIsActive,
+            sale: TestSale,
+            providerId: _testProviderId,
+            brandId: _testBrandId,
+            categoryId: _testCategoryId).Value;
     }
 }

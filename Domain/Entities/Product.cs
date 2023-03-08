@@ -1,4 +1,5 @@
-﻿using Domain.Errors;
+﻿using System.Net.Mime;
+using Domain.Errors;
 using Domain.Primitives;
 using Domain.ValueObjects;
 using FluentResults;
@@ -12,13 +13,10 @@ public class Product : Entity
     public Quantity Quantity { get; private set; }
     
     public Price FullPrice { get; private set; }
-
-    private ProductImages? _productImages;
-    public IList<ProductImage>? Images
-    {
-        get => _productImages?.Value;
-        set => _productImages = ProductImages.From(value).Value;
-    }
+    
+    public Image MainImage { get; private set; }
+    
+    public IReadOnlyCollection<ProductImage>? Images { get; private set; }
 
     public ProductDescription Description { get; private set; }
     
@@ -40,7 +38,8 @@ public class Product : Entity
         ProductName? productName, 
         Quantity? quantity, 
         Price? fullPrice, 
-        ProductImages? images, 
+        Image? mainImage,
+        IReadOnlyCollection<ProductImage>? images, 
         ProductDescription? productDescription, 
         bool isActive, 
         Sale? sale, 
@@ -49,7 +48,7 @@ public class Product : Entity
         Guid categoryId)
     {
         var result = new Result<Product>();
-        
+            
         if(id == Guid.Empty)
             result.WithError(new EmptyGuidError("Product"));
         
@@ -71,6 +70,8 @@ public class Product : Entity
         if (fullPrice == null)
             result.WithError(new NullArgumentError(nameof(FullPrice)));
 
+        result.WithErrors(CheckProductImages(mainImage, images).Errors);
+
         if (productDescription == null)
             result.WithError(new NullArgumentError(nameof(Description)));
         
@@ -80,7 +81,7 @@ public class Product : Entity
         if (result.IsFailed)
             return result;
         
-        return new Product(id,productName!,quantity!,fullPrice!,images,productDescription!,
+        return new Product(id,productName!,quantity!,fullPrice!,mainImage!,images!,productDescription!,
             isActive,sale!,providerId,brandId,categoryId);
     }
     
@@ -88,7 +89,8 @@ public class Product : Entity
         ProductName? productName, 
         Quantity? quantity, 
         Price? fullPrice, 
-        ProductImages? images, 
+        Image? mainImage,
+        IReadOnlyCollection<ProductImage>? images, 
         ProductDescription? productDescription, 
         bool isActive, 
         Sale? sale, 
@@ -97,7 +99,7 @@ public class Product : Entity
         Guid categoryId)
     {
         Guid id = Guid.NewGuid();
-        return Create(id,productName,quantity,fullPrice,images,productDescription,
+        return Create(id,productName,quantity,fullPrice,mainImage,images,productDescription,
             isActive,sale,providerId,brandId,categoryId);
     }
     
@@ -106,13 +108,14 @@ public class Product : Entity
         ProductName productName,
         Quantity quantity,
         Price fullPrice,
-        ProductImages? productImages,
+        Image mainImage,
+        IReadOnlyCollection<ProductImage> images,
         ProductDescription productDescription,
         bool isActive,
         Sale sale,
         Guid providerId,
         Guid brandId,
-        Guid categoryId) : this(id,productName,quantity,fullPrice,productImages,productDescription,isActive,sale)
+        Guid categoryId) : this(id,productName,quantity,fullPrice,mainImage,images,productDescription,isActive,sale)
     {
         ProviderId = providerId;
         BrandId = brandId;
@@ -124,7 +127,8 @@ public class Product : Entity
         ProductName productName,
         Quantity quantity,
         Price fullPrice,
-        ProductImages? productImages,
+        Image mainImage,
+        IReadOnlyCollection<ProductImage> images,
         ProductDescription productDescription,
         bool isActive,
         Sale sale) : base(id)
@@ -132,30 +136,43 @@ public class Product : Entity
         Name = productName;
         Quantity = quantity;
         FullPrice = fullPrice;
-        _productImages = productImages;
+        MainImage = mainImage;
+        Images = images;
         Description = productDescription;
         IsActive = isActive;
         Sale = sale;
+    }
+    
+    private static Result CheckProductImages(Image? mainImage, IReadOnlyCollection<ProductImage>? images)
+    {
+        Result result = new Result();     
         
-        SetProductImagesNavigationalProperties();
-    }
-    
+        if (mainImage == null)
+            result.WithError(new NullArgumentError(nameof(MainImage)));
 
-    
-    public void ChangeAllImages(IList<ProductImage>? images)
-    {
-        _productImages = ProductImages.From(images).Value;
-        SetProductImagesNavigationalProperties();
-    }
-    
-    private void SetProductImagesNavigationalProperties()
-    {
-        if (_productImages == null ||  _productImages.Value == null) return;
-        foreach (var image in _productImages?.Value!)
+        if (images == null)
+            result.WithError(new NullArgumentError(nameof(Images)));
+        else
         {
-            image.ProductId = Id;
-            image.Product = this;
+            if (images.Any(image => image.Image == mainImage))
+                result.WithError($"{nameof(Images)} can't contain {nameof(MainImage)}");
         }
+        
+        return result;
+    }
+
+    public void SetProductImages(IReadOnlyCollection<ProductImage>? images)
+    {
+        if (images != null)
+        {
+            foreach (var productImage in images)
+            {
+                productImage.ProductId = Id;
+                productImage.Product = this;
+            }
+        }
+        
+        Images = images;
     }
     
     //For EF 
