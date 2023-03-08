@@ -114,8 +114,8 @@ Represents a category object with the following properties:
 Example:
 ```json
 {
-  "CategoryId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6",
-  "Name": "Men's Socks"
+  "categoryId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6",
+  "name": "Men's Socks"
 }
 ```
 
@@ -158,42 +158,36 @@ Example:
 ### Product Request
 Represents the data used to update an existing product or create a new one with the following properties:
 
-* Name (string, required) - the name of the product
-* Quantity (integer, required) - the quantity of the product
-* FullPrice (decimal, required) - the full price of the product
-* Description (string, required) - the description of the product
-* Images(required) - array of images of the product. Each element of the array has the following properties:
-* * Image (string, required) - the URL of the image
-* * IsMain (boolean, required) - a flag indicating whether this is the main image for the product
-* Sale (decimal, required) - the sale percentage of the product(if product is on sale this value shouuld be 0)
-* IsActive (boolean, required) - a flag indicating whether the product is currently active
-* CategoryId (string, required) - the ID of the category the product belongs to
-* ProviderId (string, required) - the ID of the provider that supplies the product
-* BrandId (string, required) - the ID of the brand of the product
+* name (string, required) - the name of the product
+* quantity (integer, required) - the quantity of the product
+* fullPrice (decimal, required) - the full price of the product
+* description (string, required) - the description of the product
+* mainImage (string, required) - URL of main image of the product
+* images(required) - array of images of the product. The main image must not be included here
+* sale (decimal, required) - the sale percentage of the product(if product is on sale this value should be 0)
+* isActive (boolean, required) - a flag indicating whether the product is currently active
+* categoryId (string, required) - the ID of the category the product belongs to
+* providerId (string, required) - the ID of the provider that supplies the product
+* brandId (string, required) - the ID of the brand of the product
  
 Example:
 
 ```json
 {
-  "Name": "Sad Socks",
-  "Quantity": 50,
-  "FullPrice": 10.5,
-  "Description": "These so socks are so sad. You will cry really hard because of it:(",
-  "Images": [
-    {
-      "Image": "https://sadsocksimage1.jpg",
-      "IsMain": true
-    },
-    {
-      "Image": "https://sadsocksimage2.jpg",
-      "IsMain": false
-    }
+  "name": "Sad Socks",
+  "quantity": 50,
+  "fullPrice": 10.5,
+  "description": "These so socks are so sad. You will cry really hard because of it:(",
+  "mainImage": "https://happysocksmainimage.jpg",
+  "images": [
+    "https://happysocksimage1.svg",
+    "https://happysocksimage2.svg"
   ],
-  "Sale": 9.0,
-  "IsActive": true,
-  "CategoryId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6",
-  "ProviderId": "d80ba9a5-6a48-4aa5-b31b-07ad0564a4ee",
-  "BrandId": "f21fa9bb-ec6b-46db-a17f-cb298c96d1a1"
+  "sale": 9.0,
+  "isActive": true,
+  "categoryId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6",
+  "providerId": "d80ba9a5-6a48-4aa5-b31b-07ad0564a4ee",
+  "brandId": "f21fa9bb-ec6b-46db-a17f-cb298c96d1a1"
 }
 ```
 
@@ -206,9 +200,8 @@ Represents a product object with the following properties:
 * Quantity (integer, required) - the quantity of the product
 * FullPrice (decimal, required) - the full price of the product
 * Description (string, required) - the description of the product
-* Images(required) - array of images of the product. Each element of the array has the following properties:
-* * Image (string, required) - the URL of the image
-* * IsMain (boolean, required) - a flag indicating whether this is the main image for the product
+* MainImage (string, required) - URL of main image of the product
+* Images(required) - array of images of the product. The main image must not be included here
 * Sale (decimal, required) - the sale percentage of the product(if product is on sale this value shouuld be 0)
 * IsActive (boolean, required) - a flag indicating whether the product is currently active
 * Category (string) - the name of the category that the product belongs to
@@ -223,15 +216,10 @@ Example:
     "quantity": 10,
     "fullPrice": 15.00,
     "description": "These socks are so happy. You won't believe it!",
+    "mainImage": "https://happysocksmainimage.jpg",
     "images": [
-        {
-            "image": "https://happysocksimage1.svg",
-            "isMain": true
-        },
-        {
-            "image": "https://happysocksimage2.svg",
-            "isMain": false
-        }
+        "https://happysocksimage1.svg",
+        "https://happysocksimage2.svg"
     ],
     "sale": 12.50,
     "isActive": true,
@@ -475,15 +463,10 @@ Returns all the products in the warehouse.
     "quantity": 10,
     "fullPrice": 15.00,
     "description": "These socks are so happy. You won't believe it!",
+    "mainImage": "https://happysocksmainimage.png",
     "images": [
-      {
-        "image": "https://happysocksimage1.svg",
-        "isMain": true
-      },
-      {
-        "image": "https://happysocksimage2.svg",
-        "isMain": false
-      }
+        "https://happysocksimage1.svg",
+        "https://happysocksimage2.svg"
     ],
     "sale": 12.50,
     "isActive": true,
@@ -506,15 +489,10 @@ Returns all the products in the warehouse.
     "quantity": 10,
     "fullPrice": 15.00,
     "description": "These socks are so sad. They will make you cry!",
+    "mainImage": "https://sadsocksmainimage.png",
     "images": [
-      {
-        "image": "https://sadsocksimage1.svg",
-        "isMain": true
-      },
-      {
-        "image": "https://sadsocksimage2.svg",
-        "isMain": false
-      }
+        "https://sadsocksimage1.svg",
+        "https://sadsocksimage2.svg"
     ],
     "sale": 50,
     "isActive": true,

@@ -22,8 +22,8 @@ public class ProductUpdateDtoExample : IExamplesProvider<ProductUpdateDto>
             FullPrice = 169.95M,
             Description =
                 "Our Classic Boot was originally worn by surfers to keep warm after early-morning sessions, and has since become iconic for its soft sheepskin and enduring design. Incorporating a durable, lightweight sole to increase cushioning and traction, these versatile boots pair well with practically anything – try loose boyfriend jeans and a velvet top.",
-            Images = exampleImages,
             MainImage = "https://m.media-amazon.com/images/I/810o2uaCEKL._AC_UY695_.jpg",
+            Images = exampleImages,
             Sale = 10m,
             IsActive = true,
             CategoryId = exampleId,
