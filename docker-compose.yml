@@ -3,9 +3,11 @@ version: '3.8'
 networks:
   dev:
     driver: bridge
+  elastic:
+    driver: bridge
     
 services:
-  warehouse:
+  warehouse_api:
     image: warehouse
     depends_on:
       - "warehouse_db" 
@@ -36,7 +38,43 @@ services:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - dev
+       
+  es01:
+    image: elasticsearch:8.6.2
+    container_name: es01
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - cluster.initial_master_nodes=es01
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - elastic
+  
+  kib01:
+    image: kibana:8.6.2
+    container_name: kib01
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://es01:9200
+      ELASTICSEARCH_HOSTS: http://es01:9200
+    networks:
+      - elastic
       
+    
 volumes:
   postgres-data:
-      
+    driver: local
+  data01:
+    driver: local
+    
