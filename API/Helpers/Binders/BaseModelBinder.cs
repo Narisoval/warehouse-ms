@@ -2,6 +2,7 @@ using System.Net.Mime;
 using System.Text.Json;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Warehouse.API.Helpers.Extensions;
 
 namespace Warehouse.API.Helpers.Binders;
 

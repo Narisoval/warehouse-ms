@@ -1,10 +1,11 @@
 using Infrastructure;
-using Warehouse.API.Helpers;
+using Serilog;
+using Warehouse.API.Helpers.Extensions;
 using Warehouse.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Host.UseLoggingToElasticSearch();
 
 builder.Services.AddControllersWithBinders();
 
@@ -22,6 +23,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseExceptionHandlingMiddleware();
-
+app.UseRequestLogging();
 app.MapControllers();
 app.Run();

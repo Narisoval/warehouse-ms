@@ -1,7 +1,7 @@
 using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Warehouse.API.Helpers;
+namespace Warehouse.API.Helpers.Extensions;
 
 public static class ResultExtensions
 {

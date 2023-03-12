@@ -1,7 +1,7 @@
 using Swashbuckle.AspNetCore.Filters;
 using Warehouse.API.Helpers.Binders;
 
-namespace Warehouse.API.Helpers;
+namespace Warehouse.API.Helpers.Extensions;
 
 public static class DependencyInjection
 {
