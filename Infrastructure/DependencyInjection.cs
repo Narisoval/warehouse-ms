@@ -11,7 +11,7 @@ public static class DependencyInjection
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddWarehouseDbContext(configuration);
-        
+         
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         return services;
     }
@@ -24,6 +24,16 @@ public static class DependencyInjection
             {
                 optionsAction.UseNpgsql(connectionString);
             });
+        
+        MigrateDb(services);
+
         return services;
+    }
+
+    private static void MigrateDb(IServiceCollection services)
+    {
+        var serviceProvider = services.BuildServiceProvider();
+        var dbContext = serviceProvider.GetService<WarehouseDbContext>();
+        dbContext?.Database.Migrate();
     }
 }
