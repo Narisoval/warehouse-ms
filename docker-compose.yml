@@ -14,18 +14,18 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - ConnectionStrings__postgres=User ID=postgres;Password=12345;Server=warehouse_db;Port=5432;Database=warehouse_development;
+      - ConnectionStrings__postgres=User ID=$POSTGRES_USER;Password=$POSTGRES_PASSWORD;Server=warehouse_db;Port=5432;Database=$POSTGRES_DB_NAME;
       - ElasticConfiguration__Uri=http://es01:9200
     networks:
       - api_network
       
   warehouse_db:
-    image: postgres:15.2-alpine
+    image: postgres:$POSTGRES_VERSION
     container_name: warehouse_db
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=12345
-      - POSTGRES_DB=warehouse_development
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB_NAME
     ports:
       - "5433:5432"
     restart: always
@@ -33,6 +33,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - api_network
+  
        
   es01:
     image: elasticsearch:8.6.2
