@@ -1,16 +1,12 @@
 version: '3.8'
 
-networks:
-  dev:
-    driver: bridge
-  elastic:
-    driver: bridge
     
 services:
   warehouse_api:
     image: warehouse
     depends_on:
-      - "warehouse_db" 
+      - warehouse_db
+      - es01
     container_name: warehouse_api
     ports:
       - "8080:80"
@@ -19,10 +15,9 @@ services:
       dockerfile: Dockerfile
     environment:
       - ConnectionStrings__postgres=User ID=postgres;Password=12345;Server=warehouse_db;Port=5432;Database=warehouse_development;
-    command: >
-      sh -c "dotnet ef database update -p Infrastructure -s API; dotnet API.dll" 
+      - ElasticConfiguration__Uri=http://es01:9200
     networks:
-      - dev
+      - api_network
       
   warehouse_db:
     image: postgres:15.2-alpine
@@ -37,11 +32,12 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
-      - dev
+      - api_network
        
   es01:
     image: elasticsearch:8.6.2
     container_name: es01
+    hostname: elasticsearch
     environment:
       - node.name=es01
       - cluster.name=es-docker-cluster
@@ -58,10 +54,13 @@ services:
     ports:
       - "9200:9200"
     networks:
-      - elastic
+      - elastic_network
+      - api_network
   
   kib01:
     image: kibana:8.6.2
+    depends_on:
+      - es01
     container_name: kib01
     ports:
       - 5601:5601
@@ -69,8 +68,7 @@ services:
       ELASTICSEARCH_URL: http://es01:9200
       ELASTICSEARCH_HOSTS: http://es01:9200
     networks:
-      - elastic
-      
+      - elastic_network
     
 volumes:
   postgres-data:
@@ -78,3 +76,8 @@ volumes:
   data01:
     driver: local
     
+networks:
+  api_network:
+    driver: bridge
+  elastic_network:
+    driver: bridge
