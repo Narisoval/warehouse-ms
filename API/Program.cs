@@ -1,5 +1,9 @@
 using Infrastructure;
-using Serilog;
+using Infrastructure.DependencyInjection;
+using Infrastructure.EventBus;
+using Infrastructure.MessageBroker;
+using MassTransit;
+using Microsoft.Extensions.Options;
 using Warehouse.API.Helpers.Extensions;
 using Warehouse.API.Middleware;
 
@@ -12,6 +16,12 @@ builder.Services.AddControllersWithBinders();
 builder.Services.AddPersistence(builder.Configuration);
 
 builder.Services.AddSwagger();
+
+builder.Services.Configure<MessageBrokerSettings>(builder.Configuration.GetSection("MessageBroker"));
+
+builder.Services.AddMessageBroker();
+
+builder.Services.AddTransient<IEventBus, EventBus>();
 
 var app = builder.Build();
 

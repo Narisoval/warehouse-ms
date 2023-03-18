@@ -4,9 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infrastructure;
-
-public static class DependencyInjection
+namespace Infrastructure.DependencyInjection;
+public static class DatabaseInjection
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
@@ -18,7 +17,7 @@ public static class DependencyInjection
 
     private static IServiceCollection AddWarehouseDbContext(this IServiceCollection services, IConfiguration configuration)
     {
-        string? connectionString = configuration.GetConnectionString("postgres");
+        string? connectionString = configuration.GetConnectionString("Postgres");
         services.AddDbContext<WarehouseDbContext>(
             optionsAction =>
             {
