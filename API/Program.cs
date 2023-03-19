@@ -20,6 +20,14 @@ builder.Services.AddMessageBroker(builder.Configuration);
 
 builder.Services.AddTransient<IEventBus, EventBus>();
 
+builder.Services.AddTransient<IEventBus>(sp =>
+{
+    var publishEndpoint = sp.GetRequiredService<IPublishEndpoint>();
+    var eventBus = new EventBus(publishEndpoint);
+    var logger = sp.GetRequiredService<ILogger>();
+    return new LoggingEventBus(eventBus, logger);
+});
+    
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
