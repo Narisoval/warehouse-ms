@@ -1,11 +1,10 @@
-using Infrastructure;
 using Infrastructure.DependencyInjection;
-using Infrastructure.EventBus;
-using Infrastructure.MessageBroker;
+using Infrastructure.MessageBroker.EventBus;
 using MassTransit;
-using Microsoft.Extensions.Options;
 using Warehouse.API.Helpers.Extensions;
+using Warehouse.API.Messaging;
 using Warehouse.API.Middleware;
+using ILogger = Serilog.ILogger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,9 +16,7 @@ builder.Services.AddPersistence(builder.Configuration);
 
 builder.Services.AddSwagger();
 
-builder.Services.Configure<MessageBrokerSettings>(builder.Configuration.GetSection("MessageBroker"));
-
-builder.Services.AddMessageBroker();
+builder.Services.AddMessageBroker(builder.Configuration);
 
 builder.Services.AddTransient<IEventBus, EventBus>();
 

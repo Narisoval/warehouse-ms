@@ -1,4 +1,4 @@
-namespace Infrastructure.EventBus;
+namespace Infrastructure.MessageBroker.EventBus;
 
 public interface IEventBus
 {

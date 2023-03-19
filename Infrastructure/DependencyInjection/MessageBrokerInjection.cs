@@ -1,33 +1,35 @@
 using Infrastructure.MessageBroker;
 using MassTransit;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace Infrastructure.DependencyInjection;
-
 public static class MessageBrokerInjection
 {
-   public static IServiceCollection AddMessageBroker(this IServiceCollection services)
-   {
-      
-        services.AddSingleton(sp => sp.GetRequiredService<IOptions<MessageBrokerSettings>>().Value);
-
+    private const string sectionName = "MessageBroker";
+    public static IServiceCollection AddMessageBroker
+        (this IServiceCollection services, IConfiguration configuration)
+    {
+        var host = new Uri(configuration[$"{sectionName}:Host"]);
+        var username = configuration[$"{sectionName}:Username"];
+        var password = configuration[$"{sectionName}:Password"];
+        
         services.AddMassTransit(busConfigurator =>
         {
             busConfigurator.SetKebabCaseEndpointNameFormatter();
             busConfigurator.UsingRabbitMq((context, configurator) =>
             {
                 configurator.ConfigureEndpoints(context);
-                
-                MessageBrokerSettings settings = context.GetRequiredService<MessageBrokerSettings>();
-                configurator.Host(new Uri(settings.Host), h =>
+
+                configurator.Host(host, h =>
                 {
-                    h.Username(settings.Username);
-                    h.Password(settings.Password);
+                    h.Username(username);
+                    h.Password(password);
                 });
             });
         });
-        
+
         return services;
-   }
+    }
 }
