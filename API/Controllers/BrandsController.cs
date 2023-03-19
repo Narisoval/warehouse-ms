@@ -1,10 +1,12 @@
 using Domain.Entities;
 using Infrastructure.Interfaces;
+using Infrastructure.MessageBroker.EventBus;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 using Warehouse.API.DTO.BrandDtos;
 using Warehouse.API.DTO.SwaggerExamples;
 using Warehouse.API.Helpers.Mapping;
+using Warehouse.API.Messaging.Events.BrandEvents;
 
 namespace Warehouse.API.Controllers;
 
@@ -14,9 +16,12 @@ public class BrandsController : ControllerBase
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    public BrandsController(IUnitOfWork unitOfWork)
+    private readonly IEventBus _eventBus; 
+    
+    public BrandsController(IUnitOfWork unitOfWork, IEventBus eventBus)
     {
         _unitOfWork = unitOfWork;
+        _eventBus = eventBus;
     }
 
     [HttpGet("all")]
@@ -53,8 +58,11 @@ public class BrandsController : ControllerBase
     public async Task<ActionResult<BrandDto>> CreateBrand([FromBody] Brand? brand)
     {
         await _unitOfWork.Brands.Add(brand!);
+        
         await _unitOfWork.Complete();
 
+        await _eventBus.PublishAsync(brand!.ToCreatedEvent());
+        
         return CreatedAtAction(nameof(GetBrand),
             new { id = brand!.Id }, brand.ToDto());
     }
@@ -76,6 +84,8 @@ public class BrandsController : ControllerBase
 
         await _unitOfWork.Complete();
 
+        await _eventBus.PublishAsync(brand!.ToUpdatedEvent());
+        
         return NoContent();
     }
 
@@ -91,6 +101,8 @@ public class BrandsController : ControllerBase
 
         await _unitOfWork.Complete();
 
+        await _eventBus.PublishAsync(new BrandDeletedEvent(id));
+        
         return NoContent();
     }
 
