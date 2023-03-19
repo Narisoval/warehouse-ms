@@ -1,10 +1,12 @@
 using Domain.Entities;
 using Infrastructure.Interfaces;
+using Infrastructure.MessageBroker.EventBus;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 using Warehouse.API.DTO.CategoryDtos;
 using Warehouse.API.DTO.SwaggerExamples;
 using Warehouse.API.Helpers.Mapping;
+using Warehouse.API.Messaging.Events.CategoryEvents;
 
 namespace Warehouse.API.Controllers;
 
@@ -13,10 +15,12 @@ namespace Warehouse.API.Controllers;
 public class CategoriesController : ControllerBase
 {
     private readonly IUnitOfWork _unitOfWork;
-
-    public CategoriesController(IUnitOfWork unitOfWork)
+    private readonly IEventBus _eventBus;
+    
+    public CategoriesController(IUnitOfWork unitOfWork, IEventBus eventBus)
     {
         _unitOfWork = unitOfWork;
+        _eventBus = eventBus;
     }
 
     [HttpGet("all")]
@@ -49,7 +53,10 @@ public class CategoriesController : ControllerBase
     public async Task<ActionResult<CategoryDto>> CreateCategory([FromBody] Category? category)
     {
         await _unitOfWork.Categories.Add(category!);
+        
         await _unitOfWork.Complete();
+
+        await _eventBus.PublishAsync(category!.ToCreatedEvent());
 
         return CreatedAtAction(nameof(GetCategory),
             new { id = category.Id }, category.ToDto());
@@ -69,6 +76,8 @@ public class CategoriesController : ControllerBase
         
         await _unitOfWork.Complete();
 
+        await _eventBus.PublishAsync(category!.ToUpdatedEvent());
+        
         return NoContent();
     }
     
@@ -83,6 +92,9 @@ public class CategoriesController : ControllerBase
             return GetCategoryNotFoundResponse(id);
         
         await _unitOfWork.Complete();
+
+        await _eventBus.PublishAsync(new CategoryDeletedEvent(id));
+        
         return NoContent();
     }
 
