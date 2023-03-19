@@ -1,12 +1,14 @@
 using Domain.Entities;
 using FluentResults;
 using Infrastructure.Interfaces;
+using Infrastructure.MessageBroker.EventBus;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 using Warehouse.API.DTO.ProductDtos;
 using Warehouse.API.DTO.SwaggerExamples;
 using Warehouse.API.Helpers.Extensions;
 using Warehouse.API.Helpers.Mapping;
+using Warehouse.API.Messaging.Events.ProductEvents;
 
 namespace Warehouse.API.Controllers;
 
@@ -15,10 +17,12 @@ namespace Warehouse.API.Controllers;
 public class ProductsController : ControllerBase
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IEventBus _eventBus;
 
-    public ProductsController(IUnitOfWork unitOfWork)
+    public ProductsController(IUnitOfWork unitOfWork, IEventBus eventBus)
     {
         _unitOfWork = unitOfWork;
+        _eventBus = eventBus;
     }
 
     [HttpGet("all")]
@@ -51,15 +55,17 @@ public class ProductsController : ControllerBase
     [SwaggerRequestExample(typeof(ProductUpdateDto),typeof(ProductUpdateDtoExample))]
     public async Task<ActionResult<ProductDto>> CreateProduct([FromBody] Product? product)
     {
-        var productResult = await _unitOfWork.Products.Add(product!);
+        var productAddedResult = await _unitOfWork.Products.Add(product!);
 
-        if (productResult.IsFailed)
-            return HandleForeignKeyViolations(productResult.Errors);
+        if (productAddedResult.IsFailed)
+            return HandleRepositoryErrors(productAddedResult.Errors);
         
         await _unitOfWork.Complete();
 
-        return CreatedAtAction(nameof(GetProduct), 
-            new { id = product.Id}, product.ToDto());
+        await _eventBus.PublishAsync(product!.ToCreatedEvent());
+            
+        return CreatedAtAction(nameof(GetProduct),
+            new { id = product!.Id }, product.ToDto());
     }
 
     [HttpPut("{id:guid}")]
@@ -72,13 +78,15 @@ public class ProductsController : ControllerBase
         var productUpdatedSuccessfully = await _unitOfWork.Products.Update(product!);
 
         if (productUpdatedSuccessfully.IsFailed)
-           return HandleForeignKeyViolations(productUpdatedSuccessfully.Errors);
+           return HandleRepositoryErrors(productUpdatedSuccessfully.Errors);
         
         if (!productUpdatedSuccessfully.Value)
             return GetProductNotFoundResponse(id);
 
         await _unitOfWork.Complete();
 
+        await _eventBus.PublishAsync(product!.ToUpdatedEvent());
+        
         return NoContent();
     }
 
@@ -94,6 +102,8 @@ public class ProductsController : ControllerBase
 
         await _unitOfWork.Complete();
 
+        await _eventBus.PublishAsync(new ProductDeletedEvent(id));
+        
         return NoContent();
     }
 
@@ -102,10 +112,9 @@ public class ProductsController : ControllerBase
         return NotFound($"Product with id {id} does not exist");
     }
 
-    private ActionResult HandleForeignKeyViolations(List<IError> errors)
+    private ActionResult HandleRepositoryErrors(List<IError> errors)
     {
         errors.AddModelErrors(ModelState,"product");
         return BadRequest(ModelState);
     }
-    
 }
