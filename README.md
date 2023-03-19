@@ -302,6 +302,11 @@ Returns a single brand by its GUID id.
 * [Brand Request](#brand-request)
 
 ### `DELETE /api/brands/{id}`
+
+| ⚠️ WARNING                                                                      |
+|:--------------------------------------------------------------------------------|
+| When deleting a brand all the products, associated with it will also be deleted |
+
 * 204 The brand was successfully deleted. No content in the response body.
 * 404 The brand with the specified ID was not found.
 * 500 Internal Server Error - The server encountered an error while processing the request.
@@ -369,6 +374,10 @@ Updates a provider by its GUID id.
 [Category Request](#category-response)
 ### `DELETE /api/categories/{id}`
 Deletes a category by its GUID id.
+
+| ⚠️ WARNING                                                                         |
+|:-----------------------------------------------------------------------------------|
+| When deleting a category all the products, associated with it will also be deleted |
 
 * 204 The category was successfully deleted. No content in the response body.
 * 404 The category with the specified ID was not found.
@@ -443,6 +452,10 @@ Updates a provider by its GUID id.
 
 ### `DELETE /api/providers/{id}`
 Deletes a provider by its GUID id.
+
+| ⚠️ WARNING                                                                         |
+|:-----------------------------------------------------------------------------------|
+| When deleting a provider all the products, associated with it will also be deleted |
 
 * 204 The provider was successfully deleted. No content in the response body.
 * 404 The provider with the specified ID was not found.
