@@ -1,0 +1,53 @@
+using Infrastructure.Data;
+using Infrastructure.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Testcontainers.PostgreSql;
+
+namespace Infrastructure.IntegrationTests.Helpers.Fixtures;
+
+public class DatabaseFixture : IAsyncLifetime
+{
+    private const string PostgresVersion = "15.2-alpine";
+    
+    public IUnitOfWork UnitOfWork { get; private set; }
+
+    public DataSeeder DataSeeder { get; private set; }
+    
+    public WarehouseDbContext Context;
+    
+    private readonly PostgreSqlContainer _postgresqlContainer = new PostgreSqlBuilder()
+        .WithImage($"postgres:{PostgresVersion}")
+        .Build();
+
+
+    public async Task InitializeAsync()
+    {
+        await _postgresqlContainer.StartAsync();
+        
+        Console.WriteLine("CONTAINER CREATED ON PORT " + _postgresqlContainer.GetMappedPublicPort(5432));
+        
+        var contextOptions = new DbContextOptionsBuilder<WarehouseDbContext>()
+            .UseNpgsql(_postgresqlContainer.GetConnectionString())
+            .Options;
+            
+        Context = new WarehouseDbContext(contextOptions);
+        
+        await Context.Database.EnsureCreatedAsync();
+        
+        await SeedTestData();
+        
+        UnitOfWork = new UnitOfWork(Context);
+    }
+
+    private async Task SeedTestData()
+    {
+        DataSeeder = new DataSeeder(Context);
+        await DataSeeder.SeedTestData();
+    }
+    
+    public async Task DisposeAsync()
+    {
+        await _postgresqlContainer.StopAsync();
+    } 
+    
+}
