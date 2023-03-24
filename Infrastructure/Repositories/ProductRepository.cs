@@ -46,15 +46,6 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
         return true;
     }
 
-    public new async Task AddRange(IEnumerable<Product?> entities)
-    {
-        foreach (var product in entities)
-        {
-            if(product != null)
-                await Add(product);
-        }
-    }
-
     public new async Task<Product?> Get(Guid id)
     {
         return await Context.Products.AsNoTracking()
@@ -65,15 +56,6 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
             .FirstOrDefaultAsync();
     }
     
-    public new async Task<IEnumerable<Product>> GetAll()
-    {
-        return await Context.Products.AsNoTracking()
-            .Include(product => product.Brand)
-            .Include(product => product.Images)
-            .Include(product => product.Category)
-            .ToListAsync();
-    }
-
     public async Task<Product?> GetProductWithProvider(Guid id)
     {
         return await Context.Products.AsNoTracking()
