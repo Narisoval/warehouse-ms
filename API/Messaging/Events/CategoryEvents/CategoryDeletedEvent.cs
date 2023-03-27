@@ -1,3 +1,3 @@
 namespace Warehouse.API.Messaging.Events.CategoryEvents;
 
-public record CategoryDeletedEvent(Guid Id);
+public record CategoryDeletedEvent(Guid Id) : IEvent;

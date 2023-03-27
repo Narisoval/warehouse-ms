@@ -1,3 +1,3 @@
 namespace Warehouse.API.Messaging.Events.BrandEvents;
 
-public record BrandDeletedEvent(Guid Id);
+public record BrandDeletedEvent(Guid Id) : IEvent;
