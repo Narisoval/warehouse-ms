@@ -5,7 +5,7 @@ using Infrastructure.Data;
 
 namespace Infrastructure.IntegrationTests.Helpers.Fixtures;
 
-public class DataSeeder
+public class DbDataSeeder
 {
     public List<Category> Categories { get; private set; } = new();
 
@@ -17,7 +17,7 @@ public class DataSeeder
 
     private readonly WarehouseDbContext _context;
     
-    public DataSeeder(WarehouseDbContext context)
+    public DbDataSeeder(WarehouseDbContext context)
     {
         _context = context;
     }

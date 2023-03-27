@@ -11,7 +11,7 @@ public class DatabaseFixture : IAsyncLifetime
     
     public IUnitOfWork UnitOfWork { get; private set; }
 
-    public DataSeeder DataSeeder { get; private set; }
+    public DbDataSeeder DbDataSeeder { get; private set; }
     
     public WarehouseDbContext Context;
     
@@ -41,8 +41,8 @@ public class DatabaseFixture : IAsyncLifetime
 
     private async Task SeedTestData()
     {
-        DataSeeder = new DataSeeder(Context);
-        await DataSeeder.SeedTestData();
+        DbDataSeeder = new DbDataSeeder(Context);
+        await DbDataSeeder.SeedTestData();
     }
     
     public async Task DisposeAsync()

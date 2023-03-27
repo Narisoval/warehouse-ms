@@ -11,13 +11,13 @@ public abstract class RepositoryTestsBase<TEntity,TRepository> : IClassFixture<D
    where TRepository : class, IRepository<TEntity>
 {
    protected readonly IUnitOfWork UnitOfWork;
-   protected readonly DataSeeder Seeder;
+   protected readonly DbDataSeeder Seeder;
    protected readonly TRepository Repository;
    protected readonly IReadOnlyList<TEntity> TestEntities;
    
    public RepositoryTestsBase(DatabaseFixture fixture)
    {
-      Seeder = fixture.DataSeeder;
+      Seeder = fixture.DbDataSeeder;
       UnitOfWork = fixture.UnitOfWork;
       
       Repository = UnitOfWork.GetRepository<TRepository, TEntity>();
