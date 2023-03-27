@@ -1,7 +1,7 @@
 using Domain.Primitives;
 using Infrastructure.Interfaces;
 
-namespace Infrastructure.IntegrationTests.Helpers;
+namespace Infrastructure.IntegrationTests.Helpers.Extensions;
 
 public static class UnitOfWorkExtensions
 { 

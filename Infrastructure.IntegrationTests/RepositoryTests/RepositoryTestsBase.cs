@@ -1,6 +1,6 @@
 using Domain.Primitives;
 using FluentAssertions;
-using Infrastructure.IntegrationTests.Helpers;
+using Infrastructure.IntegrationTests.Helpers.Extensions;
 using Infrastructure.IntegrationTests.Helpers.Fixtures;
 using Infrastructure.Interfaces;
 
