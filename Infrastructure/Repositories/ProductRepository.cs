@@ -8,7 +8,6 @@ namespace Infrastructure.Repositories;
 
 public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, IProductRepository
 {
-    
     public ProductRepository(WarehouseDbContext context) : base(context)
     {
         ;
@@ -48,17 +47,8 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
 
     public new async Task<Product?> Get(Guid id)
     {
-        return await Context.Products.AsNoTracking()
-            .Include(product => product.Brand)
-            .Include(product =>product.Images)
-            .Include(product => product.Category)
-            .Where(product => product.Id == id)
-            .FirstOrDefaultAsync();
-    }
-    
-    public async Task<Product?> GetProductWithProvider(Guid id)
-    {
-        return await Context.Products.AsNoTracking()
+        return await Context.Products
+            .AsNoTracking()
             .Include(product => product.Brand)
             .Include(product => product.Images)
             .Include(product => product.Category)
@@ -66,7 +56,7 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
             .Where(product => product.Id == id)
             .FirstOrDefaultAsync();
     }
-
+    
     public async Task<IEnumerable<Product>> GetAllProductsWithProvider()
     {
         return await Context.Products.AsNoTracking()

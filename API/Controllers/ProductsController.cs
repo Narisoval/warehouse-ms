@@ -29,7 +29,7 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<ProductDto>),StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
     {
-        var products = await _unitOfWork.Products.GetAllProductsWithProvider();
+        var products = await _unitOfWork.Products.GetAll();
         
         var productDtos = products.Select(product => product.ToDto()).ToList();
         
@@ -41,7 +41,7 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProductDto>> GetProduct([FromRoute] Guid id)
     {
-        var productEntity = await _unitOfWork.Products.GetProductWithProvider(id);
+        var productEntity = await _unitOfWork.Products.Get(id);
         
         if (productEntity == null)
             return GetProductNotFoundResponse(id);
