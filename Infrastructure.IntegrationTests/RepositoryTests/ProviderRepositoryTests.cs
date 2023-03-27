@@ -66,6 +66,9 @@ public class ProviderRepositoryTests : ProductRelatedEntityTestsBase<Provider,IP
 
         // Act
         var result = await Repository.Update(seededProvider);
+
+        await UnitOfWork.Complete();
+        
         var fetchedProvider = await Repository.Get(seededProvider.Id);
         
         // Assert
