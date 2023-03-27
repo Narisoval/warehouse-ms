@@ -1,5 +1,4 @@
-﻿using System.Net.Mime;
-using Domain.Errors;
+﻿using Domain.Errors;
 using Domain.Primitives;
 using Domain.ValueObjects;
 using FluentResults;
@@ -76,7 +75,7 @@ public class Product : Entity
             result.WithError(new NullArgumentError(nameof(Description)));
         
         if(sale == null)
-            result.WithError(new NullArgumentError(nameof(Description)));
+            result.WithError(new NullArgumentError(nameof(Sale)));
 
         if (result.IsFailed)
             return result;

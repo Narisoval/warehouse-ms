@@ -1,5 +1,4 @@
 using Domain.Errors;
-using Domain.Primitives;
 using Domain.ValueObjects;
 using FluentResults;
 
