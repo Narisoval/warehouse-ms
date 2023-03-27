@@ -1,5 +1,4 @@
 using Domain.Entities;
-using Domain.Primitives;
 using Domain.UnitTests.Fixtures;
 using static Domain.UnitTests.Fixtures.ProductsFixture;
 using Domain.ValueObjects;

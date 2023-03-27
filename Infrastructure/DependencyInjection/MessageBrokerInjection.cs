@@ -1,8 +1,6 @@
-using Infrastructure.MessageBroker;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace Infrastructure.DependencyInjection;
 public static class MessageBrokerInjection
