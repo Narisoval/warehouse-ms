@@ -4,9 +4,9 @@ using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Warehouse.API.DTO.BrandDtos;
 
-namespace Warehouse.API.Helpers.Binders;
+namespace Warehouse.API.Helpers.Binders.EntityModelBinders;
 
-public sealed class BrandEntityModelBinder : BaseModelBinder<BrandDto>
+public sealed class BrandEntityModelBinder : BaseEntityModelBinder<BrandDto>
 {
     protected override void ConvertDtoToEntity(BrandDto brandDto, Guid? id)
     {

@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Warehouse.API.DTO.CategoryDtos;
 using Category = Domain.Entities.Category;
 
-namespace Warehouse.API.Helpers.Binders;
+namespace Warehouse.API.Helpers.Binders.EntityModelBinders;
 
-public sealed class CategoryEntityModelBinder : BaseModelBinder<CategoryUpdateDto>
+public sealed class CategoryEntityModelBinder : BaseEntityModelBinder<CategoryUpdateDto>
 {
     protected override void ConvertDtoToEntity(CategoryUpdateDto categoryDto, Guid? id)
     {

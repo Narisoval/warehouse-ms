@@ -1,6 +1,7 @@
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using Warehouse.API.Helpers.Binders.EntityModelBinders;
 
 namespace Warehouse.API.Helpers.Binders;
 
@@ -28,6 +29,9 @@ public class ModelBindersProvider : IModelBinderProvider
             
             case var _ when modelType == typeof(Product):
                 return new BinderTypeModelBinder(typeof(ProductEntityModelBinder));
+            
+            case var _ when modelType == typeof(List<IFormFile>):
+                return new BinderTypeModelBinder(typeof(ImageFileModelBinder));
             
             default:
                 return null;

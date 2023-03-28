@@ -1,12 +1,11 @@
-using System.Net.Mime;
 using System.Text.Json;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Warehouse.API.Helpers.Extensions;
 
-namespace Warehouse.API.Helpers.Binders;
+namespace Warehouse.API.Helpers.Binders.EntityModelBinders;
 
-public abstract class BaseModelBinder<TDto>: IModelBinder 
+public abstract class BaseEntityModelBinder<TDto>: IModelBinder 
 {
     protected ModelBindingContext BindingContext = null!;
     protected abstract void ConvertDtoToEntity(TDto dto, Guid? id);
@@ -14,51 +13,26 @@ public abstract class BaseModelBinder<TDto>: IModelBinder
     public async Task BindModelAsync(ModelBindingContext bindingContext)
     {
         BindingContext = bindingContext;
-        
-        if (!CheckIfContentTypeIsJson())
-            return;
 
+        var contentTypeChecker = new ContentTypeChecker(BindingContext);
+        
+        if (!contentTypeChecker.IsContentTypeJson())
+            return;
+        
         try
         {
             await BindEntityAsync();
         }
         catch (JsonException ex)
         {
-            HandleJsonException(ex);
+            contentTypeChecker.HandleJsonException(ex);
         }
     }    
-    
-    private bool CheckIfContentTypeIsJson()
-    {
-        string? contentType = BindingContext.HttpContext.Request.ContentType;
-        bool isJson = contentType?.StartsWith(MediaTypeNames.Application.Json) ?? false;
-
-        if (!isJson)
-        {
-            HandleIfContentTypeIsNotJson();
-            return false;
-        }
-
-        return true;
-    }
-
-    private void HandleIfContentTypeIsNotJson()
-    {
-        var exception = new UnsupportedContentTypeException("Unsupported media type");
-        BindingContext.ModelState.AddModelError("Exception", exception, BindingContext.ModelMetadata);
-    }
     
     private async Task BindEntityAsync()
     {
         TryGetIdFromRoute(out var guidId);
         await BindFromDtoAsync(guidId);
-    }
-    
-    private void HandleJsonException(JsonException ex)
-    {
-        BindingContext.ModelState.AddModelError(
-            "ObjectFormatError",
-            $"{ex.InnerException?.Message} The following json element caused a problem: {ex.Path}");
     }
     
     private bool TryGetIdFromRoute(out Guid? guidId)

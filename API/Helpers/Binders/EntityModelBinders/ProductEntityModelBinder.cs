@@ -4,8 +4,8 @@ using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Warehouse.API.DTO.ProductDtos;
 
-namespace Warehouse.API.Helpers.Binders;
-public sealed class ProductEntityModelBinder : BaseModelBinder<ProductUpdateDto>
+namespace Warehouse.API.Helpers.Binders.EntityModelBinders;
+public sealed class ProductEntityModelBinder : BaseEntityModelBinder<ProductUpdateDto>
 {
     protected override void ConvertDtoToEntity(ProductUpdateDto dto, Guid? id)
     {
@@ -97,11 +97,11 @@ public sealed class ProductEntityModelBinder : BaseModelBinder<ProductUpdateDto>
         return productResult.IsSuccess;
     }
 
-    public Result<IReadOnlyCollection<ProductImage>> ConvertImagesToResult(IReadOnlyCollection<string> images)
+    private Result<IReadOnlyCollection<ProductImage>> ConvertImagesToResult(IReadOnlyCollection<string> images)
     {
         var productImages = new List<ProductImage>();
         var result = new Result<IReadOnlyCollection<ProductImage>>();
-        //TODO clean this up
+        
         foreach (var image in images)
         {
             var imageResult = Image.From(image);
@@ -121,7 +121,10 @@ public sealed class ProductEntityModelBinder : BaseModelBinder<ProductUpdateDto>
             
             productImages.Add(productImageResult.Value);
         }
-
-        return result.WithValue(productImages);
+        
+        if(result.IsSuccess)
+            result.WithValue(productImages);
+        
+        return result;
     }
 }

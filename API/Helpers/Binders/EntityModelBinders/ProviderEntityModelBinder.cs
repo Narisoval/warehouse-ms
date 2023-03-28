@@ -4,9 +4,9 @@ using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Warehouse.API.DTO.ProviderDtos;
 
-namespace Warehouse.API.Helpers.Binders;
+namespace Warehouse.API.Helpers.Binders.EntityModelBinders;
 
-public sealed class ProviderEntityModelBinder : BaseModelBinder<ProviderUpdateDto>
+public sealed class ProviderEntityModelBinder : BaseEntityModelBinder<ProviderUpdateDto>
 {
     protected override void ConvertDtoToEntity(ProviderUpdateDto providerDto, Guid? id)
     {
