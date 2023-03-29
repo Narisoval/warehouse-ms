@@ -3,6 +3,7 @@ using Domain.ValueObjects;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Warehouse.API.DTO.ProductDtos;
+using Image = Domain.ValueObjects.Image;
 
 namespace Warehouse.API.Helpers.Binders.EntityModelBinders;
 public sealed class ProductEntityModelBinder : BaseEntityModelBinder<ProductUpdateDto>

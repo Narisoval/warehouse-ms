@@ -2,6 +2,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Warehouse.API.Helpers.Binders.EntityModelBinders;
+using Warehouse.API.Helpers.Binders.FileModelBinders;
 
 namespace Warehouse.API.Helpers.Binders;
 

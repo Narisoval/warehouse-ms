@@ -3,6 +3,7 @@ using Domain.ValueObjects;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Warehouse.API.DTO.BrandDtos;
+using Image = Domain.ValueObjects.Image;
 
 namespace Warehouse.API.Helpers.Binders.EntityModelBinders;
 
