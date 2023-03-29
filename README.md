@@ -11,43 +11,47 @@ Overall, the goal of this project is to provide a comprehensive and easy-to-use 
 Table of Contents
 =================
 * [Data formats:](#data-formats)
-    * [Brand](#brand-)
+    * [Brand](#brand-) 🛍️
         * [Brand Response](#brand-response)
         * [Brand Request](#brand-request)
-    * [Category](#category-)
+    * [Category](#category-) 📦
         * [Category Request](#category-request)
         * [Category Response](#category-response)
-    * [Provider](#provider-)
+    * [Provider](#provider-) 🚚 
         * [Provider Request](#provider-request)
         * [Provider Response](#provider-response)
-    * [Product](#product-)
+    * [Product](#product-) 📝
         * [Product Request](#product-request)
         * [Product Response](#product-response)
+    * [Image](#image-) 🖼️
+        * [Image file response](#image-file-response)
 * [API endpoints](#api-endpoints)
-    * [Brands](#brands)
+    * [Brands](#brands) 🛍️
         * [GET /api/brands/all](#get-apibrandsall)
         * [GET /api/brands/{id}](#get-apibrandsid)
         * [POST /api/brands](#post-apibrands)
         * [PUT /api/brands/{id}](#put-apibrandsid)
         * [DELETE /api/brands/{id}](#delete-apibrandsid)
-    * [Categories](#categories)
+    * [Categories](#categories) 📦
         * [GET /api/categories/all](#get-apicategoriesall)
         * [GET /api/categories/{id}](#get-apicategoriesid)
         * [POST /api/categories](#post-apicategories)
         * [PUT /api/categories/{id}](#put-apicategoriesid)
         * [DELETE /api/categories/{id}](#delete-apicategoriesid)
-    * [Providers](#providers)
+    * [Providers](#providers) 🚚 
         * [GET /api/providers/all](#get-apiprovidersall)
         * [GET /api/providers/{id}](#get-apiprovidersid)
         * [POST /api/providers](#post-apiproviders)
         * [PUT /api/providers/{id}](#put-apiprovidersid)
         * [DELETE /api/providers/{id}](#delete-apiprovidersid)
-    * [Products](#products)
+    * [Products](#products) 📝
         * [GET /api/products/all](#get-apiproductsall)
         * [GET /api/products/{id}](#get-apiproductsid)
         * [POST /api/products](#post-apiproducts)
         * [PUT /api/products/{id}](#put-apiproductsid)
         * [DELETE /api/products/{id}](#delete-apiproductsid)
+    * [Images](#images) 🖼️
+      * [POST /api/images](#post-apiimages)
 
 This microservice is responsible for storing, adding, editing and fetching information about products and their characteristics.
 
@@ -236,7 +240,24 @@ Example:
     }
 }
 ```
+## Image 🖼️
+### Image File Response
+Represents an image file object with the following properties:
 
+- FileName (string) - the original name of the uploaded image file
+
+- FileUrl (string) - the URL of the uploaded image file on ImageKit, 
+ which provides real-time image transformations through URL parameters. 
+ More information about ImageKit transformations can be found 
+ in their [documentation](https://docs.imagekit.io/features/image-transformations)).
+ 
+Example:
+```json
+{
+  "FileName": "example_image.jpg",
+  "FileUrl": "https://ik.imagekit.io/v3vfqohwz/4180314f-3879-4e1c-a0d6-86e44c4a0a42.png"
+}
+```
 # API endpoints
 
 ## Brands
@@ -564,3 +585,39 @@ Returns a single product by its GUID id.
 * 204 The product was successfully deleted. No content in the response body.
 * 404 The product with the specified ID
 * 500 Internal Server Error - The server encountered an error while processing the request.
+
+## Images
+This endpoint is used for uploading images and obtaining their URLs, which can then be used in other endpoints. 
+
+### `POST /api/images`
+Uploads images and returns a list of their corresponding URLs.
+
+* 200 OK - The request was successful, and the response contains an array of ImageFileDto objects with the file names and URLs.
+* 400 Bad Request - The request was malformed or missing required fields.
+* 500 Internal Server Error - The server encountered an error while processing the request.
+ 
+***Request body:***
+
+A multipart/form-data request containing an array of images. The allowed image content types are:
+
+- image/jpeg
+- image/png
+- image/webp
+- image/svg+xml
+ 
+***Response body:***
+
+List of [Image file response](#image-file-response)
+```json
+[
+  {
+    "FileName": "example_image1.jpg",
+    "FileUrl": "https://your-imagekit-url.example.com/example_image1.jpg"
+  },
+  
+  {
+    "FileName": "example_image2.jpg",
+    "FileUrl": "https://your-imagekit-url.example.com/example_image2.jpg"
+  }
+]
+```
