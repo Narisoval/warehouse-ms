@@ -4,7 +4,8 @@ using MassTransit;
 using Warehouse.API.Helpers.Extensions;
 using Warehouse.API.Messaging;
 using Warehouse.API.Middleware;
-using ILogger = Serilog.ILogger;
+using Infrastructure.Services;
+using ILogger = Serilog.ILogger; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +28,11 @@ builder.Services.AddTransient<IEventBus>(sp =>
     var logger = sp.GetRequiredService<ILogger>();
     return new LoggingEventBus(eventBus, logger);
 });
-    
+
+builder.Services.Configure<ImageStoreConfiguration>(builder.Configuration.GetSection("ImageStore"));
+
+builder.Services.AddS3Service();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
