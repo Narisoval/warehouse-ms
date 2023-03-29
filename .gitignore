@@ -354,3 +354,6 @@ MigrationBackup/
 
 #Docker data
 .docker-data/
+
+#Environment file which stores sensetive data for docker compose
+.env 
