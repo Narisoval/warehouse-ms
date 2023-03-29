@@ -26,6 +26,10 @@ services:
       - ConnectionStrings__postgres=User ID=$POSTGRES_USER;Password=$POSTGRES_PASSWORD;Server=warehouse_db;Port=5432;Database=$POSTGRES_DB_NAME;
       - ElasticConfiguration__Uri=http://es01:9200
       - MessageBroker__host=amqp://warehouse_mq:5672
+      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+      - ImageStore__BucketName=$AWS_BUCKET_NAME
+      - ImageStore__ImagekitUrl=$IMAGEKIT_URL
     networks:
       - api_network
       
