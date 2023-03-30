@@ -27,9 +27,11 @@ public class ProductsController : ControllerBase
 
     [HttpGet("all")]
     [ProducesResponseType(typeof(IEnumerable<ProductDto>),StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts(
+        [FromQuery] int pageIndex = 1, 
+        [FromQuery] int pageSize = 15)
     {
-        var products = await _unitOfWork.Products.GetAll();
+        var products = await _unitOfWork.Products.GetAll(pageIndex,pageSize);
         
         var productDtos = products.Select(product => product.ToDto()).ToList();
         

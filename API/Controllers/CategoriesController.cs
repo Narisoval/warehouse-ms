@@ -25,7 +25,9 @@ public class CategoriesController : ControllerBase
 
     [HttpGet("all")]
     [ProducesResponseType(typeof(IEnumerable<CategoryDto>),StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories()
+    public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories(
+        [FromQuery] int pageIndex = 1, 
+        [FromQuery] int pageSize = 15)
     {
         var categories = await _unitOfWork.Categories.GetAll();
 

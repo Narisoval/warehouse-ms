@@ -22,7 +22,9 @@ public class ProvidersController : ControllerBase
     [HttpGet("all")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(IEnumerable<ProviderDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<ProviderDto>>> GetProviders()
+    public async Task<ActionResult<IEnumerable<ProviderDto>>> GetProviders(
+        [FromQuery] int pageIndex = 1, 
+        [FromQuery] int pageSize = 15)
     {
         var providers = await _unitOfWork.Providers.GetAll();
 

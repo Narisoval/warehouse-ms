@@ -27,9 +27,11 @@ public class BrandsController : ControllerBase
     [HttpGet("all")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(IEnumerable<BrandDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<BrandDto>>> GetBrands()
+    public async Task<ActionResult<IEnumerable<BrandDto>>> GetBrands(
+        [FromQuery] int pageIndex = 1, 
+        [FromQuery] int pageSize = 15)
     {
-        var brands = await _unitOfWork.Brands.GetAll();
+        var brands = await _unitOfWork.Brands.GetAll(pageIndex,pageSize);
 
         var brandDtos = brands.Select(product => product.ToDto()).ToList();
 
