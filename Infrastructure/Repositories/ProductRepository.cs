@@ -57,13 +57,15 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
             .FirstOrDefaultAsync();
     }
     
-    public async Task<IEnumerable<Product>> GetAllProductsWithProvider()
+    public new async Task<IEnumerable<Product>> GetAll(int pageIndex = 1,int pageSize = 15)
     {
         return await Context.Products.AsNoTracking()
             .Include(product => product.Brand)
             .Include(product => product.Images)
             .Include(product => product.Category)
             .Include(product => product.Provider)
+            .Skip((pageIndex-1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
     }
 
