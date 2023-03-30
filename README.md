@@ -266,9 +266,16 @@ Example:
 
 Returns all the brands in the warehouse.
 
-***Response body:***
+***Query Parameters:***
+
+- pageIndex (optional, default = 1) - The page number to retrieve.
+- pageSize (optional, default = 15) - The number of records per page.
+ 
+***Status codes:***
 * 200 OK - The request was successful and the response contains an array of brands.
 * 500 Internal Server Error - The server encountered an error while processing the request.
+ 
+***Response body:***
 ```json
 [
     {
@@ -291,6 +298,8 @@ Returns all the brands in the warehouse.
 
 Returns a single brand by its GUID id.
 
+***Status codes:***
+
 * 200 OK - The request was successful and the response contains a single brand object.
 * 404 Not Found - The brand with the specified id could not be found.
 * 500 Internal Server Error - The server encountered an error while processing the request.
@@ -299,6 +308,9 @@ Returns a single brand by its GUID id.
 * [Brand Response](#brand-response)
 
 ### `POST /api/brands`
+
+***Status codes:***
+
 * 201 Created - The brand was successfully created and the response contains the new brand object.
 * 400 Bad Request - The request was malformed or missing required fields.
 * 500 Internal Server Error - The server encountered an error while processing the request.
@@ -313,11 +325,15 @@ Returns a single brand by its GUID id.
 * [Brand Response](#brand-response)
 
 ### `PUT /api/brands/{id}`
+
+***Status codes:***
+
 * 204 No Content on success
 * 400 Bad Request if the request body is invalid
 * 404 Not Found if the brand with the specified ID was not found
 * 500 Internal Server Error - The server encountered an error while processing the request.
-* 
+ 
+ 
 ***Request body:***
 
 * [Brand Request](#brand-request)
@@ -327,6 +343,7 @@ Returns a single brand by its GUID id.
 | ⚠️ WARNING                                                                      |
 |:--------------------------------------------------------------------------------|
 | When deleting a brand all the products, associated with it will also be deleted |
+***Status codes:***
 
 * 204 The brand was successfully deleted. No content in the response body.
 * 404 The brand with the specified ID was not found.
@@ -337,6 +354,12 @@ Returns a single brand by its GUID id.
 ### `GET /api/categories/all`
 Returns all the categories in the warehouse.
 
+***Query Parameters:***
+
+- pageIndex (optional, default = 1) - The page number to retrieve.
+- pageSize (optional, default = 15) - The number of records per page.
+
+***Status codes:***
 * 200 OK - The request was successful and the response contains an array of categories.
 * 500 Internal Server Error - The server encountered an error while processing the request.
 
@@ -358,6 +381,8 @@ Returns all the categories in the warehouse.
 ### `GET /api/categories/{id}`
 Returns a single category by its GUID id.
 
+***Status codes:***
+
 * 200 OK - The request was successful and the response contains a single category object.
 * 404 Not Found - The category with the specified id could not be found.
 * 500 Internal Server Error - The server encountered an error while processing the request.
@@ -368,6 +393,8 @@ Returns a single category by its GUID id.
 
 ### `POST /api/categories`
 Creates a new category.
+
+***Status codes:***
 
 * 201 Created - The category was successfully created and the response contains the new category object.
 * 400 Bad Request - The request was malformed or missing required fields.
@@ -385,6 +412,8 @@ Creates a new category.
 ### `PUT /api/categories/{id}`
 Updates a provider by its GUID id.
 
+***Status codes:***
+
 * 204 No Content on success
 * 400 Bad Request if the request body is invalid
 * 404 Not Found if the provider with the specified ID was not found
@@ -400,6 +429,9 @@ Deletes a category by its GUID id.
 |:-----------------------------------------------------------------------------------|
 | When deleting a category all the products, associated with it will also be deleted |
 
+
+***Status codes:***
+
 * 204 The category was successfully deleted. No content in the response body.
 * 404 The category with the specified ID was not found.
 * 500 Internal Server Error - The server encountered an error while processing the request.
@@ -409,6 +441,12 @@ Deletes a category by its GUID id.
 
 Returns all the providers in the warehouse.
 
+***Query Parameters:***
+
+- pageIndex (optional, default = 1) - The page number to retrieve.
+- pageSize (optional, default = 15) - The number of records per page.
+ 
+***Status codes:***
 * 200 OK - The request was successful and the response contains an array of provider objects.
 * 500 Internal Server Error - The server encountered an error while processing the request.
  
@@ -437,6 +475,8 @@ Returns all the providers in the warehouse.
 
 Returns a single provider by its GUID id.
 
+***Status codes:***
+
 * 200 OK - The request was successful and the response contains a single provider object.
 * 404 Not Found - The provider with the specified id could not be found.
 * 500 Internal Server Error - The server encountered an error while processing the request.
@@ -448,6 +488,9 @@ Returns a single provider by its GUID id.
 ### `POST /api/providers`
 
 Creates a new provider.
+
+***Status codes:***
+
 * 201 Created - The provider was successfully created and the response contains the new provider object.
 * 400 Bad Request - The request was malformed or missing required fields.
 * 500 Internal Server Error - The server encountered an error while processing the request.
@@ -461,10 +504,14 @@ Creates a new provider.
 [Provider response](#provider-response)
 
 ### `PUT /api/providers/{id}`
+
+***Status codes:***
+
 * 204 No Content on success
 * 400 Bad Request if the request body is invalid
 * 404 Not Found if the provider with the specified ID was not found
-
+* 500 Internal Server Error - The server encountered an error while processing the request.
+ 
 Updates a provider by its GUID id.
 
 ***Request body:***
@@ -478,17 +525,28 @@ Deletes a provider by its GUID id.
 |:-----------------------------------------------------------------------------------|
 | When deleting a provider all the products, associated with it will also be deleted |
 
+***Status codes:***
+
 * 204 The provider was successfully deleted. No content in the response body.
 * 404 The provider with the specified ID was not found.
+* 500 Internal Server Error - The server encountered an error while processing the request.
  
 ## Products
 ### `GET /api/products/all`
 Returns all the products in the warehouse.
 
+***Query Parameters:***
+
+- pageIndex (optional, default = 1) - The page number to retrieve.
+- pageSize (optional, default = 15) - The number of records per page.
+ 
+***Status codes:***
+
 * 200 OK - The request was successful and the response contains an array of products.
 * 500 Internal Server Error - The server encountered an error while processing the request.
 
 ***Response body:***
+ 
 ```json
 [
   {
@@ -547,6 +605,8 @@ Returns all the products in the warehouse.
 ### `GET /api/products/{id}`
 Returns a single product by its GUID id.
 
+***Status codes:***
+
 * 200 OK - The request was successful and the response contains a single product object.
 * 404 Not Found - The product with the specified id could not be found.
 * 500 Internal Server Error - The server encountered an error while processing the request.
@@ -556,6 +616,8 @@ Returns a single product by its GUID id.
 [Product response](#product-response)
 
 ### `POST /api/products`
+
+***Status codes:***
 
 * 201 Created - The product was successfully created and the response contains the new product object.
 * 400 Bad Request - The request was malformed or missing required fields.
@@ -571,6 +633,8 @@ Returns a single product by its GUID id.
 
 ### `PUT /api/products/{id}`
 
+***Status codes:***
+
 * 204 No Content on success
 * 400 Bad Request if the request body is invalid
 * 404 Not Found if the product with the specified ID was not found
@@ -582,6 +646,8 @@ Returns a single product by its GUID id.
 
 ### `DELETE /api/products/{id}`
 
+***Status codes:***
+
 * 204 The product was successfully deleted. No content in the response body.
 * 404 The product with the specified ID
 * 500 Internal Server Error - The server encountered an error while processing the request.
@@ -591,6 +657,8 @@ This endpoint is used for uploading images and obtaining their URLs, which can t
 
 ### `POST /api/images`
 Uploads images and returns a list of their corresponding URLs.
+
+***Status codes:***
 
 * 200 OK - The request was successful, and the response contains an array of ImageFileDto objects with the file names and URLs.
 * 400 Bad Request - The request was malformed or missing required fields.
