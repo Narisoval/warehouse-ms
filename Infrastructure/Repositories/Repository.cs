@@ -20,12 +20,16 @@ public abstract class Repository<TEntity, TContext> : IRepository<TEntity>
         return await Context.Set<TEntity>().FindAsync(id);
     }
 
-    public async Task<IEnumerable<TEntity>> GetAll(int pageIndex = 0,int pageSize = 15)
+    public async Task<(IEnumerable<TEntity>, int)> GetAll(int pageIndex = 1,int pageSize = 15)
     {
-        return await Context.Set<TEntity>()
+        var totalCount = await Context.Set<TEntity>().CountAsync();
+        
+        var entities = await Context.Set<TEntity>().AsNoTracking()
             .Skip((pageIndex-1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
+        
+        return (entities, totalCount);
     }
 
     public async Task Add(TEntity entity)

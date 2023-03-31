@@ -57,9 +57,11 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
             .FirstOrDefaultAsync();
     }
     
-    public new async Task<IEnumerable<Product>> GetAll(int pageIndex = 1,int pageSize = 15)
+    public new async Task<(IEnumerable<Product>,int)> GetAll(int pageIndex = 1,int pageSize = 15)
     {
-        return await Context.Products.AsNoTracking()
+        var totalCount = await Context.Products.CountAsync();
+        
+        var products = await Context.Products.AsNoTracking()
             .Include(product => product.Brand)
             .Include(product => product.Images)
             .Include(product => product.Category)
@@ -67,6 +69,8 @@ public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, 
             .Skip((pageIndex-1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
+        
+        return (products, totalCount);
     }
 
     private async Task<Result> CheckForeignKeys(Product entity)

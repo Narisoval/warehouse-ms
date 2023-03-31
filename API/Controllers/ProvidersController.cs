@@ -2,6 +2,7 @@ using Domain.Entities;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
+using Warehouse.API.DTO.PaginationDtos;
 using Warehouse.API.DTO.ProviderDtos;
 using Warehouse.API.DTO.SwaggerExamples;
 using Warehouse.API.Helpers.Mapping;
@@ -21,15 +22,20 @@ public class ProvidersController : ControllerBase
 
     [HttpGet("all")]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(IEnumerable<ProviderDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<ProviderDto>>> GetProviders(
+    [ProducesResponseType(typeof(IEnumerable<PageResponse<ProviderDto>>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PageResponse<ProviderDto>>> GetProviders(
         [FromQuery] int pageIndex = 1, 
         [FromQuery] int pageSize = 15)
     {
-        var providers = await _unitOfWork.Providers.GetAll();
+        var (providers,totalRecords) = await _unitOfWork.Providers.GetAll(pageIndex,pageSize);
 
         var providerDtos = providers.Select(provider => provider.ToDto()).ToList();
-        return Ok(providerDtos);
+
+        var paginationInfo = new PaginationInfo(pageIndex, pageSize, totalRecords);
+
+        var pageResponse = new PageResponse<ProviderDto>(providerDtos, paginationInfo);
+            
+        return Ok(pageResponse);
 
     }
 

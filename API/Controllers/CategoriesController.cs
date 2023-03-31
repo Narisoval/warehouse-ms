@@ -4,6 +4,7 @@ using Infrastructure.MessageBroker.EventBus;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 using Warehouse.API.DTO.CategoryDtos;
+using Warehouse.API.DTO.PaginationDtos;
 using Warehouse.API.DTO.SwaggerExamples;
 using Warehouse.API.Helpers.Mapping;
 using Warehouse.API.Messaging.Events.CategoryEvents;
@@ -24,15 +25,20 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpGet("all")]
-    [ProducesResponseType(typeof(IEnumerable<CategoryDto>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PageResponse<CategoryDto>),StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories(
         [FromQuery] int pageIndex = 1, 
         [FromQuery] int pageSize = 15)
     {
-        var categories = await _unitOfWork.Categories.GetAll();
+        var (categories,totalRecords) = await _unitOfWork.Categories.GetAll(pageIndex,pageSize);
 
         var categoryDtos = categories.Select(category => category.ToDto()).ToList();
-        return Ok(categoryDtos);
+
+        var paginationInfo = new PaginationInfo(pageIndex, pageSize, totalRecords);
+
+        var pageResponse = new PageResponse<CategoryDto>(categoryDtos, paginationInfo);
+        
+        return Ok(pageResponse);
     }
     
     [HttpGet("{id:guid}")]

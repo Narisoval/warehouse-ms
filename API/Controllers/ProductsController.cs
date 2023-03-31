@@ -4,6 +4,7 @@ using Infrastructure.Interfaces;
 using Infrastructure.MessageBroker.EventBus;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
+using Warehouse.API.DTO.PaginationDtos;
 using Warehouse.API.DTO.ProductDtos;
 using Warehouse.API.DTO.SwaggerExamples;
 using Warehouse.API.Helpers.Extensions;
@@ -26,16 +27,20 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("all")]
-    [ProducesResponseType(typeof(IEnumerable<ProductDto>),StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts(
+    [ProducesResponseType(typeof(PageResponse<ProductDto>),StatusCodes.Status200OK)]
+    public async Task<ActionResult<PageResponse<ProductDto>>> GetProducts(
         [FromQuery] int pageIndex = 1, 
         [FromQuery] int pageSize = 15)
     {
-        var products = await _unitOfWork.Products.GetAll(pageIndex,pageSize);
+        var (products,totalRecords) = await _unitOfWork.Products.GetAll(pageIndex,pageSize);
         
         var productDtos = products.Select(product => product.ToDto()).ToList();
+
+        var paginationInfo = new PaginationInfo(pageIndex, pageSize, totalRecords);
+
+        var pageResponse = new PageResponse<ProductDto>(productDtos, paginationInfo);
         
-        return Ok(productDtos);
+        return Ok(pageResponse);
     }
 
     [HttpGet("{id:guid}")]
