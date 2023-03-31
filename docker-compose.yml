@@ -1,6 +1,5 @@
 version: '3.8'
 
-    
 services:
   warehouse_api:
     image: warehouse
@@ -15,7 +14,6 @@ services:
       es01:
         condition: 
           service_healthy
-        
     container_name: warehouse_api
     ports:
       - "8080:80"
@@ -44,7 +42,7 @@ services:
       - "5433:5432"
     restart: always
     volumes:
-      - .docker-data/db/postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     networks:
       - api_network
     
@@ -57,8 +55,8 @@ services:
   warehouse_mq:
     image: rabbitmq:3.11-management-alpine
     volumes:
-      - .docker-data/queue/data/:/var/lib/rabbitmq
-      - .docker-data/queue/log/:/var/log/rabbitmq
+      - rabbitmq-data:/var/lib/rabbitmq
+      - rabbitmq-log:/var/log/rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -108,21 +106,26 @@ services:
       - es01
     container_name: kib01
     ports:
-      - 5601:5601
+    - 5601:5601
     environment:
       ELASTICSEARCH_URL: http://es01:9200
       ELASTICSEARCH_HOSTS: http://es01:9200
     networks:
       - elastic_network
-    
+
 volumes:
   postgres-data:
-    driver: local
+      driver: local
   data01:
     driver: local
-    
+  rabbitmq-data:
+      driver: local
+  rabbitmq-log:
+    driver: local
+
 networks:
   api_network:
     driver: bridge
   elastic_network:
-    driver: bridge
+      driver: bridge
+
