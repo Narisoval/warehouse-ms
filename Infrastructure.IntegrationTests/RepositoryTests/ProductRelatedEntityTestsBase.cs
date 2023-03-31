@@ -5,19 +5,21 @@ using FluentAssertions;
 using Infrastructure.Data;
 using Infrastructure.IntegrationTests.Helpers.Fixtures;
 using Infrastructure.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.IntegrationTests.RepositoryTests;
 
-public abstract class ProductRelatedEntityTestsBase<TEntity,TRepository> : RepositoryTestsBase<TEntity,TRepository> 
+public abstract class ProductRelatedEntityTestsBase<TEntity, TRepository> : RepositoryTestsBase<TEntity, TRepository>
     where TRepository : class, IRepository<TEntity>
     where TEntity : Entity
 {
     protected WarehouseDbContext Context;
+
     public ProductRelatedEntityTestsBase(DatabaseFixture fixture) : base(fixture)
     {
         Context = fixture.Context;
     }
-    
+
     [Fact]
     public async Task Should_DeleteAllRelatedProducts_When_CategoryIsDeleted()
     {
@@ -34,7 +36,7 @@ public abstract class ProductRelatedEntityTestsBase<TEntity,TRepository> : Repos
         relatedProductsBeforeEntityDeletion
             .Should()
             .NotBeEmpty("There must be some products related to the brand under test");
-        
+
         wasEntityDeleted.Should().BeTrue();
         relatedProductsAfterEntityDeletion.Should().BeEmpty();
 
@@ -44,8 +46,8 @@ public abstract class ProductRelatedEntityTestsBase<TEntity,TRepository> : Repos
 
     private async Task<IReadOnlyCollection<Product>> GetRelatedProducts(Guid entityId)
     {
-        var allProducts = await UnitOfWork.Products.GetAll();
-        
+        var allProducts = await Context.Products.AsNoTracking().ToListAsync();
+
         if (typeof(TRepository) == typeof(ICategoryRepository))
             return allProducts.Where(product => product.CategoryId == entityId).ToImmutableList();
 

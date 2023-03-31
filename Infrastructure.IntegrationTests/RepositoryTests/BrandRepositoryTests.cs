@@ -14,12 +14,6 @@ public class BrandRepositoryTests : ProductRelatedEntityTestsBase<Brand, IBrandR
     {
     }
 
-    private async Task<IReadOnlyCollection<Product>> GetRelatedProducts(Guid brandId)
-    {
-        var allProducts = await UnitOfWork.Products.GetAll();
-        return allProducts.Where(pr => pr.BrandId == brandId).ToImmutableList();
-    }
-
     [Fact]
     public override async Task Should_UpdateEntity_When_Called()
     {

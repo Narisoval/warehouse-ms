@@ -17,10 +17,13 @@ public class ProductRepositoryTests : RepositoryTestsBase<Product,IProductReposi
     public async Task Should_GetProductWithAllRelatedEntities_When_GettingAllProducts()
     {
         //Act
-        var allProducts = await Repository.GetAll();
+        const int pageIndex = 1;
+        const int pageSize = 1;
+        
+        var (products,_) = await Repository.GetAll(pageIndex,pageSize);
         
         //Assert
-        foreach (var product in allProducts)
+        foreach (var product in products)
         {
             AssertProductHasCorrectNavigationalProperties(product);
         }
