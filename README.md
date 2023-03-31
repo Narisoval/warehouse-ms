@@ -277,21 +277,28 @@ Returns all the brands in the warehouse.
  
 ***Response body:***
 ```json
-[
+{
+  "data": [
     {
       "brandId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6",
       "name": "Happy Socks",
       "image": "https://happysockslogo.svg",
       "description": "These so socks are so happy. You won't believe it!"
     },
-  
     {
       "brandId": "0b276958-258b-48d1-ada1-25f418240f37",
       "name": "Happy cocks",
       "image": "https://happycockslogo.jpg",
       "description": "These cocks are really happy to be eaten by you. Exactly you."
     }
-]
+  ],
+  "pagination": {
+    "pageIndex": 2,
+    "pageSize": 2,
+    "totalPages": 100,
+    "totalRecords": 200
+  }
+}
 ```
 
 ### `GET /api/brands/{id}`
@@ -365,123 +372,137 @@ Returns all the categories in the warehouse.
 
 ***Response body:***
 ```json
-[
+{
+  "data": [
     {
-        "categoryId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6",
-        "name": "Electronics",
-        "description": "Devices that use electricity to perform a specific function."
+      "categoryId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6",
+      "name": "Electronics"
     },
     {
-        "categoryId": "0b276958-258b-48d1-ada1-25f418240f37",
-        "name": "Home Goods",
-        "description": "Products for use in and around the home."
+      "categoryId": "0b276958-258b-48d1-ada1-25f418240f37",
+      "name": "Home Goods"
     }
-]
+  ],
+  "pagination": {
+    "pageIndex": 2,
+    "pageSize": 2,
+    "totalPages": 100,
+    "totalRecords": 200
+  }
+}
 ```
 ### `GET /api/categories/{id}`
 Returns a single category by its GUID id.
 
-***Status codes:***
+***Status codes: ***
 
 * 200 OK - The request was successful and the response contains a single category object.
 * 404 Not Found - The category with the specified id could not be found.
 * 500 Internal Server Error - The server encountered an error while processing the request.
- 
-***Response body:***
+
+***Response body: ***
 
 [Category Response](#category-response)
 
 ### `POST /api/categories`
 Creates a new category.
 
-***Status codes:***
+***Status codes: ***
 
 * 201 Created - The category was successfully created and the response contains the new category object.
 * 400 Bad Request - The request was malformed or missing required fields.
 * 500 Internal Server Error - The server encountered an error while processing the request.
 
-***Request body:***
+***Request body: ***
 
 [Category Request](#category-response)
 
-***Response body:***
+***Response body: ***
 
 [Category Response](#category-response)
 
 
-### `PUT /api/categories/{id}`
+### `PUT /api/categories/{id
+}`
 Updates a provider by its GUID id.
 
-***Status codes:***
+***Status codes: ***
 
 * 204 No Content on success
 * 400 Bad Request if the request body is invalid
 * 404 Not Found if the provider with the specified ID was not found
 * 500 Internal Server Error - The server encountered an error while processing the request.
- 
-***Request body:***
+
+***Request body: ***
 
 [Category Request](#category-response)
 ### `DELETE /api/categories/{id}`
 Deletes a category by its GUID id.
 
 | ⚠️ WARNING                                                                         |
-|:-----------------------------------------------------------------------------------|
+|: -----------------------------------------------------------------------------------|
 | When deleting a category all the products, associated with it will also be deleted |
 
 
-***Status codes:***
+***Status codes: ***
 
 * 204 The category was successfully deleted. No content in the response body.
 * 404 The category with the specified ID was not found.
 * 500 Internal Server Error - The server encountered an error while processing the request.
- 
+
 ## Providers
 ### `GET /api/providers/all`
 
 Returns all the providers in the warehouse.
 
-***Query Parameters:***
+***Query Parameters: ***
 
 - pageIndex (optional, default = 1) - The page number to retrieve.
 - pageSize (optional, default = 15) - The number of records per page.
- 
+
 ***Status codes:***
 * 200 OK - The request was successful and the response contains an array of provider objects.
 * 500 Internal Server Error - The server encountered an error while processing the request.
- 
-***Response body:***
+
+***Response body: ***
 ```json
-[
+{
+  "data": [
     {
-        "providerId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6",
-        "name": "Acme Inc.",
-        "address": "123 Main St.",
-        "phone": "555-1234",
-        "email": "acme@example.com"
+      "providerId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6",
+      "name": "Acme Inc.",
+      "address": "123 Main St.",
+      "phone": "555-1234",
+      "email": "acme@example.com"
     },
-  
     {
-        "providerId": "0b276958-258b-48d1-ada1-25f418240f37",
-        "name": "Globex Corporation",
-        "address": "456 Broadway",
-        "phone": "555-5678",
-        "email": "globex@example.com"
+      "providerId": "0b276958-258b-48d1-ada1-25f418240f37",
+      "name": "Globex Corporation",
+      "address": "456 Broadway",
+      "phone": "555-5678",
+      "email": "globex@example.com"
     }
-]
+  ],
+  "pagination": {
+    "pageIndex": 2,
+    "pageSize": 2,
+    "totalPages": 100,
+    "totalRecords": 200
+  }
+}
 ```
 
 ### `GET /api/providers/{id}`
 
 Returns a single provider by its GUID id.
 
-***Status codes:***
+***Status codes: ***
 
 * 200 OK - The request was successful and the response contains a single provider object.
 * 404 Not Found - The provider with the specified id could not be found.
 * 500 Internal Server Error - The server encountered an error while processing the request.
- 
-***Response body:***
+
+***Response body: ***
 
 [Provider response](#provider-response)
 
@@ -489,118 +510,127 @@ Returns a single provider by its GUID id.
 
 Creates a new provider.
 
-***Status codes:***
+***Status codes: ***
 
 * 201 Created - The provider was successfully created and the response contains the new provider object.
 * 400 Bad Request - The request was malformed or missing required fields.
 * 500 Internal Server Error - The server encountered an error while processing the request.
-  
-***Request body:***
+
+***Request body: ***
 
 [Provider request](#provider-request)
 
-***Response body:***
+***Response body: ***
 
 [Provider response](#provider-response)
 
-### `PUT /api/providers/{id}`
+### `PUT /api/providers/{id
+}`
 
-***Status codes:***
+***Status codes: ***
 
 * 204 No Content on success
 * 400 Bad Request if the request body is invalid
 * 404 Not Found if the provider with the specified ID was not found
 * 500 Internal Server Error - The server encountered an error while processing the request.
- 
+
 Updates a provider by its GUID id.
 
-***Request body:***
+***Request body: ***
 
 [Provider request](#provider-request)
 
-### `DELETE /api/providers/{id}`
+### `DELETE /api/providers/{id
+}`
 Deletes a provider by its GUID id.
 
 | ⚠️ WARNING                                                                         |
-|:-----------------------------------------------------------------------------------|
+|: -----------------------------------------------------------------------------------|
 | When deleting a provider all the products, associated with it will also be deleted |
 
-***Status codes:***
+***Status codes: ***
 
 * 204 The provider was successfully deleted. No content in the response body.
 * 404 The provider with the specified ID was not found.
 * 500 Internal Server Error - The server encountered an error while processing the request.
- 
+
 ## Products
 ### `GET /api/products/all`
 Returns all the products in the warehouse.
 
-***Query Parameters:***
+***Query Parameters: ***
 
 - pageIndex (optional, default = 1) - The page number to retrieve.
 - pageSize (optional, default = 15) - The number of records per page.
- 
+
 ***Status codes:***
 
 * 200 OK - The request was successful and the response contains an array of products.
 * 500 Internal Server Error - The server encountered an error while processing the request.
 
-***Response body:***
- 
+***Response body: ***
+
 ```json
-[
-  {
-    "productId": "1c2e87b6-0e31-4d8e-af50-1f0e93f06c0d",
-    "name": "White happy socks for men",
-    "quantity": 10,
-    "fullPrice": 15.00,
-    "description": "These socks are so happy. You won't believe it!",
-    "mainImage": "https://happysocksmainimage.png",
-    "images": [
+{
+  "data": [
+    {
+      "productId": "1c2e87b6-0e31-4d8e-af50-1f0e93f06c0d",
+      "name": "White happy socks for men",
+      "quantity": 10,
+      "fullPrice": 15.00,
+      "description": "These socks are so happy. You won't believe it!",
+      "mainImage": "https://happysocksmainimage.png",
+      "images": [
         "https://happysocksimage1.svg",
         "https://happysocksimage2.svg"
-    ],
-    "sale": 12.50,
-    "isActive": true,
-    "category": "Women's Socks",
-    "provider": {
-      "companyName": "Happy Socks Co.",
-      "phoneNumber": "555-1234",
-      "email": "contact@happysocks.com"
+      ],
+      "sale": 12.50,
+      "isActive": true,
+      "category": "Women's Socks",
+      "provider": {
+        "companyName": "Happy Socks Co.",
+        "phoneNumber": "555-1234",
+        "email": "contact@happysocks.com"
+      },
+      "brand": {
+        "name": "Happy Socks",
+        "image": "https://happysockslogo.svg",
+        "description": "This so socks are so happy. You won't believe it!"
+      }
     },
-    "brand": {
-      "name": "Happy Socks",
-      "image": "https://happysockslogo.svg",
-      "description": "This so socks are so happy. You won't believe it!"
-    }
-  },
-
-  {
-    "productId": "1c2e87b6-0e31-4d8e-af50-1f0e93f06c0d",
-    "name": "Black sad socks for women",
-    "quantity": 10,
-    "fullPrice": 15.00,
-    "description": "These socks are so sad. They will make you cry!",
-    "mainImage": "https://sadsocksmainimage.png",
-    "images": [
+    {
+      "productId": "1c2e87b6-0e31-4d8e-af50-1f0e93f06c0d",
+      "name": "Black sad socks for women",
+      "quantity": 10,
+      "fullPrice": 15.00,
+      "description": "These socks are so sad. They will make you cry!",
+      "mainImage": "https://sadsocksmainimage.png",
+      "images": [
         "https://sadsocksimage1.svg",
         "https://sadsocksimage2.svg"
-    ],
-    "sale": 50,
-    "isActive": true,
-    "category": "Women's Socks",
-    "provider": {
-      "companyName": "Happy Socks Co.",
-      "phoneNumber": "555-1234",
-      "email": "contact@sadsocks.com"
-    },
-    "brand": {
-      "name": "Happy Socks",
-      "image": "https://happysockslogo.svg",
-      "description": "This so socks are so happy. You won't believe it!"
+      ],
+      "sale": 50,
+      "isActive": true,
+      "category": "Women's Socks",
+      "provider": {
+        "companyName": "Happy Socks Co.",
+        "phoneNumber": "555-1234",
+        "email": "contact@sadsocks.com"
+      },
+      "brand": {
+        "name": "Happy Socks",
+        "image": "https://happysockslogo.svg",
+        "description": "This so socks are so happy. You won't believe it!"
+      }
     }
+  ],
+  "pagination": {
+    "pageIndex": 2,
+    "pageSize": 2,
+    "totalPages": 100,
+    "totalRecords": 200
   }
-]
+}
 ```
 ### `GET /api/products/{id}`
 Returns a single product by its GUID id.
