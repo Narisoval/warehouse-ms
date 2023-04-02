@@ -3,15 +3,13 @@ using FluentResults;
 
 namespace Domain.Primitives;
 
-public class LengthRestrictedValueObject<T> : ValueObject 
-    where T : LengthRestrictedValueObject<T>, IRanged<uint>, new()
+public abstract class LengthRestrictedValueObject<T> : ValueObject
+    where T : LengthRestrictedValueObject<T>, new()
 {
+    internal abstract Range<int> LengthRange { get; }
+    
     public string Value { get; private set; }
-    
-    protected LengthRestrictedValueObject()
-    {
-    }
-    
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value; 
@@ -20,7 +18,7 @@ public class LengthRestrictedValueObject<T> : ValueObject
     public static Result<T> From(string? value)
     {
         var valueObject = new T();
-        var result = valueObject.Validate(value,valueObject);
+        var result = valueObject.Validate(value);
         
         if (!result.IsSuccess) return result;
         
@@ -28,16 +26,17 @@ public class LengthRestrictedValueObject<T> : ValueObject
         return valueObject;
     }
 
-    private Result<T> Validate(string? value, IRanged<uint> ranged)
+    private Result<T> Validate(string? value)
     {
         if (value == null)
             return new Result().WithError(new NullArgumentError(typeof(T).Name));
 
-        if (!ranged.Range.InRange((uint)value.Length))
+        if (!LengthRange.InRange(value.Length))
             return new Result()
                 .WithError(new IncorrectLengthError(typeof(T).Name,
-                    ranged.Range.Min, ranged.Range.Max));
+                    LengthRange.Min, LengthRange.Max));
         
         return Result.Ok();
     }
+
 }

@@ -2,15 +2,13 @@ using Domain.Errors;
 using FluentResults;
 
 namespace Domain.Primitives;
-public class RangedValueObject<TThis,TValue> : ValueObject 
+public abstract class RangedValueObject<TThis,TValue> : ValueObject 
     where TValue : struct, IComparable 
-    where TThis : RangedValueObject<TThis,TValue>, IRanged<TValue>, new()
+    where TThis : RangedValueObject<TThis,TValue>, new()
 {
     public TValue Value { get; private set; }
     
-    protected RangedValueObject()
-    {
-    }
+    internal abstract Range<TValue> Range { get; }
     
     protected override IEnumerable<object> GetEqualityComponents()
     {
@@ -20,7 +18,7 @@ public class RangedValueObject<TThis,TValue> : ValueObject
     public static Result<TThis> From(TValue value)
     {
         var valueObject = new TThis();
-        var result = valueObject.Validate(value,valueObject);
+        var result = valueObject.Validate(value);
         
         if (!result.IsSuccess) return result;
         
@@ -28,11 +26,11 @@ public class RangedValueObject<TThis,TValue> : ValueObject
         return valueObject;
     }
 
-    private Result<TThis> Validate(TValue value, IRanged<TValue> ranged)
+    private Result<TThis> Validate(TValue value )
     {
-        if (!ranged.Range.InRange(value))
+        if (!Range.InRange(value))
             return new Result<TThis>().WithError(
-                new OutOfRangeError(typeof(TThis).Name,ranged.Range.ToString()));
+                new OutOfRangeError(typeof(TThis).Name,Range.ToString()));
                 
         return Result.Ok();
     }

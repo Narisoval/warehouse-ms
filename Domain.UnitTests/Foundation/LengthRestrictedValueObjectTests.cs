@@ -45,8 +45,8 @@ public class LengthRestrictedValueObjectTests
         sut.Value.Value.Should().Be(value);
     }
     
-    class TestValueObject : LengthRestrictedValueObject<TestValueObject>, IRanged<uint>
+    class TestValueObject : LengthRestrictedValueObject<TestValueObject> 
     {
-        Range<uint> IRanged<uint>.Range { get; } = Range<uint>.Create(MinLength, MaxLength);
+        internal override Range<int> LengthRange { get; } =  Range<int>.Create(MinLength, MaxLength);
     }
 }

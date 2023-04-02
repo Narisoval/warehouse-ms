@@ -2,8 +2,8 @@ using Domain.Primitives;
 
 namespace Domain.ValueObjects;
 
-public sealed class BrandDescription : LengthRestrictedValueObject<BrandDescription>,IRanged<uint>
+public sealed class BrandDescription : LengthRestrictedValueObject<BrandDescription>
 {
-    Range<uint> IRanged<uint>.Range { get; } = Range<uint>.Create(10, 800);
+    internal override Range<int> LengthRange { get; } = Range<int>.Create(10, 800);
 }
     

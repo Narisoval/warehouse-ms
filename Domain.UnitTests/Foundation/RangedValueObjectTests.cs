@@ -44,8 +44,8 @@ public class RangedValueObjectTests
         sut.Value.Value.Should().Be(value);
     }
     
-    class TestValueObject : RangedValueObject<TestValueObject,int>, IRanged<int>
+    class TestValueObject : RangedValueObject<TestValueObject,int>
     {
-        Range<int> IRanged<int>.Range => Range<int>.Create(Min, Max);
+        internal override Range<int> Range { get; } = Range<int>.Create(Min, Max);
     }
 }
