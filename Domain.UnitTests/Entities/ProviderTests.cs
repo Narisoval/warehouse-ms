@@ -10,7 +10,7 @@ public class ProviderTests
     private static readonly Guid TestId = Guid.NewGuid();
     private static readonly Email TestEmail = Email.From("example@email.com").Value;
     private static readonly CompanyName TestCompanyName = CompanyName.From("Hammermen dev.").Value;
-    private static readonly string TestPhoneNumber = "+3806894583948";
+    private static readonly PhoneNumber TestPhoneNumber = PhoneNumber.From("+3806894583948").Value;
 
     [Fact]
     public void Should_CreateProvider_When_CreatingProviderWithId()
@@ -78,7 +78,7 @@ public class ProviderTests
         return Provider.Create(
             TestId, 
             (CompanyName?)arguments[0],
-            (string?)arguments[1],
+            (PhoneNumber?)arguments[1],
             (Email?)arguments[2]);
     }
     
@@ -86,7 +86,7 @@ public class ProviderTests
     {
         return Provider.Create(
             (CompanyName?)arguments[0],
-            (string?)arguments[1],
+            (PhoneNumber?)arguments[1],
             (Email?)arguments[2]);
     }
 
@@ -94,7 +94,7 @@ public class ProviderTests
     public void Should_ReturnFailedResult_When_PhoneNumberIsNull()
     {
         //Arrange
-        string? phoneNumber = null;
+        PhoneNumber? phoneNumber = null;
         
         //Act
         var sut = Provider.Create(TestId, TestCompanyName, phoneNumber, TestEmail);

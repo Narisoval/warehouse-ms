@@ -9,7 +9,7 @@ public static class ProvidersFixture
    {
       var id = Guid.NewGuid();
       var companyName = CompanyName.From("BBC").Value;
-      var phoneNumber = "+3806666665";
+      var phoneNumber = PhoneNumber.From("+3806666665").Value;
       var email = Email.From("bbc@bbc.co.uk").Value;
       
       return Provider.Create(id, companyName,phoneNumber,email).Value;
