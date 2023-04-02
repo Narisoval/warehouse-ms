@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Warehouse.API.DTO;
 using ILogger = Serilog.ILogger;
 
-namespace Warehouse.API.Controllers;
+namespace Warehouse.API.Controllers.v1;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 public class ImagesController : ControllerBase
 {
     private readonly IStorageService _storageService;
@@ -22,7 +23,7 @@ public class ImagesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(IEnumerable<ImageFileDto>),StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<IEnumerable<ImageFileDto>>> Upload(List<IFormFile>? files)
+    public async Task<ActionResult<IEnumerable<ImageFileDto>>> Upload([FromForm] List<IFormFile>? files)
     {
         List<ImageFileDto> uploadedImages;
         List<string> uploadedFileKeys = new();

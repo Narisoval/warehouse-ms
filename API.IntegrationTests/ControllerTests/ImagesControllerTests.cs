@@ -15,6 +15,7 @@ public class ImagesControllerTests : IClassFixture<WarehouseWebApplicationFactor
 {
     private readonly HttpClient _client;
 
+    private const string Endpoint = "api/v1/images";
     public ImagesControllerTests(WarehouseWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
@@ -28,7 +29,7 @@ public class ImagesControllerTests : IClassFixture<WarehouseWebApplicationFactor
         var formContent = CreateMultipartFormDataContent(new List<IFormFile> { testFile.Object });
 
         //Act
-        var response = await _client.PostAsync("/api/images", formContent);
+        var response = await _client.PostAsync(Endpoint, formContent);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -58,7 +59,7 @@ public class ImagesControllerTests : IClassFixture<WarehouseWebApplicationFactor
         var formContent = CreateMultipartFormDataContent(formFiles);
 
         // Act
-        var response = await _client.PostAsync("/api/images", formContent);
+        var response = await _client.PostAsync(Endpoint, formContent);
 
         // Assert
         response.StatusCode.Should().Be(isAllowed ? HttpStatusCode.OK : HttpStatusCode.BadRequest);
@@ -79,7 +80,7 @@ public class ImagesControllerTests : IClassFixture<WarehouseWebApplicationFactor
         var formContent = CreateMultipartFormDataContent(new List<IFormFile>(){testFile.Object});
 
         // Act
-        var response = await _client.PostAsync("/api/images", formContent);
+        var response = await _client.PostAsync(Endpoint, formContent);
 
         // Assert
         response.StatusCode.Should().Be(isAllowed ? HttpStatusCode.OK : HttpStatusCode.BadRequest);
@@ -102,7 +103,7 @@ public class ImagesControllerTests : IClassFixture<WarehouseWebApplicationFactor
         var formContent = CreateMultipartFormDataContent(formFiles);
 
         // Act
-        var response = await _client.PostAsync("/api/images", formContent);
+        var response = await _client.PostAsync(Endpoint, formContent);
 
         // Assert
         response.StatusCode.Should().Be(isAllowed ? HttpStatusCode.OK : HttpStatusCode.BadRequest);

@@ -5,14 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 using Warehouse.API.DTO.CategoryDtos;
 using Warehouse.API.DTO.PaginationDtos;
-using Warehouse.API.DTO.SwaggerExamples;
 using Warehouse.API.Helpers.Mapping;
 using Warehouse.API.Messaging.Events.CategoryEvents;
+using Warehouse.API.OpenApi.SwaggerExamples;
 
-namespace Warehouse.API.Controllers;
+namespace Warehouse.API.Controllers.v1;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 public class CategoriesController : ControllerBase
 {
     private readonly IUnitOfWork _unitOfWork;
