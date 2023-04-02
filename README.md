@@ -26,32 +26,33 @@ Table of Contents
     * [Image](#image-) 🖼️
         * [Image file response](#image-file-response)
 * [API endpoints](#api-endpoints)
+    * [Versioning](#versioning)
     * [Brands](#brands) 🛍️
-        * [GET /api/brands/all](#get-apibrandsall)
-        * [GET /api/brands/{id}](#get-apibrandsid)
-        * [POST /api/brands](#post-apibrands)
-        * [PUT /api/brands/{id}](#put-apibrandsid)
-        * [DELETE /api/brands/{id}](#delete-apibrandsid)
+        * [GET /api/v1/brands/all](#get-apibrandsall)
+        * [GET /api/v1/brands/{id}](#get-apibrandsid)
+        * [POST /api/v1/brands](#post-apibrands)
+        * [PUT /api/v1/brands/{id}](#put-apibrandsid)
+        * [DELETE /api/v1/brands/{id}](#delete-apibrandsid)
     * [Categories](#categories) 📦
-        * [GET /api/categories/all](#get-apicategoriesall)
-        * [GET /api/categories/{id}](#get-apicategoriesid)
-        * [POST /api/categories](#post-apicategories)
-        * [PUT /api/categories/{id}](#put-apicategoriesid)
-        * [DELETE /api/categories/{id}](#delete-apicategoriesid)
+        * [GET /api/v1/categories/all](#get-apicategoriesall)
+        * [GET /api/v1/categories/{id}](#get-apicategoriesid)
+        * [POST /api/v1/categories](#post-apicategories)
+        * [PUT /api/v1/categories/{id}](#put-apicategoriesid)
+        * [DELETE /api/v1/categories/{id}](#delete-apicategoriesid)
     * [Providers](#providers) 🚚 
-        * [GET /api/providers/all](#get-apiprovidersall)
-        * [GET /api/providers/{id}](#get-apiprovidersid)
-        * [POST /api/providers](#post-apiproviders)
-        * [PUT /api/providers/{id}](#put-apiprovidersid)
-        * [DELETE /api/providers/{id}](#delete-apiprovidersid)
+        * [GET /api/v1/providers/all](#get-apiprovidersall)
+        * [GET /api/v1/providers/{id}](#get-apiprovidersid)
+        * [POST /api/v1/providers](#post-apiproviders)
+        * [PUT /api/v1/providers/{id}](#put-apiprovidersid)
+        * [DELETE /api/v1/providers/{id}](#delete-apiprovidersid)
     * [Products](#products) 📝
-        * [GET /api/products/all](#get-apiproductsall)
-        * [GET /api/products/{id}](#get-apiproductsid)
-        * [POST /api/products](#post-apiproducts)
-        * [PUT /api/products/{id}](#put-apiproductsid)
-        * [DELETE /api/products/{id}](#delete-apiproductsid)
+        * [GET /api/v1/products/all](#get-apiproductsall)
+        * [GET /api/v1/products/{id}](#get-apiproductsid)
+        * [POST /api/v1/products](#post-apiproducts)
+        * [PUT /api/v1/products/{id}](#put-apiproductsid)
+        * [DELETE /api/v1/products/{id}](#delete-apiproductsid)
     * [Images](#images) 🖼️
-      * [POST /api/images](#post-apiimages)
+      * [POST /api/v1/images](#post-apiimages)
 
 This microservice is responsible for storing, adding, editing and fetching information about products and their characteristics.
 
@@ -260,9 +261,23 @@ Example:
 ```
 # API endpoints
 
+## Versioning
+The API supports versioning to ensure backward compatibility and to allow the introduction of 
+new features without impacting existing clients. In this application, the API versioning strategy uses the 
+URL segment method for specifying the desired API version.
+
+To specify the API version in the URL, add a segment containing the version number after the base URL. 
+The version number should be prefixed with v. 
+
+For example:
+
+```http request
+GET https://example.com/api/v1/brands/all
+```
+
 ## Brands
 
-### `GET /api/brands/all`
+### `GET /api/v1/brands/all`
 
 Returns all the brands in the warehouse.
 
@@ -301,7 +316,7 @@ Returns all the brands in the warehouse.
 }
 ```
 
-### `GET /api/brands/{id}`
+### `GET /api/v1/brands/{id}`
 
 Returns a single brand by its GUID id.
 
@@ -314,7 +329,7 @@ Returns a single brand by its GUID id.
 ***Response body:***
 * [Brand Response](#brand-response)
 
-### `POST /api/brands`
+### `POST /api/v1/brands`
 
 ***Status codes:***
 
@@ -331,7 +346,7 @@ Returns a single brand by its GUID id.
 
 * [Brand Response](#brand-response)
 
-### `PUT /api/brands/{id}`
+### `PUT /api/v1/brands/{id}`
 
 ***Status codes:***
 
@@ -345,7 +360,7 @@ Returns a single brand by its GUID id.
 
 * [Brand Request](#brand-request)
 
-### `DELETE /api/brands/{id}`
+### `DELETE /api/v1/brands/{id}`
 
 | ⚠️ WARNING                                                                      |
 |:--------------------------------------------------------------------------------|
@@ -358,7 +373,7 @@ Returns a single brand by its GUID id.
  
 ## Categories
 
-### `GET /api/categories/all`
+### `GET /api/v1/categories/all`
 Returns all the categories in the warehouse.
 
 ***Query Parameters:***
@@ -391,7 +406,7 @@ Returns all the categories in the warehouse.
   }
 }
 ```
-### `GET /api/categories/{id}`
+### `GET /api/v1/categories/{id}`
 Returns a single category by its GUID id.
 
 ***Status codes: ***
@@ -404,7 +419,7 @@ Returns a single category by its GUID id.
 
 [Category Response](#category-response)
 
-### `POST /api/categories`
+### `POST /api/v1/categories`
 Creates a new category.
 
 ***Status codes: ***
@@ -422,7 +437,7 @@ Creates a new category.
 [Category Response](#category-response)
 
 
-### `PUT /api/categories/{id
+### `PUT /api/v1/categories/{id
 }`
 Updates a provider by its GUID id.
 
@@ -436,7 +451,7 @@ Updates a provider by its GUID id.
 ***Request body: ***
 
 [Category Request](#category-response)
-### `DELETE /api/categories/{id}`
+### `DELETE /api/v1/categories/{id}`
 Deletes a category by its GUID id.
 
 | ⚠️ WARNING                                                                         |
@@ -451,7 +466,7 @@ Deletes a category by its GUID id.
 * 500 Internal Server Error - The server encountered an error while processing the request.
 
 ## Providers
-### `GET /api/providers/all`
+### `GET /api/v1/providers/all`
 
 Returns all the providers in the warehouse.
 
@@ -492,7 +507,7 @@ Returns all the providers in the warehouse.
 }
 ```
 
-### `GET /api/providers/{id}`
+### `GET /api/v1/providers/{id}`
 
 Returns a single provider by its GUID id.
 
@@ -506,7 +521,7 @@ Returns a single provider by its GUID id.
 
 [Provider response](#provider-response)
 
-### `POST /api/providers`
+### `POST /api/v1/providers`
 
 Creates a new provider.
 
@@ -524,7 +539,7 @@ Creates a new provider.
 
 [Provider response](#provider-response)
 
-### `PUT /api/providers/{id
+### `PUT /api/v1/providers/{id
 }`
 
 ***Status codes: ***
@@ -540,7 +555,7 @@ Updates a provider by its GUID id.
 
 [Provider request](#provider-request)
 
-### `DELETE /api/providers/{id
+### `DELETE /api/v1/providers/{id
 }`
 Deletes a provider by its GUID id.
 
@@ -555,7 +570,7 @@ Deletes a provider by its GUID id.
 * 500 Internal Server Error - The server encountered an error while processing the request.
 
 ## Products
-### `GET /api/products/all`
+### `GET /api/v1/products/all`
 Returns all the products in the warehouse.
 
 ***Query Parameters: ***
@@ -632,7 +647,7 @@ Returns all the products in the warehouse.
   }
 }
 ```
-### `GET /api/products/{id}`
+### `GET /api/v1/products/{id}`
 Returns a single product by its GUID id.
 
 ***Status codes:***
@@ -645,7 +660,7 @@ Returns a single product by its GUID id.
 
 [Product response](#product-response)
 
-### `POST /api/products`
+### `POST /api/v1/products`
 
 ***Status codes:***
 
@@ -661,7 +676,7 @@ Returns a single product by its GUID id.
 
 [Product response](#product-response)
 
-### `PUT /api/products/{id}`
+### `PUT /api/v1/products/{id}`
 
 ***Status codes:***
 
@@ -674,7 +689,7 @@ Returns a single product by its GUID id.
 
 [Product Request](#product-request)
 
-### `DELETE /api/products/{id}`
+### `DELETE /api/v1/products/{id}`
 
 ***Status codes:***
 
@@ -685,7 +700,7 @@ Returns a single product by its GUID id.
 ## Images
 This endpoint is used for uploading images and obtaining their URLs, which can then be used in other endpoints. 
 
-### `POST /api/images`
+### `POST /api/v1/images`
 Uploads images and returns a list of their corresponding URLs.
 
 ***Status codes:***
