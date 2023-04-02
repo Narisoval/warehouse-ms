@@ -1,8 +1,8 @@
 using Serilog;
 
-namespace Warehouse.API.Helpers.Extensions;
+namespace Warehouse.API.Helpers.Extensions.ApplicationBuilderExtensions;
 
-public static class ApplicationBuilderExtensions
+public static class ApplicationLoggingExtensions
 {
    public static IApplicationBuilder UseRequestLogging(this IApplicationBuilder builder)
    {
@@ -10,7 +10,8 @@ public static class ApplicationBuilderExtensions
         {
             options.EnrichDiagnosticContext = (diagnosticsContext, httpContext) =>
             {
-                diagnosticsContext.Set("Authorization", httpContext.Request.Headers.Authorization, true);
+                diagnosticsContext.Set("Authorization", httpContext.Request.Headers.Authorization, 
+                    true);
             };
             
         });
