@@ -1,11 +1,8 @@
 using Infrastructure.DependencyInjection;
 using Infrastructure.MessageBroker.EventBus;
-using MassTransit;
 using Warehouse.API.Helpers.Extensions;
-using Warehouse.API.Messaging;
 using Warehouse.API.Middleware;
 using Infrastructure.Services;
-using ILogger = Serilog.ILogger; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,13 +18,7 @@ builder.Services.AddMessageBroker(builder.Configuration);
 
 builder.Services.AddTransient<IEventBus, EventBus>();
 
-builder.Services.AddTransient<IEventBus>(sp =>
-{
-    var publishEndpoint = sp.GetRequiredService<IPublishEndpoint>();
-    var eventBus = new EventBus(publishEndpoint);
-    var logger = sp.GetRequiredService<ILogger>();
-    return new LoggingEventBus(eventBus, logger);
-});
+builder.Services.AddLoggingEventBus();
 
 builder.Services.Configure<ImageStoreConfiguration>(builder.Configuration.GetSection("ImageStore"));
 
