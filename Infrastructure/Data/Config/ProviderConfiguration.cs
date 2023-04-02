@@ -16,6 +16,10 @@ public class ProviderConfiguration : IEntityTypeConfiguration<Provider>
             .HasConversion(companyName => companyName.Value,
                 value => CompanyName.From(value).Value);   
         
+        builder.Property(provider => provider.PhoneNumber)
+            .HasConversion(phoneNumber => phoneNumber.Value,
+            value => PhoneNumber.From(value).Value);   
+        
         builder.Property(provider => provider.Email)
             .HasConversion(email => email.Value,
             value => Email.From(value).Value);   

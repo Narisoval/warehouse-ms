@@ -48,13 +48,13 @@ public static class EntitiesFixture
         Provider.Create(
             Guid.NewGuid(),
             CompanyName.From("Socks owner inc").Value,
-            "+3806935093",
+            PhoneNumber.From("+3806935093").Value,
             Email.From("dogs@gmail.com").Value).Value,
 
         Provider.Create(
             Guid.NewGuid(),
             CompanyName.From("Animals owner inc").Value,
-            "+38069344444",
+            PhoneNumber.From("+38069344444").Value,
             Email.From("animals@gmail.com").Value).Value,
     };
 

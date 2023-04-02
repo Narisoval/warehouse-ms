@@ -11,7 +11,7 @@ public static class ProviderMapping
         {
             ProviderId = provider.Id,
             Email = provider.Email.Value,
-            PhoneNumber = provider.PhoneNumber,
+            PhoneNumber = provider.PhoneNumber.Value,
             CompanyName = provider.CompanyName.Value
         };
     }
@@ -22,7 +22,7 @@ public static class ProviderMapping
         {
             CompanyName = provider.CompanyName.Value,
             Email = provider.Email.Value,
-            PhoneNumber = provider.PhoneNumber
+            PhoneNumber = provider.PhoneNumber.Value
         };
     }
 }

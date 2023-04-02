@@ -279,7 +279,7 @@ public class ProvidersControllerTests : IClassFixture<WarehouseWebApplicationFac
         {
             CompanyName = entity.CompanyName.Value,
             Email = entity.Email.Value,
-            PhoneNumber = entity.PhoneNumber
+            PhoneNumber = entity.PhoneNumber.Value
         };
         await _client.PutAsJsonAsync($"{Endpoint}/{entity.Id}", providerUpdateDto);
     }

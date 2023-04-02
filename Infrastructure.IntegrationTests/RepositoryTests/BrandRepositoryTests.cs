@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Domain.Entities;
 using Domain.ValueObjects;
 using FluentAssertions;

@@ -28,7 +28,7 @@ where T : class, IEvent
         var eventToPublish = EventsFixture.Get<T>();
 
         // Act
-        var messagesPublished = await GetPublishedMessagesDifference
+        var messagesPublished = await GetPublishedMessagesCount
             (async () => await _eventBus.PublishAsync(eventToPublish));
 
         messagesPublished.Should().Be(1);
@@ -52,13 +52,13 @@ where T : class, IEvent
         
         // Assert
         var messagesPublished =  
-            await GetPublishedMessagesDifference(
+            await GetPublishedMessagesCount(
                 async () => await eventPublishing.Should().ThrowExactlyAsync<OperationCanceledException>());
         
         messagesPublished.Should().Be(0);
     }
     
-    private async Task<int> GetPublishedMessagesDifference(Func<Task> method)
+    private async Task<int> GetPublishedMessagesCount(Func<Task> method)
     {
         await _semaphore.WaitAsync();
         try

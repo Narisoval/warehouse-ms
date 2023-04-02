@@ -12,7 +12,7 @@ public sealed class ProviderEntityModelBinder : BaseEntityModelBinder<ProviderUp
     {
         var emailResult = Email.From(providerDto.Email);
         var companyNameResult = CompanyName.From(providerDto.CompanyName);
-        var phoneNumber = providerDto.PhoneNumber;
+        var phoneNumberResult = PhoneNumber.From(providerDto.PhoneNumber);
 
         if(!CheckIfResultsAreSuccessful(emailResult,companyNameResult))
             return;
@@ -23,14 +23,14 @@ public sealed class ProviderEntityModelBinder : BaseEntityModelBinder<ProviderUp
             providerResult = Provider.Create(
                 id: id.Value,
                 companyName: companyNameResult.Value,
-                phoneNumber: phoneNumber,
+                phoneNumber: phoneNumberResult.Value,
                 email: emailResult.Value);
         }
         else
         {
             providerResult = Provider.Create(
                 companyName: companyNameResult.Value,
-                phoneNumber: phoneNumber,
+                phoneNumber: phoneNumberResult.Value,
                 email: emailResult.Value);
         }
 

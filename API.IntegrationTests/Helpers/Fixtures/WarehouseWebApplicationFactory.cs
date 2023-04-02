@@ -37,7 +37,6 @@ public class WarehouseWebApplicationFactory : WebApplicationFactory<Program>, IA
 
             services.SetUpTestMessaging(messageBrokerSettings);
 
-
             services.SetUpDbContext(_dbContainer.GetConnectionString());
 
             services.SetUpMockStorageProvider();
@@ -68,7 +67,9 @@ public class WarehouseWebApplicationFactory : WebApplicationFactory<Program>, IA
         await context.Database.EnsureCreatedAsync();
 
         var dbSeeder = new DbDataSeeder(context);
+        
         await dbSeeder.SeedTestData();
+        
         await _rabbitMqContainer.StartAsync();
         
     }

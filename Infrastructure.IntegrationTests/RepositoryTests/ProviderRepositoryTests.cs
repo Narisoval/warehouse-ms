@@ -25,7 +25,7 @@ public class ProviderRepositoryTests : ProductRelatedEntityTestsBase<Provider,IP
         var updatedProvider = Provider.Create(
             seededProvider.Id,
             CompanyName.From("Updated Company Name").Value,
-            "+38069355555",
+            PhoneNumber.From("+38069355555").Value,
             Email.From("updatedemail@gmail.com").Value).Value;
     
         // Act
@@ -45,7 +45,7 @@ public class ProviderRepositoryTests : ProductRelatedEntityTestsBase<Provider,IP
         var nonExistingProvider = Provider.Create(
             Guid.NewGuid(),
             CompanyName.From("Non-existing Company Name").Value,
-            "+38069355555",
+            PhoneNumber.From("+38069355555").Value,
             Email.From("nonexistingemail@gmail.com").Value).Value;
     
         // Act
