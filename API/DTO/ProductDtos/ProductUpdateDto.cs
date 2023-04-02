@@ -9,10 +9,11 @@ public class ProductUpdateDto
      public decimal FullPrice { get; init; } = default;
  
      public string Description { get; init; } = "";
- 
-     public IReadOnlyCollection<string> Images { get; init; } = null!;
 
-     public string MainImage { get; init; }
+     public string MainImage { get; init; } = "";
+     
+     public IReadOnlyCollection<string> Images { get; init; } = null!;
+     
      public decimal Sale { get; init; } = default;
  
      public bool IsActive { get; init; } = default;

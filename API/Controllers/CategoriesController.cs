@@ -26,15 +26,15 @@ public class CategoriesController : ControllerBase
 
     [HttpGet("all")]
     [ProducesResponseType(typeof(PageResponse<CategoryDto>),StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories(
-        [FromQuery] int pageIndex = 1, 
-        [FromQuery] int pageSize = 15)
+    public async Task<ActionResult<PageResponse<CategoryDto>>> GetCategories(
+        [FromQuery] PaginationQueryParameters queryParams)
     {
-        var (categories,totalRecords) = await _unitOfWork.Categories.GetAll(pageIndex,pageSize);
+        var (categories,totalRecords) = await _unitOfWork.Categories
+            .GetAll(queryParams.PageIndex,queryParams.PageSize);
 
         var categoryDtos = categories.Select(category => category.ToDto()).ToList();
 
-        var paginationInfo = new PaginationInfo(pageIndex, pageSize, totalRecords);
+        var paginationInfo = new PaginationInfo(queryParams.PageIndex, queryParams.PageSize, totalRecords);
 
         var pageResponse = new PageResponse<CategoryDto>(categoryDtos, paginationInfo);
         

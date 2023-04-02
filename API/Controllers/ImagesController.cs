@@ -36,7 +36,7 @@ public class ImagesController : ControllerBase
             return await HandleAmazonException(uploadedFileKeys, ex);
         }
 
-        return uploadedImages;
+        return Ok(uploadedImages);
     }
 
     private async Task<List<ImageFileDto>> UploadFilesAsync(IEnumerable<IFormFile> files, ICollection<string> uploadedFileKeys)

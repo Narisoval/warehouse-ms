@@ -29,14 +29,14 @@ public class ProductsController : ControllerBase
     [HttpGet("all")]
     [ProducesResponseType(typeof(PageResponse<ProductDto>),StatusCodes.Status200OK)]
     public async Task<ActionResult<PageResponse<ProductDto>>> GetProducts(
-        [FromQuery] int pageIndex = 1, 
-        [FromQuery] int pageSize = 15)
+        [FromQuery] PaginationQueryParameters queryParams)
     {
-        var (products,totalRecords) = await _unitOfWork.Products.GetAll(pageIndex,pageSize);
+        var (products,totalRecords) = await _unitOfWork.Products
+            .GetAll(queryParams.PageIndex,queryParams.PageSize);
         
         var productDtos = products.Select(product => product.ToDto()).ToList();
 
-        var paginationInfo = new PaginationInfo(pageIndex, pageSize, totalRecords);
+        var paginationInfo = new PaginationInfo(queryParams.PageIndex, queryParams.PageSize, totalRecords);
 
         var pageResponse = new PageResponse<ProductDto>(productDtos, paginationInfo);
         
@@ -69,10 +69,12 @@ public class ProductsController : ControllerBase
         
         await _unitOfWork.Complete();
 
-        await _eventBus.PublishAsync(product!.ToCreatedEvent());
+        var createdProduct = await _unitOfWork.Products.Get(product!.Id);
+        
+        await _eventBus.PublishAsync(createdProduct!.ToCreatedEvent());
             
         return CreatedAtAction(nameof(GetProduct),
-            new { id = product!.Id }, product.ToDto());
+            new { id = product!.Id }, createdProduct!.ToDto());
     }
 
     [HttpPut("{id:guid}")]
@@ -105,7 +107,7 @@ public class ProductsController : ControllerBase
         var wasProductRemoved = await _unitOfWork.Products.Remove(id);
 
         if (!wasProductRemoved)
-            GetProductNotFoundResponse(id);
+            return GetProductNotFoundResponse(id);
 
         await _unitOfWork.Complete();
 

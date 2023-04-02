@@ -23,20 +23,19 @@ public class ProvidersController : ControllerBase
     [HttpGet("all")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(IEnumerable<PageResponse<ProviderDto>>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<PageResponse<ProviderDto>>> GetProviders(
-        [FromQuery] int pageIndex = 1, 
-        [FromQuery] int pageSize = 15)
+    public async Task<ActionResult<PageResponse<ProviderDto>>> GetProviders
+        ([FromQuery] PaginationQueryParameters queryParams)
     {
-        var (providers,totalRecords) = await _unitOfWork.Providers.GetAll(pageIndex,pageSize);
+        var (providers,totalRecords) = await _unitOfWork.Providers
+            .GetAll(queryParams.PageIndex,queryParams.PageSize);
 
         var providerDtos = providers.Select(provider => provider.ToDto()).ToList();
 
-        var paginationInfo = new PaginationInfo(pageIndex, pageSize, totalRecords);
+        var paginationInfo = new PaginationInfo(queryParams.PageIndex, queryParams.PageSize, totalRecords);
 
         var pageResponse = new PageResponse<ProviderDto>(providerDtos, paginationInfo);
             
         return Ok(pageResponse);
-
     }
 
     [HttpGet("{id:guid}")]

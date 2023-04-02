@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 using Warehouse.API.DTO.BrandDtos;
 using Warehouse.API.DTO.PaginationDtos;
-using Warehouse.API.DTO.ProviderDtos;
 using Warehouse.API.DTO.SwaggerExamples;
 using Warehouse.API.Helpers.Mapping;
 using Warehouse.API.Messaging.Events.BrandEvents;
@@ -30,14 +29,14 @@ public class BrandsController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(typeof(PageResponse<BrandDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<PageResponse<BrandDto>>> GetBrands(
-        [FromQuery] int pageIndex = 1, 
-        [FromQuery] int pageSize = 15)
+        [FromQuery] PaginationQueryParameters queryParams)
     {
-        var (brands, totalRecords) = await _unitOfWork.Brands.GetAll(pageIndex,pageSize);
+        var (brands, totalRecords) = await _unitOfWork.Brands
+            .GetAll(queryParams.PageIndex,queryParams.PageSize);
         
         var brandDtos = brands.Select(product => product.ToDto()).ToList();
 
-        var paginationInfo = new PaginationInfo(pageIndex, pageSize, totalRecords);
+        var paginationInfo = new PaginationInfo(queryParams.PageIndex, queryParams.PageSize, totalRecords);
 
         var pageResponse = new PageResponse<BrandDto>(brandDtos,paginationInfo);
         
