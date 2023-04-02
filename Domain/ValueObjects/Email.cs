@@ -6,7 +6,7 @@ namespace Domain.ValueObjects;
 
 public sealed class Email : ValueObject 
 {
-    public string Value { get; private init; }
+    public string Value { get; }
     
     private Email(string email)
     {
