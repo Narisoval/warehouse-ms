@@ -9,8 +9,8 @@ public class RangeTests
     public void Should_ThrowException_When_MaxIsLessThenMin()
     {
         //Arrange
-        int min = 44;
-        int max = 0;
+        const int min = 44;
+        const int max = 0;
         
         //Act & Assert
         Assert.Throws<ArgumentOutOfRangeException>(() => Range<int>.Create(min, max));
@@ -20,8 +20,8 @@ public class RangeTests
     public void Should_CreateRange_WhenMaxIsLessThanMin()
     {
         //Arrange
-        var min = 0;
-        var max = 40;
+        const int min = 0;
+        const int max = 40;
         
         //Act
         var sut = Range<int>.Create(min, max);
@@ -35,7 +35,7 @@ public class RangeTests
     public void Should_CreateRange_WhenMaxIsEqualToMin()
     {
         //Arrange
-        var min = 40;
+        const int min = 40;
         
         //Act
         var sut = Range<int>.Create(min, min);

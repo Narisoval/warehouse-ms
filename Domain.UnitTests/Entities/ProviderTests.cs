@@ -72,23 +72,6 @@ public class ProviderTests
             providerCreatedWithoutId.AssertIsFailed(i+1);
         }
     }
-    
-    private Result<Provider> CreateProviderWithId(List<object?> arguments)
-    {
-        return Provider.Create(
-            TestId, 
-            (CompanyName?)arguments[0],
-            (PhoneNumber?)arguments[1],
-            (Email?)arguments[2]);
-    }
-    
-    private Result<Provider> CreateProviderWithoutId(List<object?> arguments)
-    {
-        return Provider.Create(
-            (CompanyName?)arguments[0],
-            (PhoneNumber?)arguments[1],
-            (Email?)arguments[2]);
-    }
 
     [Fact]
     public void Should_ReturnFailedResult_When_PhoneNumberIsNull()
@@ -124,5 +107,22 @@ public class ProviderTests
         provider.CompanyName.Should().BeEquivalentTo(TestCompanyName);
         provider.PhoneNumber.Should().Be(TestPhoneNumber);
         provider.Email.Should().BeEquivalentTo(TestEmail);
+    }
+    
+    private Result<Provider> CreateProviderWithId(List<object?> arguments)
+    {
+        return Provider.Create(
+            TestId, 
+            (CompanyName?)arguments[0],
+            (PhoneNumber?)arguments[1],
+            (Email?)arguments[2]);
+    }
+    
+    private Result<Provider> CreateProviderWithoutId(List<object?> arguments)
+    {
+        return Provider.Create(
+            (CompanyName?)arguments[0],
+            (PhoneNumber?)arguments[1],
+            (Email?)arguments[2]);
     }
 }

@@ -78,6 +78,7 @@ public class ProductTests
     {
         //Arrange
         var sut = GetTestProduct();
+        
         IReadOnlyCollection<ProductImage>? newProductImages = null;
         
         //Act 

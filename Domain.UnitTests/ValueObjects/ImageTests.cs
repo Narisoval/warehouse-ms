@@ -57,8 +57,10 @@ public class ImageTests
     {
         //Arrange
         string imageUrl = "https://image.jpg";
+        
         //Act
         var sut = Image.From(imageUrl);
+        
         //Assert
         sut.IsSuccess.Should().BeTrue();
         var imageValueObject = sut.Value;

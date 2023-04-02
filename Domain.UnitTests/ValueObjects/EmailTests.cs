@@ -1,4 +1,5 @@
 using Domain.ValueObjects;
+using FluentAssertions;
 
 namespace Domain.UnitTests.ValueObjects;
 
@@ -13,7 +14,8 @@ public class EmailTests
         var result = Email.From(email);
 
         // Assert
-        Assert.Equal(email, result.Value.Value);
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Value.Should().BeEquivalentTo(email);
     }
 
     [Theory]

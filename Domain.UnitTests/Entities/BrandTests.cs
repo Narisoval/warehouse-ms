@@ -20,20 +20,8 @@ public class BrandTests
         var brandResult = Brand.Create(_id, _brandName, _image, _description);
 
         //Assert
-        Assert.Equal(_id, brandResult.Value.Id);
+        brandResult.Value.Id.Should().Be(_id);
         AssertBrandCreatedCorrectly(brandResult);
-    }
-
-    private void AssertBrandCreatedCorrectly(Result<Brand> brandResult)
-    { 
-        brandResult.IsSuccess.Should().BeTrue();
-        
-        var brand = brandResult.Value;
-        
-        Assert.Equal(_brandName, brand.Name);
-        Assert.Equal(_image, brand.Image);
-        Assert.Equal(_description, brand.Description);
-        
     }
 
     [Fact]
@@ -55,6 +43,7 @@ public class BrandTests
         //Assert
         brandResult.AssertIsFailed(1);
     }
+    
     [Fact]
     public void Should_ReturnFailedResult_When_SomeArgumentsAreNull()
     {
@@ -73,6 +62,18 @@ public class BrandTests
         }
     }
 
+    private void AssertBrandCreatedCorrectly(Result<Brand> brandResult)
+    { 
+        brandResult.IsSuccess.Should().BeTrue();
+        
+        var brand = brandResult.Value;
+        
+        Assert.Equal(_brandName, brand.Name);
+        Assert.Equal(_image, brand.Image);
+        Assert.Equal(_description, brand.Description);
+        
+    }
+    
     private Result<Brand> CreateBrandWithId(List<ValueObject?> arguments)
     {
         return Brand.Create(
@@ -89,5 +90,4 @@ public class BrandTests
             (Image?)arguments[1]!,
             (BrandDescription?)arguments[2]!);    
     }
-
 }
