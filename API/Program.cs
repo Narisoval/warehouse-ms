@@ -46,3 +46,6 @@ app.UseExceptionHandlingMiddleware();
 app.UseRequestLogging();
 app.MapControllers();
 app.Run();
+
+//For tests
+public partial class Program { }
