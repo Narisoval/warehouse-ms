@@ -1,8 +1,9 @@
 using Infrastructure.DependencyInjection;
-using Infrastructure.MessageBroker.EventBus;
 using Warehouse.API.Helpers.Extensions;
 using Warehouse.API.Middleware;
 using Infrastructure.Services;
+using Warehouse.API.Helpers.Extensions.ApplicationBuilderExtensions;
+using Warehouse.API.Helpers.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +13,7 @@ builder.Services.AddControllersWithBinders();
 
 builder.Services.AddPersistence(builder.Configuration);
 
-builder.Services.AddSwagger();
-
 builder.Services.AddMessageBroker(builder.Configuration);
-
-builder.Services.AddTransient<IEventBus, EventBus>();
 
 builder.Services.AddLoggingEventBus();
 
@@ -24,18 +21,20 @@ builder.Services.Configure<ImageStoreConfiguration>(builder.Configuration.GetSec
 
 builder.Services.AddS3Service();
 
+builder.Services.AddApiVersions();
+
+builder.Services.AddSwagger();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwaggerIfDevelopment();
 
 app.UseExceptionHandlingMiddleware();
+
 app.UseRequestLogging();
+
 app.MapControllers();
+
 app.Run();
 
 //For tests

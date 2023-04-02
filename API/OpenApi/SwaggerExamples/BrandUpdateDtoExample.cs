@@ -1,7 +1,7 @@
 using Swashbuckle.AspNetCore.Filters;
 using Warehouse.API.DTO.BrandDtos;
 
-namespace Warehouse.API.DTO.SwaggerExamples;
+namespace Warehouse.API.OpenApi.SwaggerExamples;
 
 public class BrandUpdateDtoExample : IExamplesProvider<BrandUpdateDto>
 {

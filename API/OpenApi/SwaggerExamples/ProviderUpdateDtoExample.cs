@@ -1,7 +1,7 @@
 using Swashbuckle.AspNetCore.Filters;
 using Warehouse.API.DTO.ProviderDtos;
 
-namespace Warehouse.API.DTO.SwaggerExamples;
+namespace Warehouse.API.OpenApi.SwaggerExamples;
 
 public class ProviderUpdateDtoExample  : IExamplesProvider<ProviderUpdateDto>
 {
