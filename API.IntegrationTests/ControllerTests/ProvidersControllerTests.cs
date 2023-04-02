@@ -14,7 +14,7 @@ public class ProvidersControllerTests : IClassFixture<WarehouseWebApplicationFac
 {
     private readonly HttpClient _client;
 
-    private const string Endpoint = "api/providers";
+    private const string Endpoint = "api/v1/providers";
 
     public ProvidersControllerTests(WarehouseWebApplicationFactory factory)
     {

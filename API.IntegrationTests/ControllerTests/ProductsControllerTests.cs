@@ -20,7 +20,7 @@ public class ProductsControllerTests : IClassFixture<WarehouseWebApplicationFact
 
     private readonly ControllerTestHelper _testHelper;
 
-    private const string Endpoint = "api/products";
+    private const string Endpoint = "api/v1/products";
 
     public ProductsControllerTests(WarehouseWebApplicationFactory factory)
     {

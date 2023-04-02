@@ -22,7 +22,7 @@ public class BrandsControllerTests : IClassFixture<WarehouseWebApplicationFactor
 
     private readonly ControllerTestHelper _testHelper;
 
-    private const string Endpoint = "api/brands";
+    private const string Endpoint = "api/v1/brands";
 
     public BrandsControllerTests(WarehouseWebApplicationFactory factory)
     {
