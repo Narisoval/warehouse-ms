@@ -6,15 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 using Warehouse.API.DTO.PaginationDtos;
 using Warehouse.API.DTO.ProductDtos;
-using Warehouse.API.DTO.SwaggerExamples;
 using Warehouse.API.Helpers.Extensions;
 using Warehouse.API.Helpers.Mapping;
 using Warehouse.API.Messaging.Events.ProductEvents;
+using Warehouse.API.OpenApi.SwaggerExamples;
 
-namespace Warehouse.API.Controllers;
+namespace Warehouse.API.Controllers.v1;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 public class ProductsController : ControllerBase
 {
     private readonly IUnitOfWork _unitOfWork;

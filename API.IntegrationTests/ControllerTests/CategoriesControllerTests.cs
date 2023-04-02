@@ -21,7 +21,7 @@ public class CategoriesControllerTests : IClassFixture<WarehouseWebApplicationFa
 
     private readonly ControllerTestHelper _testHelper;
 
-    private const string Endpoint = "api/categories";
+    private const string Endpoint = "api/v1/categories";
     
     public CategoriesControllerTests(WarehouseWebApplicationFactory factory)
     {
