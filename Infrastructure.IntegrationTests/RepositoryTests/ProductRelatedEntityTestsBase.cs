@@ -5,6 +5,7 @@ using FluentAssertions;
 using Infrastructure.Data;
 using Infrastructure.IntegrationTests.Helpers.Fixtures;
 using Infrastructure.Interfaces;
+using Infrastructure.Interfaces.Generics;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.IntegrationTests.RepositoryTests;

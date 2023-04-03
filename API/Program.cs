@@ -1,9 +1,9 @@
 using Infrastructure.DependencyInjection;
-using Warehouse.API.Helpers.Extensions;
-using Warehouse.API.Middleware;
 using Infrastructure.Services;
+using Warehouse.API.Helpers.Extensions;
 using Warehouse.API.Helpers.Extensions.ApplicationBuilderExtensions;
 using Warehouse.API.Helpers.Extensions.DependencyInjection;
+using Warehouse.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 

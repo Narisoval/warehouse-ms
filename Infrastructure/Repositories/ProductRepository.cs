@@ -2,11 +2,12 @@ using Domain.Entities;
 using FluentResults;
 using Infrastructure.Data;
 using Infrastructure.Interfaces;
+using Infrastructure.Repositories.Generics;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public sealed class ProductRepository : Repository<Product,WarehouseDbContext>, IProductRepository
+public sealed class ProductRepository : PaginatedRepository<Product,WarehouseDbContext>, IProductRepository
 {
     public ProductRepository(WarehouseDbContext context) : base(context)
     {

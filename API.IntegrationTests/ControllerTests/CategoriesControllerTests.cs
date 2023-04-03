@@ -41,56 +41,18 @@ public class CategoriesControllerTests : IClassFixture<WarehouseWebApplicationFa
     [Fact]
     public async Task Should_ReturnAllCategories_When_GetAllEndpointIsCalled()
     {
-        // Arrange
-        var oneItemResponse = await _client.GetAsync($"{Endpoint}/all?pageIndex=1&pageSize=1");
-        var oneItemPageResponse = await oneItemResponse.Content.ReadFromJsonAsync<PageResponse<CategoryDto>>();
-        oneItemPageResponse.Should().NotBeNull();
-        var pagesSize = oneItemPageResponse!.PaginationInfo.TotalRecords;
-        
         //Act
-        var allItemsResponse = await _client.GetAsync($"{Endpoint}/all?pageIndex={1}&pageSize={pagesSize}");
-        var allItems = await allItemsResponse.Content.ReadFromJsonAsync<PageResponse<CategoryDto>>();
+        var allItemsResponse = await _client.GetAsync($"{Endpoint}/all");
+        var allItems = await allItemsResponse.Content.ReadFromJsonAsync<IEnumerable<CategoryDto>>();
         var seededCategoriesDtos = EntitiesFixture.Categories.Select(category => category.ToDto());
         
         //Assert
-        oneItemPageResponse.Should().NotBeNull();
         allItemsResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         allItems.Should().NotBeNull();
-        allItems!.Data.Should().BeEquivalentTo(seededCategoriesDtos);
+        allItems!.Should().BeEquivalentTo(seededCategoriesDtos);
     }
     
-    [Theory]
-    [InlineData(1, 2)]
-    public async Task Should_ReturnCategoriesWithCustomPagination_When_GetAllEndpointIsCalledWithQueryParameters
-        (int pageIndex, int pageSize)
-    {
-        // Act
-        var response = await _client.GetAsync($"{Endpoint}/all?pageIndex={pageIndex}&pageSize={pageSize}");
-        var result = await response.Content.ReadFromJsonAsync<PageResponse<CategoryDto>>();
-
-        // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-        result.Should().NotBeNull();
-        result!.Data.Count().Should().Be(pageSize);
-        result.PaginationInfo.PageIndex.Should().Be(pageIndex);
-        result.PaginationInfo.PageSize.Should().Be(pageSize);
-    }
-    
-    [Theory]
-    [InlineData(0, 6)]
-    [InlineData(6, 0)]
-    [InlineData(0, 0)]
-    [InlineData(-1, 9)]
-    [InlineData(9, -1)]
-    [InlineData(-1, -1)]
-    public async Task Should_ReturnBadRequest_When_GetAllEndpointIsCalledWithInvalidQueryParameters(int pageIndex, int pageSize)
-    {
-        // Act
-        var response = await _client.GetAsync($"{Endpoint}/all?pageIndex={pageIndex}&pageSize={pageSize}");
-
-        // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-    }
+    //TODO more tests 
     
     #endregion
 
