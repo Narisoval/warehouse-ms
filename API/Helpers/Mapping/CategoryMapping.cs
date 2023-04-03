@@ -12,6 +12,8 @@ public static class CategoryMapping
         {
             CategoryId = category.Id,
             Name = category.Name.Value,
+            ParentId = category.Id,
+            SubCategories = category.SubCategories?.Select(x => x.ToDto()).ToList()
         };
     }
 
@@ -26,7 +28,7 @@ public static class CategoryMapping
     
     public static CategoryUpdatedEvent ToUpdatedEvent(this Category category)
     {
-        return new CategoryUpdatedEvent()
+        return new CategoryUpdatedEvent
         {
             Id = category.Id,
             Name = category.Name.Value,

@@ -6,18 +6,20 @@ using Category = Domain.Entities.Category;
 
 namespace Warehouse.API.Helpers.Binders.EntityModelBinders;
 
-public sealed class CategoryEntityModelBinder : BaseEntityModelBinder<CategoryUpdateDto>
+public sealed class CategoryEntityModelBinder : EntityModelBinder<CategoryUpdateDto>
 {
     protected override void ConvertDtoToEntity(CategoryUpdateDto categoryDto, Guid? id)
     {
         var categoryNameResult = CategoryName.From(categoryDto.Name);
+
+        var parentId = categoryDto.ParentId;
         
         if(!CheckIfResultsAreSuccessful(categoryNameResult))
             return;
 
-        Result<Category> categoryResult = id != null ? 
-            Category.Create(id.Value, categoryNameResult.Value) : 
-            Category.Create(categoryNameResult.Value);
+        var categoryResult = id != null ? 
+            Category.Create(id.Value, categoryNameResult.Value,parentId) : 
+            Category.Create(categoryNameResult.Value,parentId);
         
         if(!CheckIfCategoryIsCreatedSuccessfully(categoryResult))
             return;

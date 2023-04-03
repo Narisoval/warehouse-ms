@@ -6,7 +6,7 @@ using Warehouse.API.DTO.ProductDtos;
 using Image = Domain.ValueObjects.Image;
 
 namespace Warehouse.API.Helpers.Binders.EntityModelBinders;
-public sealed class ProductEntityModelBinder : BaseEntityModelBinder<ProductUpdateDto>
+public sealed class ProductEntityModelBinder : EntityModelBinder<ProductUpdateDto>
 {
     protected override void ConvertDtoToEntity(ProductUpdateDto dto, Guid? id)
     {

@@ -5,7 +5,7 @@ using Warehouse.API.Helpers.Extensions;
 
 namespace Warehouse.API.Helpers.Binders.EntityModelBinders;
 
-public abstract class BaseEntityModelBinder<TDto>: IModelBinder 
+public abstract class EntityModelBinder<TDto>: IModelBinder 
 {
     protected ModelBindingContext BindingContext = null!;
     protected abstract void ConvertDtoToEntity(TDto dto, Guid? id);
