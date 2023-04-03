@@ -16,5 +16,10 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .HasConversion(name => name.Value,
                 value => CategoryName.From(value).Value)
             .HasColumnName("Name");
+        
+        builder.HasOne(c => c.Parent)
+            .WithMany(c => c.SubCategories)
+            .HasForeignKey(c => c.ParentId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
