@@ -6,7 +6,7 @@ using Warehouse.API.DTO.ProviderDtos;
 
 namespace Warehouse.API.Helpers.Binders.EntityModelBinders;
 
-public sealed class ProviderEntityModelBinder : BaseEntityModelBinder<ProviderUpdateDto>
+public sealed class ProviderEntityModelBinder : EntityModelBinder<ProviderUpdateDto>
 {
     protected override void ConvertDtoToEntity(ProviderUpdateDto providerDto, Guid? id)
     {

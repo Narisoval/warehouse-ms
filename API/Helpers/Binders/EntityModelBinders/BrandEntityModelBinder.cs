@@ -7,7 +7,7 @@ using Image = Domain.ValueObjects.Image;
 
 namespace Warehouse.API.Helpers.Binders.EntityModelBinders;
 
-public sealed class BrandEntityModelBinder : BaseEntityModelBinder<BrandDto>
+public sealed class BrandEntityModelBinder : EntityModelBinder<BrandDto>
 {
     protected override void ConvertDtoToEntity(BrandDto brandDto, Guid? id)
     {
