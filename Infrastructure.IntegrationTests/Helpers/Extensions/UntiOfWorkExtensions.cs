@@ -1,5 +1,6 @@
 using Domain.Primitives;
 using Infrastructure.Interfaces;
+using Infrastructure.Interfaces.Generics;
 
 namespace Infrastructure.IntegrationTests.Helpers.Extensions;
 

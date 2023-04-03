@@ -27,19 +27,13 @@ public class CategoriesController : ControllerBase
 
     [HttpGet("all")]
     [ProducesResponseType(typeof(PageResponse<CategoryDto>),StatusCodes.Status200OK)]
-    public async Task<ActionResult<PageResponse<CategoryDto>>> GetCategories(
-        [FromQuery] PaginationQueryParameters queryParams)
+    public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories()
     {
-        var (categories,totalRecords) = await _unitOfWork.Categories
-            .GetAll(queryParams.PageIndex,queryParams.PageSize);
+        var categories = await _unitOfWork.Categories.GetAll();
 
         var categoryDtos = categories.Select(category => category.ToDto()).ToList();
 
-        var paginationInfo = new PaginationInfo(queryParams.PageIndex, queryParams.PageSize, totalRecords);
-
-        var pageResponse = new PageResponse<CategoryDto>(categoryDtos, paginationInfo);
-        
-        return Ok(pageResponse);
+        return Ok(categoryDtos);
     }
     
     [HttpGet("{id:guid}")]
@@ -68,7 +62,7 @@ public class CategoriesController : ControllerBase
         await _eventBus.PublishAsync(category!.ToCreatedEvent());
 
         return CreatedAtAction(nameof(GetCategory),
-            new { id = category.Id }, category.ToDto());
+            new { id = category!.Id }, category.ToDto());
     }
 
     [HttpPut("{id:guid}")]

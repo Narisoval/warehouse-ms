@@ -1,8 +1,9 @@
 using Domain.Primitives;
 using Infrastructure.Interfaces;
+using Infrastructure.Interfaces.Generics;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repositories;
+namespace Infrastructure.Repositories.Generics;
 
 public abstract class Repository<TEntity, TContext> : IRepository<TEntity>
     where TEntity : Entity 
@@ -18,18 +19,6 @@ public abstract class Repository<TEntity, TContext> : IRepository<TEntity>
     public async Task<TEntity?> Get(Guid id)
     {
         return await Context.Set<TEntity>().FindAsync(id);
-    }
-
-    public async Task<(IEnumerable<TEntity>, int)> GetAll(int pageIndex = 1,int pageSize = 15)
-    {
-        var totalCount = await Context.Set<TEntity>().CountAsync();
-        
-        var entities = await Context.Set<TEntity>().AsNoTracking()
-            .Skip((pageIndex-1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-        
-        return (entities, totalCount);
     }
 
     public async Task Add(TEntity entity)
