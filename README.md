@@ -102,11 +102,13 @@ Example:
 Represents the data used to update an existing category or create a new one with the following properties:
 
 * Name (string, required) - the name of the category
-
+* ParentId (string, optional) - the unique identifier of the parent category
+ 
 Example:
 ```json
 {
-  "Name": "Men's Socks"
+  "Name": "Men's Socks",
+  "ParentId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6"
 }
 ```
 
@@ -115,12 +117,29 @@ Represents a category object with the following properties:
 
 * CategoryId (string) - the unique identifier of the category
 * Name (string) - the name of the category
+* ParentId (string, optional) - the unique identifier of the parent category
+* SubCategories (array, optional) - a list of subcategories if any
  
 Example:
 ```json
 {
   "categoryId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6",
-  "name": "Men's Socks"
+  "name": "Men's Clothing",
+  "parentId": "0b276958-258b-48d1-ada1-25f418240f37",
+  "subCategories": [
+    {
+      "categoryId": "2a9b8d56-78c1-49a3-aa1b-3cde12fdaa37",
+      "name": "Men's Shirts",
+      "parentId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6",
+      "subCategories": []
+    },
+    {
+      "categoryId": "7c4b6a1d-4d3b-4e9c-bb60-eb45c3e2eaa2",
+      "name": "Men's Pants",
+      "parentId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6",
+      "subCategories": []
+    }
+  ]
 }
 ```
 
@@ -376,36 +395,56 @@ Returns a single brand by its GUID id.
 ### `GET /api/v1/categories/all`
 Returns all the categories in the warehouse.
 
-***Query Parameters:***
+Status codes:
 
-- pageIndex (optional, default = 1) - The page number to retrieve.
-- pageSize (optional, default = 15) - The number of records per page.
-
-***Status codes:***
 * 200 OK - The request was successful and the response contains an array of categories.
 * 500 Internal Server Error - The server encountered an error while processing the request.
+Response body:
 
 ***Response body:***
 ```json
-{
-  "data": [
-    {
-      "categoryId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6",
-      "name": "Electronics"
-    },
-    {
-      "categoryId": "0b276958-258b-48d1-ada1-25f418240f37",
-      "name": "Home Goods"
-    }
-  ],
-  "pagination": {
-    "pageIndex": 2,
-    "pageSize": 2,
-    "totalPages": 100,
-    "totalRecords": 200
+[
+  {
+    "categoryId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6",
+    "name": "Electronics",
+    "parentId": null,
+    "subCategories": [
+      {
+        "categoryId": "34c5d5e9-5a5c-4c81-bd7c-2c3b3ef5a5a5",
+        "name": "Smartphones",
+        "parentId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6",
+        "subCategories": []
+      },
+      {
+        "categoryId": "51e2f7a8-82e8-4a81-9c9b-7c17de0b8d8c",
+        "name": "Laptops",
+        "parentId": "61a0dcde-79c0-4240-abde-dfb9f68a8ef6",
+        "subCategories": []
+      }
+    ]
+  },
+  {
+    "categoryId": "0b276958-258b-48d1-ada1-25f418240f37",
+    "name": "Home Goods",
+    "parentId": null,
+    "subCategories": [
+      {
+        "categoryId": "a5e5b5e5-5a5a-4a81-8d7c-2c3b3ef5a5a5",
+        "name": "Kitchen Appliances",
+        "parentId": "0b276958-258b-48d1-ada1-25f418240f37",
+        "subCategories": []
+      },
+      {
+        "categoryId": "b6f6c6f6-6b6b-4b81-9e9f-7d7d8e8f9f9f",
+        "name": "Furniture",
+        "parentId": "0b276958-258b-48d1-ada1-25f418240f37",
+        "subCategories": []
+      }
+    ]
   }
-}
+]
 ```
+
 ### `GET /api/v1/categories/{id}`
 Returns a single category by its GUID id.
 
@@ -437,8 +476,7 @@ Creates a new category.
 [Category Response](#category-response)
 
 
-### `PUT /api/v1/categories/{id
-}`
+### `PUT /api/v1/categories/{id}`
 Updates a provider by its GUID id.
 
 ***Status codes: ***
@@ -454,9 +492,9 @@ Updates a provider by its GUID id.
 ### `DELETE /api/v1/categories/{id}`
 Deletes a category by its GUID id.
 
-| ⚠️ WARNING                                                                         |
-|: -----------------------------------------------------------------------------------|
-| When deleting a category all the products, associated with it will also be deleted |
+| ⚠️ WARNING                                                                                                |
+|:----------------------------------------------------------------------------------------------------------|
+| When deleting a category all the sub categories and the products, associated with it will also be deleted |
 
 
 ***Status codes: ***
