@@ -8,7 +8,8 @@ namespace Infrastructure.IntegrationTests.Helpers.Fixtures;
 public class DatabaseFixture : IAsyncLifetime
 {
     private const string PostgresVersion = "15.2-alpine";
-    
+
+    private const int PublicPort = 5432;
     public IUnitOfWork UnitOfWork { get; private set; }
 
     public DbDataSeeder DbDataSeeder { get; private set; }
@@ -24,7 +25,7 @@ public class DatabaseFixture : IAsyncLifetime
     {
         await _postgresqlContainer.StartAsync();
         
-        Console.WriteLine("CONTAINER CREATED ON PORT " + _postgresqlContainer.GetMappedPublicPort(5432));
+        Console.WriteLine("CONTAINER CREATED ON PORT " + _postgresqlContainer.GetMappedPublicPort(PublicPort));
         
         var contextOptions = new DbContextOptionsBuilder<WarehouseDbContext>()
             .UseNpgsql(_postgresqlContainer.GetConnectionString())

@@ -60,7 +60,6 @@ public class CategoryRepositoryTests : ProductRelatedEntityTestsBase<Category, I
         // Arrange
         var seededCategory = GetRandomSeededEntity();
         
-        // Detach the entity from the DbContext
         Context.Entry(seededCategory).State = EntityState.Detached;
         
         // Act
@@ -73,5 +72,28 @@ public class CategoryRepositoryTests : ProductRelatedEntityTestsBase<Category, I
         // Assert
         result.Should().BeTrue();
         fetchedCategory.Should().BeEquivalentTo(seededCategory);
+    }
+    
+    [Fact]
+    public async Task Should_RemoveAllChildren_When_DeletingParent()
+    {
+       //Arrange
+       var parent = Category.Create(Guid.NewGuid(), CategoryName.From("Socks").Value).Value;
+       var child1 = Category.Create(Guid.NewGuid(), CategoryName.From("Dogs").Value,parent.Id).Value;
+       var child2 = Category.Create(Guid.NewGuid(), CategoryName.From("Cocks").Value,child1.Id).Value;
+       
+       await Context.AddRangeAsync(parent, child1, child2);
+       await Context.SaveChangesAsync();
+       
+       //Act 
+       var isParentRemoved = await Repository.Remove(parent.Id);
+       await UnitOfWork.Complete();
+       
+       //Assert
+       isParentRemoved.Should().BeTrue();
+       var child1FromDb = await Repository.Get(child1.Id);
+       var child2FromDb = await Repository.Get(child2.Id);
+       child1FromDb.Should().BeNull();
+       child2FromDb.Should().BeNull();
     }
 }
