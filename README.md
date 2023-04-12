@@ -1,16 +1,19 @@
 # Warehouse Microservice 🏭
 This microservice is designed to provide easy access to product information stored in the warehouse through an intuitive API. Its main features include:
 
-1. **Data Storage:** The microservice stores all product information, including descriptions, images, and other characteristics.
-2. **Querying:** Users can query the microservice to retrieve information about specific products, such as their name, description, and image.
-3. **Editing:** The API allows users to edit existing product information or add new products to the database.
-4. **Robustness:** The microservice is designed to be robust and scalable, ensuring that it can handle large volumes of requests without any issues.
+1. 📦 **Data Storage:** The microservice stores all product information, including descriptions, images, and other characteristics.
+2. 🔍 **Querying:** Users can query the microservice to retrieve information about specific products, such as their name, description, and image.
+3. ✏️ **Editing:** The API allows users to edit existing product information or add new products to the database.
+4. 💪 **Robustness:** The microservice is designed to be robust and scalable, ensuring that it can handle large volumes of requests without any issues.
  
 Overall, the goal of this project is to provide a comprehensive and easy-to-use API for managing all aspects of product information in the warehouse.
 
 Table of Contents
 =================
-* [Data formats:](#data-formats)
+* [Running the app](#running-the-app)
+    * [Running with docker compose](#running-with-docker-compose)
+    * [Running without docker](#running-without-docker)
+* [Data formats](#data-formats)
     * [Brand](#brand-) 🛍️
         * [Brand Response](#brand-response)
         * [Brand Request](#brand-request)
@@ -58,6 +61,57 @@ This microservice is responsible for storing, adding, editing and fetching infor
 
 The main goal of this project is to make an easy-to-use API for querying and changing all kinds of
 information about products, stored in the warehouse.
+
+# Running the App
+There are two ways to run the application: using Docker Compose or running without Docker.
+
+## Running with Docker Compose
+1. Create a new file named .env in the root directory of your project.
+2. Add the following environment variables to the .env file with your own values:
+```dotenv
+POSTGRES_USER="<your_postgres_user>"
+POSTGRES_PASSWORD="<your_postgres_password>"
+POSTGRES_DB_NAME="<your_postgres_db_name>"
+AWS_ACCESS_KEY_ID="<your_aws_access_key_id>"
+AWS_SECRET_ACCESS_KEY="<your_aws_secret_access_key>"
+AWS_BUCKET_NAME="<your_aws_bucket_name>"
+IMAGEKIT_URL="<your_imagekit_url>"
+```
+
+3. Run the following command in the terminal to start the application with Docker Compose:
+```shell
+docker-compose up
+```
+## Running without Docker
+1. Open the appsettings.json or create a new one in your project.
+
+2. Add the following configuration settings with your own values:
+```json
+{
+  // ...
+  "ElasticConfiguration": {
+    "Uri": "<your_elastic_search_uri>"
+  },
+  "ConnectionStrings": {
+    "Postgres": "<your_postgres_connection_string>"
+  },
+  "MessageBroker": {
+    "Host": "<your_message_broker_host>",
+    "Username": "<your_message_broker_username>",
+    "Password": "<your_message_broker_password>"
+  },
+  "ImageStore": {
+    "BucketName": "<your_aws_bucket_name>",
+    "ImagekitUrl": "<your_imagekit_url>"
+  }
+}
+```
+
+3. Start the up in your ID or using the following command in the terminal:
+```shell
+dotnet run
+```
+
 # Data formats
 
 ## Brand 🛍️
