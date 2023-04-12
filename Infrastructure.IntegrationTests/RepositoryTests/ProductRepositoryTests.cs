@@ -88,7 +88,7 @@ public class ProductRepositoryTests : RepositoryTestsBase<Product,IProductReposi
 
     [Theory]
     [MemberData(nameof(TestData))]
-    public async Task Should_ReturnRightAmountOfErrors_When_AddingCategoryWithWrongForeignKeys
+    public async Task Should_ReturnRightAmountOfErrors_When_AddingProductWithWrongForeignKeys
     (Guid? providerId, Guid? brandId, Guid? categoryId, int expectedErrorCount)
     {
         // Arrange
