@@ -6,7 +6,6 @@ namespace Infrastructure.Interfaces;
 
 public interface IProductRepository : IPaginatedRepository<Product>
 {
-    //TODO: pagination
     new Task<Result> Add(Product entity);
     
     new Task<Result<bool>> Update(Product productWithNewValues);
