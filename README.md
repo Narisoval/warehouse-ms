@@ -11,6 +11,9 @@ Overall, the goal of this project is to provide a comprehensive and easy-to-use 
 Table of Contents
 =================
 * [Running the app](#running-the-app)
+    * [Prerequisites](#prerequisites)
+        * [Installing docker and docker-compose](#installing-docker-and-docker-compose)
+        * [Installing .net 6 sdk](#installing-net-6-sdk)
     * [Running with docker compose](#running-with-docker-compose)
     * [Running without docker](#running-without-docker)
 * [Data formats](#data-formats)
@@ -65,6 +68,23 @@ information about products, stored in the warehouse.
 # Running the App
 There are two ways to run the application: using Docker Compose or running without Docker.
 
+## Prerequisites
+Before running the application, ensure you have the following installed:
+
+* Docker and Docker Compose (if running with Docker)
+* .NET 6 SDK (if running without Docker)
+
+### Installing Docker and Docker Compose
+Follow the official documentation to install Docker and Docker Compose for your operating system:
+
+* [Install Docker](https://docs.docker.com/get-docker/)
+* [Install Docker Compose](https://docs.docker.com/compose/install/)
+
+### Installing .NET 6 SDK
+Follow the official documentation to install the .NET 6 SDK for your operating system:
+
+* [Install .NET 6 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
+ 
 ## Running with Docker Compose
 1. Create a new file named .env in the root directory of your project.
 2. Add the following environment variables to the .env file with your own values:
