@@ -357,3 +357,6 @@ MigrationBackup/
 
 #Environment file which stores sensetive data for docker compose
 .env 
+
+#
+*/appsettings.*.json
