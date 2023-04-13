@@ -7,27 +7,27 @@ namespace Domain.UnitTests.Entities;
 
 public class ProviderTests
 {
-    private static readonly Guid TestId = Guid.NewGuid();
-    private static readonly Email TestEmail = Email.From("example@email.com").Value;
-    private static readonly CompanyName TestCompanyName = CompanyName.From("Hammermen dev.").Value;
-    private static readonly PhoneNumber TestPhoneNumber = PhoneNumber.From("+3806894583948").Value;
+    private static readonly Guid Id = Guid.NewGuid();
+    private static readonly Email Email = Email.From("example@email.com").Value;
+    private static readonly CompanyName CompanyName = CompanyName.From("Hammermen dev.").Value;
+    private static readonly PhoneNumber PhoneNumber = PhoneNumber.From("+3806894583948").Value;
 
     [Fact]
     public void Should_CreateProvider_When_CreatingProviderWithId()
     {
         //Act
-        var providerResult = Provider.Create(TestId, TestCompanyName, TestPhoneNumber, TestEmail);
+        var providerResult = Provider.Create(Id, CompanyName, PhoneNumber, Email);
 
         //Assert
         AssertProviderCreatedSuccessfully(providerResult);
-        providerResult.Value.Id.Should().Be(TestId);
+        providerResult.Value.Id.Should().Be(Id);
     }
 
     [Fact]
     public void Should_CreateProvider_When_CreatingProviderWithoutId()
     {
         //Act
-        var providerResult = Provider.Create(TestCompanyName, TestPhoneNumber, TestEmail);
+        var providerResult = Provider.Create(CompanyName, PhoneNumber, Email);
 
         //Assert
         AssertProviderCreatedSuccessfully(providerResult);
@@ -41,88 +41,20 @@ public class ProviderTests
         var id = Guid.Empty;
 
         //Act
-        var providerResult = Provider.Create(id, TestCompanyName, TestPhoneNumber, TestEmail);
+        var providerResult = Provider.Create(id, CompanyName, PhoneNumber, Email);
 
         //Assert
         providerResult.AssertIsFailed(1);
     }
 
 
-    [Fact]
-    public void Should_ReturnFailedResult_When_OneOfTheArgumentsIsNull()
-    {
-        //Arrange
-        var arguments = new List<object?>
-        {
-            TestCompanyName,
-            TestPhoneNumber,
-            TestEmail
-        };
-
-        for (int i = 0; i < arguments.Count; i++)
-        {
-            arguments[i] = null;
-            
-            //Act
-            var providerCreatedWithId = CreateProviderWithId(arguments);
-            var providerCreatedWithoutId = CreateProviderWithoutId(arguments);
-            
-            //Assert
-            providerCreatedWithId.AssertIsFailed(i+1);
-            providerCreatedWithoutId.AssertIsFailed(i+1);
-        }
-    }
-
-    [Fact]
-    public void Should_ReturnFailedResult_When_PhoneNumberIsNull()
-    {
-        //Arrange
-        PhoneNumber? phoneNumber = null;
-        
-        //Act
-        var sut = Provider.Create(TestId, TestCompanyName, phoneNumber, TestEmail);
-        
-        //Assert
-        sut.AssertIsFailed(1);
-    }
-    
-    [Fact]
-    public void Should_ReturnFailedResult_When_EmailIsNull()
-    {
-        //Arrange 
-        Email? email = null;
-        
-        //Act
-        var sut = Provider.Create(TestId, TestCompanyName, TestPhoneNumber, email);
-            
-        //Assert
-        sut.AssertIsFailed(1);
-    }
-
     private void AssertProviderCreatedSuccessfully(Result<Provider> providerResult)
     {
         providerResult.IsSuccess.Should().BeTrue();
         var provider = providerResult.Value;
 
-        provider.CompanyName.Should().BeEquivalentTo(TestCompanyName);
-        provider.PhoneNumber.Should().Be(TestPhoneNumber);
-        provider.Email.Should().BeEquivalentTo(TestEmail);
-    }
-    
-    private Result<Provider> CreateProviderWithId(List<object?> arguments)
-    {
-        return Provider.Create(
-            TestId, 
-            (CompanyName?)arguments[0],
-            (PhoneNumber?)arguments[1],
-            (Email?)arguments[2]);
-    }
-    
-    private Result<Provider> CreateProviderWithoutId(List<object?> arguments)
-    {
-        return Provider.Create(
-            (CompanyName?)arguments[0],
-            (PhoneNumber?)arguments[1],
-            (Email?)arguments[2]);
+        provider.CompanyName.Should().BeEquivalentTo(CompanyName);
+        provider.PhoneNumber.Should().Be(PhoneNumber);
+        provider.Email.Should().BeEquivalentTo(Email);
     }
 }

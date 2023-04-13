@@ -2,7 +2,7 @@
 using Domain.Primitives;
 using Domain.ValueObjects;
 using FluentResults;
-
+// ReSharper disable UnusedAutoPropertyAccessor.Local
 namespace Domain.Entities;
 
 public class Product : Entity
@@ -34,14 +34,14 @@ public class Product : Entity
 
     public static Result<Product> Create(
         Guid id,
-        ProductName? productName, 
-        Quantity? quantity, 
-        Price? fullPrice, 
-        Image? mainImage,
+        ProductName productName, 
+        Quantity quantity, 
+        Price fullPrice, 
+        Image mainImage,
         IReadOnlyCollection<ProductImage>? images, 
-        ProductDescription? productDescription, 
+        ProductDescription productDescription, 
         bool isActive, 
-        Sale? sale, 
+        Sale sale, 
         Guid providerId, 
         Guid brandId, 
         Guid categoryId)
@@ -60,39 +60,24 @@ public class Product : Entity
         if (categoryId == Guid.Empty)
             result.WithError(new EmptyGuidError("Category"));
         
-        if (productName == null)
-            result.WithError(new NullArgumentError(nameof(Name)));
-        
-        if (quantity == null)
-            result.WithError(new NullArgumentError(nameof(Quantity)));
-        
-        if (fullPrice == null)
-            result.WithError(new NullArgumentError(nameof(FullPrice)));
-
         result.WithErrors(CheckProductImages(mainImage, images).Errors);
-
-        if (productDescription == null)
-            result.WithError(new NullArgumentError(nameof(Description)));
-        
-        if(sale == null)
-            result.WithError(new NullArgumentError(nameof(Sale)));
 
         if (result.IsFailed)
             return result;
         
-        return new Product(id,productName!,quantity!,fullPrice!,mainImage!,images!,productDescription!,
-            isActive,sale!,providerId,brandId,categoryId);
+        return new Product(id,productName,quantity,fullPrice,mainImage,images!,productDescription,
+            isActive,sale,providerId,brandId,categoryId);
     }
     
     public static Result<Product> Create(
-        ProductName? productName, 
-        Quantity? quantity, 
-        Price? fullPrice, 
-        Image? mainImage,
+        ProductName productName, 
+        Quantity quantity, 
+        Price fullPrice, 
+        Image mainImage,
         IReadOnlyCollection<ProductImage>? images, 
-        ProductDescription? productDescription, 
+        ProductDescription productDescription, 
         bool isActive, 
-        Sale? sale, 
+        Sale sale, 
         Guid providerId, 
         Guid brandId, 
         Guid categoryId)
@@ -100,6 +85,38 @@ public class Product : Entity
         Guid id = Guid.NewGuid();
         return Create(id,productName,quantity,fullPrice,mainImage,images,productDescription,
             isActive,sale,providerId,brandId,categoryId);
+    }
+    
+    public void SetProductImages(IReadOnlyCollection<ProductImage>? images)
+    {
+        if (images != null)
+        {
+            foreach (var productImage in images)
+            {
+                productImage.ProductId = Id;
+                productImage.Product = this;
+            }
+        }
+        
+        Images = images;
+    }
+    
+    private static Result CheckProductImages(Image? mainImage, IReadOnlyCollection<ProductImage>? images)
+    {
+        Result result = new Result();     
+        
+        if (mainImage == null)
+            result.WithError(new NullArgumentError(nameof(MainImage)));
+
+        if (images == null)
+            result.WithError(new NullArgumentError(nameof(Images)));
+        else
+        {
+            if (images.Any(image => image.Image == mainImage))
+                result.WithError($"{nameof(Images)} can't contain {nameof(MainImage)}");
+        }
+        
+        return result;
     }
     
     private Product(
@@ -142,40 +159,10 @@ public class Product : Entity
         Sale = sale;
     }
     
-    private static Result CheckProductImages(Image? mainImage, IReadOnlyCollection<ProductImage>? images)
-    {
-        Result result = new Result();     
-        
-        if (mainImage == null)
-            result.WithError(new NullArgumentError(nameof(MainImage)));
-
-        if (images == null)
-            result.WithError(new NullArgumentError(nameof(Images)));
-        else
-        {
-            if (images.Any(image => image.Image == mainImage))
-                result.WithError($"{nameof(Images)} can't contain {nameof(MainImage)}");
-        }
-        
-        return result;
-    }
-
-    public void SetProductImages(IReadOnlyCollection<ProductImage>? images)
-    {
-        if (images != null)
-        {
-            foreach (var productImage in images)
-            {
-                productImage.ProductId = Id;
-                productImage.Product = this;
-            }
-        }
-        
-        Images = images;
-    }
-    
-    //For EF 
+    //For EF
+    #pragma warning disable CS8618
     private Product()
     {
+        ;
     }
 }

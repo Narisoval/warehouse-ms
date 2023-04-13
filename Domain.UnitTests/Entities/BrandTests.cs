@@ -1,5 +1,4 @@
 using Domain.Entities;
-using Domain.Primitives;
 using Domain.ValueObjects;
 using FluentAssertions;
 using FluentResults;
@@ -44,24 +43,6 @@ public class BrandTests
         brandResult.AssertIsFailed(1);
     }
     
-    [Fact]
-    public void Should_ReturnFailedResult_When_SomeArgumentsAreNull()
-    {
-        // Arrange
-        var arguments = new List<ValueObject?> { _brandName, _image, _description };
-
-        // Act and Assert
-        for (int i = 0; i < arguments.Count; i++)
-        {
-            arguments[i] = null;
-            var brandResultWithoutId = CreateBrandWithoutId(arguments);
-            var brandResultWithId = CreateBrandWithId(arguments);
-                
-            brandResultWithId.AssertIsFailed(i+1);
-            brandResultWithoutId.AssertIsFailed(i+1);
-        }
-    }
-
     private void AssertBrandCreatedCorrectly(Result<Brand> brandResult)
     { 
         brandResult.IsSuccess.Should().BeTrue();
@@ -72,22 +53,5 @@ public class BrandTests
         Assert.Equal(_image, brand.Image);
         Assert.Equal(_description, brand.Description);
         
-    }
-    
-    private Result<Brand> CreateBrandWithId(List<ValueObject?> arguments)
-    {
-        return Brand.Create(
-            _id,
-            (BrandName?)arguments[0],
-            (Image?)arguments[1]!,
-            (BrandDescription?)arguments[2]!);    
-    }
-    
-    private Result<Brand> CreateBrandWithoutId(List<ValueObject?> arguments)
-    {
-        return Brand.Create(
-            (BrandName?)arguments[0],
-            (Image?)arguments[1]!,
-            (BrandDescription?)arguments[2]!);    
     }
 }

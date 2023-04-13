@@ -141,34 +141,6 @@ public class ProductTests
         productResult.AssertIsFailed(4);
     }
 
-    [Fact]
-    public void Should_ReturnFailedResult_When_SomePropertiesAreNull()
-    {
-        //Arrange
-        var nullableArguments = new List<object?>()
-        {
-            TestName,
-            TestQuantity,
-            TestPrice,
-            TestMainImage,
-            _testProductImages,
-            TestProductDescription,
-            TestSale
-        };
-        
-        for (int i = 0; i < nullableArguments.Count; i++)
-        {
-            //Act 
-            nullableArguments[i] = null;
-            var productResultWithId = CreateProduct(nullableArguments,_testId);
-            var productResultWithoutId = CreateProduct(nullableArguments);
-            
-            //Assert
-            productResultWithId.AssertIsFailed(i+1);
-            productResultWithoutId.AssertIsFailed(i + 1);
-        }
-    }
-    
     private void AssertProviderCreatedCorrectly(Result<Product> productResult)
     {
         productResult.IsSuccess.Should().BeTrue();
@@ -183,46 +155,6 @@ public class ProductTests
         productResult.Value.ProviderId.Should().Be(_testProviderId);
         productResult.Value.BrandId.Should().Be(_testBrandId);
         productResult.Value.CategoryId.Should().Be(_testCategoryId);
-    }
-    
-    private Result<Product> CreateProduct(List<object?> arguments, Guid? id = null)
-    {
-        var productName = (ProductName?)arguments[0];
-        var quantity = (Quantity?)arguments[1];
-        var price = (Price?)arguments[2];
-        var mainImage = (Image?)arguments[3];
-        var images = (IReadOnlyCollection<ProductImage>?)arguments[4];
-        var description = (ProductDescription?)arguments[5];
-        var sale = (Sale?)arguments[6];
-        if (id == null)
-        {
-            return Product.Create(
-                productName: productName,
-                quantity: quantity,
-                fullPrice: price,
-                mainImage: mainImage,
-                images: images,
-                productDescription: description,
-                isActive: true,
-                sale: sale,
-                providerId: _testProviderId,
-                brandId: _testBrandId,
-                categoryId: _testCategoryId);
-        }
-        
-        return Product.Create(
-            id: id.Value,
-            productName: productName,
-            quantity: quantity,
-            fullPrice: price,
-            mainImage: mainImage,
-            images: images,
-            productDescription: description,
-            isActive: true,
-            sale: sale,
-            providerId: _testProviderId,
-            brandId: _testBrandId,
-            categoryId: _testCategoryId);
     }
     
 }

@@ -50,18 +50,4 @@ public class CategoryTests
         sut.AssertIsFailed(1);
     }
     
-    
-    [Fact]
-    public void Should_ReturnFailedResult_When_ArgumentsAreNull()
-    {
-        //Arrange
-        CategoryName? categoryName = null;
-        var id = Guid.NewGuid();
-        
-        //Act
-        var categoryResult = Category.Create(id, categoryName);
-        
-        //Assert
-        categoryResult.AssertIsFailed(1);
-    }
 }
