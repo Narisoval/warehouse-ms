@@ -96,7 +96,7 @@ public class CategoriesController : ControllerBase
         
         await _unitOfWork.Complete();
 
-        await _eventBus.PublishAsync(new CategoryDeletedEvent(id));
+        await _eventBus.PublishAsync(new CategoryDeletedEvent{Id = id});
         
         return NoContent();
     }

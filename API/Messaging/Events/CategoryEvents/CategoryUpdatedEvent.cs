@@ -1,3 +1,3 @@
 namespace Warehouse.API.Messaging.Events.CategoryEvents;
 
-public record CategoryUpdatedEvent : CategoryEventBase;
+public class CategoryUpdatedEvent : CategoryEventBase {}

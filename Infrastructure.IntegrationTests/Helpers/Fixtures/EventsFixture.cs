@@ -7,7 +7,7 @@ namespace Infrastructure.IntegrationTests.Helpers.Fixtures;
 
 public static class EventsFixture
 {
-    private static Guid TestId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+    private static readonly Guid TestId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
 
     public static T Get<T>() where T : class, IEvent
     {
@@ -45,7 +45,7 @@ public static class EventsFixture
 
     #region BrandEventsExamples
     
-    private static readonly BrandCreatedEvent BrandCreatedEventExample = new BrandCreatedEvent
+    private static readonly BrandCreatedEvent BrandCreatedEventExample = new()
     {
         Id = TestId,
         Name = "TestBrand",
@@ -53,7 +53,7 @@ public static class EventsFixture
         Image = "https://testimagesstore.com/testimage.png"
     };
     
-    private static readonly BrandUpdatedEvent BrandUpdatedEventExample = new BrandUpdatedEvent
+    private static readonly BrandUpdatedEvent BrandUpdatedEventExample = new()
     {
         Id = TestId,
         Name = "TestBrand",
@@ -61,31 +61,31 @@ public static class EventsFixture
         Image = "https://testimagesstore.com/testimage.png"
     };
 
-    private static readonly BrandDeletedEvent BrandDeletedEventExample = new BrandDeletedEvent(TestId);
+    private static readonly BrandDeletedEvent BrandDeletedEventExample = new() {Id = TestId};
     
     #endregion
     
     #region CategoryEventsExamples
     
-    private static readonly CategoryCreatedEvent CategoryCreatedEventExample = new CategoryCreatedEvent
+    private static readonly CategoryCreatedEvent CategoryCreatedEventExample = new()
     {
         Id = TestId,
         Name = "Test category!!"
     };
 
-    private static readonly CategoryUpdatedEvent CategoryUpdatedEventExample = new CategoryUpdatedEvent
+    private static readonly CategoryUpdatedEvent CategoryUpdatedEventExample = new()
     {
         Id = TestId,
         Name = "Test category!!"
     };
 
-    private static readonly CategoryDeletedEvent CategoryDeletedEventExample = new CategoryDeletedEvent(TestId);
+    private static readonly CategoryDeletedEvent CategoryDeletedEventExample = new() {Id = TestId };
     
     #endregion
 
     #region ProductEventExamples
 
-    private static ProductCreatedEvent ProductCreatedEventExample = new ProductCreatedEvent
+    private static readonly ProductCreatedEvent ProductCreatedEventExample = new()
     {
         Id = TestId,
         Name = "Test product",
@@ -104,7 +104,7 @@ public static class EventsFixture
         BrandId = TestId,
     };
 
-    private static ProductUpdatedEvent ProductUpdatedEventExample = new ProductUpdatedEvent
+    private static readonly ProductUpdatedEvent ProductUpdatedEventExample = new()
     {
         Id = TestId,
         Name = "Test product",
@@ -123,7 +123,7 @@ public static class EventsFixture
         BrandId = TestId,
     };
 
-    private static ProductDeletedEvent ProductDeletedEventExample = new ProductDeletedEvent(TestId);
+    private static readonly ProductDeletedEvent ProductDeletedEventExample = new() { Id = TestId };
 
     #endregion
 

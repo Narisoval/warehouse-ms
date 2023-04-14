@@ -3,7 +3,7 @@ using Warehouse.API.DTO.ProviderDtos;
 
 namespace Warehouse.API.DTO.ProductDtos;
 
-public record ProductDto 
+public class ProductDto 
 {
     public Guid ProductId { get; set; }
 

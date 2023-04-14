@@ -1,7 +1,7 @@
 #pragma warning disable CS8618
 namespace Warehouse.API.Messaging.Events.BrandEvents;
 
-public abstract record BrandEventBase : IEvent
+public abstract class BrandEventBase : IEvent
 {
     public Guid Id { get; init; }
     

@@ -109,7 +109,7 @@ public class BrandsController : ControllerBase
 
         await _unitOfWork.Complete();
 
-        await _eventBus.PublishAsync(new BrandDeletedEvent(id));
+        await _eventBus.PublishAsync(new BrandDeletedEvent{ Id = id});
         
         return NoContent();
     }

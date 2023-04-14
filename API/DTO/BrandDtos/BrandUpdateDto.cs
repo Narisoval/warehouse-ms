@@ -1,6 +1,6 @@
 namespace Warehouse.API.DTO.BrandDtos;
 
-public record BrandUpdateDto
+public class BrandUpdateDto
 {
     public string Name { get; init; } = "";
     

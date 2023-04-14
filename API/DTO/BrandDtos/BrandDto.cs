@@ -1,6 +1,6 @@
 namespace Warehouse.API.DTO.BrandDtos;
 
-public record BrandDto 
+public class BrandDto 
 {
     public Guid BrandId { get; set; }
     

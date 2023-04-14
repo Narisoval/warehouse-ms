@@ -1,3 +1,6 @@
 namespace Warehouse.API.Messaging.Events.ProductEvents;
 
-public record ProductDeletedEvent(Guid Id) : IEvent;
+public class ProductDeletedEvent : IEvent
+{
+    public Guid Id { get; init; }
+}

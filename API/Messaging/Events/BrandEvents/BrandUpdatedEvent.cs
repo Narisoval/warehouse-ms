@@ -1,4 +1,4 @@
 namespace Warehouse.API.Messaging.Events.BrandEvents;
 
-public record BrandUpdatedEvent : BrandEventBase;
+public class BrandUpdatedEvent : BrandEventBase {}
 

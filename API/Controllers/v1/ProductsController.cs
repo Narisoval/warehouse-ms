@@ -112,7 +112,7 @@ public class ProductsController : ControllerBase
 
         await _unitOfWork.Complete();
 
-        await _eventBus.PublishAsync(new ProductDeletedEvent(id));
+        await _eventBus.PublishAsync(new ProductDeletedEvent{ Id = id });
         
         return NoContent();
     }

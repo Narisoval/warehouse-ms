@@ -1,6 +1,6 @@
 namespace Warehouse.API.Messaging.Events.ProductEvents;
 
-public abstract record ProductEventBase : IEvent
+public abstract class ProductEventBase : IEvent
 {
      public Guid Id { get; init; }
      
